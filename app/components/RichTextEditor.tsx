@@ -38,6 +38,7 @@ import {
 
 // Custom types
 type CustomText = { text: string; [key: string]: any };
+console.log(123);
 
 type ElementType =
   | "paragraph"
