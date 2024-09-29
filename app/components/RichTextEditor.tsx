@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   createEditor,
   Descendant,
   Element as SlateElement,
   Transforms,
   Editor,
-  Text,
   Range,
   BaseEditor,
 } from "slate";
