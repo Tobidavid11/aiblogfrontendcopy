@@ -159,11 +159,7 @@ const toggleBlock = (editor: Editor, format: string) => {
     };
   } else {
     newProperties = {
-      type: isActive
-        ? "paragraph"
-        : isList
-        ? "list-item"
-        : (format as ElementType),
+      type: isActive ? "paragraph" : (format as ElementType),
     };
   }
   Transforms.setNodes<CustomElement>(editor, newProperties);
@@ -171,9 +167,6 @@ const toggleBlock = (editor: Editor, format: string) => {
   if (!isActive && isList) {
     const block: CustomElement = { type: format as ElementType, children: [] };
     Transforms.wrapNodes(editor, block);
-  } else if (!isActive) {
-    const block: CustomElement = { type: format as ElementType, children: [] };
-    Transforms.wrapNodes(editor, block, { split: true });
   }
 };
 
