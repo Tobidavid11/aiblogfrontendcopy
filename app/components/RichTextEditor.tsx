@@ -171,6 +171,9 @@ const toggleBlock = (editor: Editor, format: string) => {
   if (!isActive && isList) {
     const block: CustomElement = { type: format as ElementType, children: [] };
     Transforms.wrapNodes(editor, block);
+  } else if (!isActive) {
+    const block: CustomElement = { type: format as ElementType, children: [] };
+    Transforms.wrapNodes(editor, block, { split: true });
   }
 };
 
@@ -259,8 +262,8 @@ const Element = ({ attributes, children, element }: any) => {
       return <img src={element.url} alt={element.alt} {...attributes} />;
     case "video":
       return (
-        <video controls>
-          <source src={element.url} type='video/mp4' {...attributes} />
+        <video controls {...attributes}>
+          <source src={element.url} type='video/mp4' />
           {children}
         </video>
       );
