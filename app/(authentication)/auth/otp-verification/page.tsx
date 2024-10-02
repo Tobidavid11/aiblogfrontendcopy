@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import OtpInputComponent from "../../../components/auth/otpinput";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import iconGmail from "../../../../public/assets/icons/iconGmail.svg";
@@ -20,9 +20,8 @@ const mockVerifyOtp = async (
   return { success: false, message: "Invalid OTP", isTokenExpired: false };
 };
 
-const mockRequestPasswordReset = async (
-  email: string
-): Promise<{ success: boolean; message: string }> => {
+const mockRequestPasswordReset = async (): // email: string
+Promise<{ success: boolean; message: string }> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return { success: true, message: "New OTP has been sent to your email" };
 };
@@ -41,6 +40,7 @@ const OtpVerificationPage = () => {
   const { toast } = useToast();
 
   const email = "avioflagos@gmail.com";
+
   useEffect(() => {
     if (otpInputRef.current) {
       otpInputRef.current.focus();
@@ -92,8 +92,10 @@ const OtpVerificationPage = () => {
             setCountdown(0);
           }
         }
-      } catch (error) {
-        setError("An unexpected error occured");
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "An unexpected error occurred";
+        setError(errorMessage);
         toast({
           title: "Verification failed",
           description: "An unexpected error occurred",
@@ -119,7 +121,7 @@ const OtpVerificationPage = () => {
     }
     setResendLoading(true);
     try {
-      const result = await mockRequestPasswordReset(email);
+      const result = await mockRequestPasswordReset();
       if (result.success) {
         toast({
           title: "Verification Email Sent",
@@ -138,8 +140,10 @@ const OtpVerificationPage = () => {
             "bg-red-100 text-red-800 border border-red-300 rounded-lg p-4 shadow-md",
         });
       }
-    } catch (error) {
-      setError("An unexpected error occurred");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An unexpected error occurred";
+      setError(errorMessage);
       toast({
         title: "Error",
         description: "An unexpected error occurred",
@@ -165,6 +169,14 @@ const OtpVerificationPage = () => {
         <div className="flex justify-between mb-6">
           <OtpInputComponent otp={otp} setOtp={setOtp} />
         </div>
+
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        {isTokenExpired && (
+          <p className="text-yellow-500 mb-4">
+            Your OTP has expired. Please request a new one.
+          </p>
+        )}
 
         <Button
           onClick={handleOtpSubmit}
