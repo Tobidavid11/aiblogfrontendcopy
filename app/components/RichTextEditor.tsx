@@ -88,7 +88,7 @@ export const RichTextEditor = () => {
   const initialValue: Descendant[] = [
     {
       type: "paragraph",
-      children: [{ text: "Start typing your rich text here..." }],
+      children: [{ text: "Start typing" }],
     },
   ];
 
@@ -97,7 +97,7 @@ export const RichTextEditor = () => {
 
   return (
     <Slate editor={editor} initialValue={initialValue}>
-      <Toolbar>
+      <Toolbar className='mx-20'>
         <MarkButton format='bold' icon={<Bold />} />
         <MarkButton format='italic' icon={<Italic />} />
         <MarkButton format='underline' icon={<Underline />} />
@@ -120,9 +120,10 @@ export const RichTextEditor = () => {
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder='Enter some rich text…'
+        placeholder='enter some rich text here'
         spellCheck
         autoFocus
+        className='bg-gray-200 py-10 mx-20'
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event as any)) {
