@@ -29,6 +29,7 @@ Promise<{ success: boolean; message: string }> => {
 const OtpVerificationPage = () => {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [resendLoading, setResendLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
   const [censoredEmail, setCensoredEmail] = useState("");
   const [error, setError] = useState("");
   const [isTokenExpired, setIsTokenExpired] = useState(false);
@@ -39,14 +40,19 @@ const OtpVerificationPage = () => {
 
   const { toast } = useToast();
 
-  const email = "avioflagos@gmail.com";
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedEmail = sessionStorage.getItem("userEmail");
+      setEmail(storedEmail || "avioflagos@gmail.com"); // Use placeholder if no email in storage
+    }
+  }, []);
 
   useEffect(() => {
     if (otpInputRef.current) {
       otpInputRef.current.focus();
     }
     setCensoredEmail(censorEmail(email));
-  }, []);
+  }, [email]);
 
   useEffect(() => {
     if (countdown > 0) {
