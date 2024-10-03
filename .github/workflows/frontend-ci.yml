@@ -1,4 +1,4 @@
-name: Next.js CI
+name: Build and Lint
 
 on:
   pull_request:
