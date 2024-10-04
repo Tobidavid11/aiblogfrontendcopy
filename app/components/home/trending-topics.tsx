@@ -1,15 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { topics } from "@/data/topics";
 import { slugify } from "@/lib/utils";
 import Link from "next/link";
 import FollowCard from "../follow-card";
+import { topics } from "@/data/mock/topics";
+import { user } from "@/data/mock/user";
 
 export default function TrendingTopics() {
-  const user = {
-    name: "Miracle Davison",
-    username: "@mira",
-    profile_pic: "/profile.png",
-  };
   const emptyArray = Array(9).fill(undefined);
 
   return (

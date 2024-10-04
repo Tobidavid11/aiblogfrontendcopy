@@ -1,17 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { RoundedImage } from "./rounded-image";
+import { cn } from "@/lib/utils";
 
 const FollowCard = ({
   user,
+  className,
 }: {
   user: { name: string; profile_pic: string; username: string };
+  className?: string;
 }) => {
   const followAction = async () => {
     "use server";
   };
 
   return (
-    <div className="flex justify-between">
+    <div className={cn("flex justify-between", className)}>
       <div className="gap-3 flex items-center">
         <div>
           <RoundedImage
