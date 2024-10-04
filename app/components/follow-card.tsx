@@ -9,7 +9,6 @@ const FollowCard = ({
   const followAction = async () => {
     "use server";
   };
-  console.log(user);
 
   return (
     <div className="flex justify-between">

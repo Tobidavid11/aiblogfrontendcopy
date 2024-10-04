@@ -9,7 +9,6 @@ interface ImageProps {
 }
 
 export function RoundedImage({ src, alt, size = 115, className }: ImageProps) {
-  console.log(src);
   return (
     <div
       className={cn("relative overflow-hidden rounded-full", className)}
