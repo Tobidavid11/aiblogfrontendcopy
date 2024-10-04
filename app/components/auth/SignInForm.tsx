@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import { EyeIcon, EyeOffIcon, CircleUserRound } from "lucide-react";
-import { Input } from "./ui/input";
-import { Checkbox } from "./ui/checkbox";
+import { Input } from "../../../components/ui/input";
+import { Checkbox } from "../../../components/ui/checkbox";
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
