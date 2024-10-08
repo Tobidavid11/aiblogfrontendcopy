@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import Redirecting from "./redirecting";
+import Success from "./success";
 
 type Wallet = "phantom" | "metamask";
 export default function ConnectWallet() {
@@ -36,9 +37,9 @@ export default function ConnectWallet() {
 
   return (
     <div className="max-w-[530px] mx-auto font-dm-sans">
-      {isLoading ? (
-        <Redirecting />
-      ) : (
+      {isLoading && <Redirecting />}
+      {isConnected && <Success />}
+      {!isLoading && !isConnected && (
         <Card className="rounded-xl overflow-hidden bg-whitesmoke">
           <CardHeader className="">
             <CardTitle className="text-text-color text-xl">
