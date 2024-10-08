@@ -14,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   children: React.ReactNode
 }
-
+ 
 export default function Button({
   size = 'medium',
   color = 'primary',
@@ -33,7 +33,7 @@ export default function Button({
 
   const colorClasses = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
+    secondary: 'bg-[#FDC316] text-white hover:bg-[#FDC316]/90',
     success: 'bg-green-500 text-white hover:bg-green-600',
     danger: 'bg-red-500 text-white hover:bg-red-600',
     warning: 'bg-yellow-500 text-white hover:bg-yellow-600',
@@ -45,7 +45,7 @@ export default function Button({
     text: `bg-transparent text-${color} hover:bg-${color}/10`,
   }
 
-  const baseClasses = 'rounded-md font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200'
+  const baseClasses = 'rounded-md font-semibold focus:outline-none transition-colors duration-200'
   const disabledClasses = 'opacity-50 cursor-not-allowed'
 
   const buttonClasses = cn(
