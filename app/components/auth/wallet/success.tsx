@@ -11,7 +11,6 @@ import Image from "next/image";
 export default function Success() {
   return (
     <Card className="rounded-xl overflow-hidden bg-whitesmoke">
-      {/* <CardContent className="mt-6 grid grid-cols-2 gap-4 py-12"></CardContent> */}
       <CardContent>
         <Image
           width={500}
