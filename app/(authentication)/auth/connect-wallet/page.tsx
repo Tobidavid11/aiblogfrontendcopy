@@ -1,4 +1,4 @@
-import ConnectWallet from "@/app/components/auth/connect-wallet";
+import ConnectWallet from "@/app/components/auth/wallet/connect-wallet";
 
 const ConnectWalletPage = () => {
   return (
