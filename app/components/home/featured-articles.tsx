@@ -39,8 +39,6 @@ const ArticleCard = ({ article }: { article: BlogType }) => {
             fill
             style={{ objectFit: "cover" }}
             className="rounded-lg"
-            // sizes="100vw"
-            // style={{ width: "100%", height: "auto" }}
           />
         </div>
         <CardDescription className="mt-2">{article.date}</CardDescription>
