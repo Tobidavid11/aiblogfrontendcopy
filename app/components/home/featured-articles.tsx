@@ -54,3 +54,4 @@ const ArticleCard = ({ article }: { article: BlogType }) => {
 };
 
 export default FeaturedArticles;
+

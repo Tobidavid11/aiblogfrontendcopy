@@ -1,22 +1,16 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
-import { dmSans } from "@/lib/fonts";
+import type { Metadata } from "next";
+import { DM_Sans } from "next/font/google";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const DmSans = DM_Sans({
+  subsets: ["latin-ext"],
+  variable: "--dm-sans",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "AI Blog",
-  description: "AI Blog",
+  title: "Drello",
+  description: "AI blog application",
 };
 
 export default function RootLayout({
@@ -26,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased bg-[#F5F5F5]`}
-      >
+      <body className={`${DmSans.className} antialiased bg-[#FAFAFA]`}>
         {children}
       </body>
     </html>

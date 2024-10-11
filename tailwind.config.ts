@@ -13,6 +13,14 @@ const config: Config = {
         "dm-sans": ["var(--font-dm-sans)"],
       },
       colors: {
+        "modals-and-dropdown": "#fafafa",
+        "neutral-100": "#f5f5f5",
+        "neutral-700": "#404040",
+        "text-color": "#171717",
+        whitesmoke: "#f5f5f5",
+        gainsboro: "#e5e5e5",
+        gray: "#262626",
+        "cta-primary-normal": "#fdc316",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
