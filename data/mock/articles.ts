@@ -7,7 +7,7 @@ export const article: BlogType = {
   image: "/blog_image.png",
   description:
     "The Digital Detox, Why Unplugging is Essential for Mental Health",
-  date: "Oct 1, 2024",
+  date: "3hrs ago",
 };
 
 export const articles = [article, article, article, article, article, article];

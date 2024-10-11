@@ -1,10 +1,9 @@
 
-
-
 import { articles } from "@/data/mock/articles";
 import FeaturedArticles from "./components/home/featured-articles";
-// import TrendingTopics from "./components/home/trending-topics";
-// import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
+import TrendingTopics from "./components/home/trending-topics";
+ import RichTextEditor from "./components/RichTextEditor/RichTextEditor";
+import PostEditor from "./components/home/post-editor";
 
 export default function Home() {
   return (
@@ -13,9 +12,10 @@ export default function Home() {
       {/*   <div className='p-16 bg-gray-400'>Hello there, Welcome to AI Blog!</div> */}
       {/* </div> */}
       {/* Rich text Editor here!! */}
-      {/* <RichTextEditor /> */}
+       <RichTextEditor />
       <FeaturedArticles articles={articles} />
-      {/* <TrendingTopics /> */}
+       <TrendingTopics />
+       <PostEditor/>
 
     </div>
   );

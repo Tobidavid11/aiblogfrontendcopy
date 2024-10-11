@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -12,7 +11,7 @@ import Image from "next/image";
 
 const FeaturedArticles = ({ articles }: { articles: BlogType[] }) => {
   return (
-    <aside className="px-6 py-7 top-[100px] sticky bg-white max-w-[500px] min-h-dvh">
+    <aside className="px-2 py-7 top-[100px] sticky bg-white max-w-[500px] lg:min-w-[304px] min-h-dvh">
       <h3 className="font-dm-sans font-medium text-2xl mb-7 text-[#171717]">
         Featured Articles
       </h3>
@@ -29,7 +28,7 @@ const ArticleCard = ({ article }: { article: BlogType }) => {
   return (
     <Card className="p-2 border-l-transparent border-r-transparent border-t-transparent rounded-none shadow-none gap-4 flex flex-col font-dm-sans text-[text-[#262626]] pb-5 border-b border-b-[#E5E5E5]">
       <CardHeader className="p-0">
-        <FollowCard className="gap-7" user={article.user} />
+        <FollowCard className="" user={article.user} />
       </CardHeader>
       <CardContent className="p-0">
         <div className="relative block w-full h-[191px]">
@@ -43,7 +42,6 @@ const ArticleCard = ({ article }: { article: BlogType }) => {
             // style={{ width: "100%", height: "auto" }}
           />
         </div>
-        <CardDescription className="mt-2">{article.date}</CardDescription>
       </CardContent>
       <CardFooter className="flex flex-col p-0">
         <CardTitle className="font-bold leading-8 scroll-m-20">
