@@ -14,7 +14,7 @@ const BlogTags: React.FC<TagsSectionProps> = ({ tags , className , icon }) => {
      
       <div className="flex space-x-2 overflow-x-auto pb-2">
         {tags.map((tag) => (
-          <Button key={tag} variant="outline"  size="sm" className={cn("rounded-[25px] flex items-center justify-center gap-2", className)}>
+          <Button key={tag} variant="outline"  size="sm" className={cn("rounded-[25px] flex items-center justify-center gap-2 border-none outline-none", className)}>
            {icon && icon} {tag}
           </Button>
         ))}

@@ -12,9 +12,22 @@ import { PostMetrics, UserProfile } from "../shared";
 import { BlogType } from "@/types/blog";
 import Image from "next/image";
 
-const BlogCard = memo<{ blog: BlogType }>(({ blog }) => {
+interface MainBloyType {
+  blog: BlogType;
+  hasShadow?: boolean;
+  hasBackground?: boolean;
+}
+
+const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
   return (
-    <Card className="w-full flex flex-col gap-y-3 mb-6 border-none bg-transparent rounded-xl shadow-none">
+    <Card
+      className={`w-full flex flex-col gap-y-3 border-none ${
+        hasBackground ? "bg-white" : "bg-transparent"
+      } ${hasBackground ? "mb-0" : "mb-6"}
+       ${hasBackground ? "p-4" : "p-0"} ${
+        hasShadow ? "bg-white" : "shadow-none"
+      } rounded-xl`}
+    >
       <CardHeader className="p-0">
         <UserProfile user={blog.user} />
       </CardHeader>
@@ -32,7 +45,7 @@ const BlogCard = memo<{ blog: BlogType }>(({ blog }) => {
           </p>
         </CardDescription>
 
-        <div className="relative block rounded-tl-xl rounded-tr-xl w-full h-[230px] my-4 overflow-hidden">
+        <div className="relative block rounded-xl w-full h-[230px] my-3 overflow-hidden">
           <Image
             src={blog.image}
             alt={`${blog.title} blog image`}

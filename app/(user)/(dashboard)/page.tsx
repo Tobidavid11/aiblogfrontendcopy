@@ -1,6 +1,7 @@
 import { BlogCard } from "@/components/blog";
 import { BlogDummyData } from "@/data/mock/blog";
 
+
 const Home = () => {
   return (
     <div className="containerHeight overflow-scroll custom-scroll pb-6">

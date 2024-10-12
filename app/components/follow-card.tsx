@@ -25,7 +25,7 @@ const FollowCard = ({
         </div>
         <div className="font-dm-sans">
           <h4 className="text-sm font-bold">{user.name}</h4>
-          <p className="font-medium text-xs">{user.username} . <span>{article.date}</span></p>
+          <p className="font-medium text-xs">{user.username} . <span>3hrs ago</span></p>
           
         </div>
         

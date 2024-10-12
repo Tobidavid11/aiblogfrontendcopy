@@ -1,13 +1,20 @@
-import { BlogType } from "@/types/blog";
-import { user } from "./user";
+import { ArticleProps } from "@/types/article";
+import { UserData } from "./user";
 
-export const article: BlogType = {
-  user: user,
+export const article: ArticleProps = {
+  user: UserData,
   title: "The Digital Detox, Why Unplugging is Essential",
   image: "/blog_image.png",
   description:
     "The Digital Detox, Why Unplugging is Essential for Mental Health",
-  date: "3hrs ago",
+  date: "Oct 1, 2024",
 };
 
-export const articles = [article, article, article, article, article, article];
+export const ArticleData = [
+  article,
+  article,
+  article,
+  article,
+  article,
+  article,
+];
