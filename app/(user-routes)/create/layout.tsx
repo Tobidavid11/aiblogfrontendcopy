@@ -1,4 +1,5 @@
 import { NavBar } from "@/app/(user)/sections";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function CreatePostLayout({
   children,
@@ -7,8 +8,8 @@ export default function CreatePostLayout({
 }>) {
   return (
     <div className="flex flex-col min-h-screen">
-      <NavBar />
-      {children}
+      {/* <NavBar /> */}
+      <TooltipProvider>{children}</TooltipProvider>
     </div>
   );
 }

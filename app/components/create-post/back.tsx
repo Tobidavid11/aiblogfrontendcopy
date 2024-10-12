@@ -8,9 +8,10 @@ export default function Back() {
   return (
     <Button
       onClick={() => router.back()}
-      className="rounded-full py-6 flex gap-4 bg-palegoldenrod items-center text-gray"
+      className="rounded-full p-2 sm:px-4 border-[.4px] border-transparent md:py-6 flex gap-4 bg-palegoldenrod items-center text-gray"
     >
-      <ArrowLeft size={28} /> Back
+      <ArrowLeft className="!text-xs" />
+      <span className="hidden md:flex">Back</span>
     </Button>
   );
 }
