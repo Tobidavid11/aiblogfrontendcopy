@@ -1,10 +1,11 @@
 import { PostMetrics } from "./post-metrics";
 import { UserProps } from "./user";
 
-export interface BlogType {
+export interface JobType {
   user: UserProps;
   title: string;
   description: string;
-  image: string;
+  content: string;
+  date: string; // ISO Date 
   metrics: PostMetrics;
 }

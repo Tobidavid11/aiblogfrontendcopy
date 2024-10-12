@@ -1,4 +1,4 @@
-export const topics = [
+export const TopicsData: string[] = [
   "Crypto Craze",
   "AWS",
   "Nigeria",
@@ -7,4 +7,5 @@ export const topics = [
   "Football",
   "Solana",
   "Metaverse",
+  "Call to action: well explained",
 ];
