@@ -1,4 +1,3 @@
-import { NavBar } from "@/app/(user)/sections";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function CreatePostLayout({
