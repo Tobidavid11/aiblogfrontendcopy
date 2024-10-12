@@ -19,8 +19,8 @@ export interface MinimalTiptapProps
 }
 
 const Toolbar = ({ editor }: { editor: Editor }) => (
-  <div className="shrink-0 overflow-x-auto border-t border-border p-2">
-    <div className="flex w-max items-center gap-px">
+  <div className="shrink-0 overflow-x-auto border-border p-2 w-full">
+    <div className="flex items-center gap-px">
       <SectionTwo
         editor={editor}
         activeActions={["bold", "italic", "strikethrough", "code"]}
@@ -45,21 +45,24 @@ export const MinimalTiptapOne = React.forwardRef<
   }
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:border-primary",
-        className,
-      )}
-    >
-      <EditorContent
-        editor={editor}
-        className={cn("minimal-tiptap-editor", editorContentClassName)}
-      />
+    <>
+      <div
+        ref={ref}
+        className={cn(
+          // focus-within:border-primary
+          "flex h-auto min-h-72 w-full flex-col rounded-md border border-input",
+          className,
+        )}
+      >
+        <EditorContent
+          editor={editor}
+          className={cn("minimal-tiptap-editor h-full", editorContentClassName)}
+        />
+        <LinkBubbleMenu editor={editor} />
+        <ImageBubbleMenu editor={editor} />
+      </div>
       <Toolbar editor={editor} />
-      <LinkBubbleMenu editor={editor} />
-      <ImageBubbleMenu editor={editor} />
-    </div>
+    </>
   );
 });
 
