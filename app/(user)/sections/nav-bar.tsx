@@ -4,6 +4,7 @@ import { RoundedImage, SearchInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { UserData } from "@/data/mock/user";
 import { Bell, Edit3Icon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -83,12 +84,14 @@ const NavBar = () => {
         <SearchInput onSearch={handleSearch} placeholder="Find anything..." />
 
         {/* Write to earn btn */}
-        <Button className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] rounded-full py-3 gap-x-2 flex justify-center items-center transition duration-300 ease-in-out">
-          <Edit3Icon className="h-4 w-4 text-[#262626]" />
-          <span className="font-medium text-[#262626] text-center">
-            Write to earn
-          </span>
-        </Button>
+        <Link href={"/write"}>
+          <Button className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] rounded-full py-3 gap-x-2 flex justify-center items-center transition duration-300 ease-in-out">
+            <Edit3Icon className="h-4 w-4 text-[#262626]" />
+            <span className="font-medium text-[#262626] text-center">
+              Write to earn
+            </span>
+          </Button>
+        </Link>
 
         {/* Notification */}
         <div className="flex-1 border rounded-full w-10 h-10 flex items-center justify-center hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">

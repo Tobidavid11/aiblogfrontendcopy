@@ -21,6 +21,8 @@ const config: Config = {
         gainsboro: "#e5e5e5",
         gray: "#262626",
         "cta-primary-normal": "#fdc316",
+        palegoldenrod: "#f9f7b9",
+        "accents-greenish": "#baf28d",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
