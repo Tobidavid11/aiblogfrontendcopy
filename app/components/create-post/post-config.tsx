@@ -30,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Publish from "./publish";
 
 const formSchema = z.object({
   category: z
@@ -142,13 +143,7 @@ export const PostConfig = () => {
             >
               Save to draft
             </Button>
-            <Button
-              type="submit"
-              className="font-medium text-gray bg-cta-primary-normal rounded-full py-6 px-6 border border-transparent"
-              disabled
-            >
-              Publish
-            </Button>
+            <Publish />
           </CardFooter>
         </Card>
       </CardContent>
