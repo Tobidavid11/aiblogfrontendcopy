@@ -1,4 +1,4 @@
-import Button from "@/app/components/CustomButton/Button";
+
 import { JobDummyData } from "@/data/mock/job";
 import iconComment from "@/public/assets/icons/comment.svg";
 import iconShare from "@/public/assets/icons/share.svg";
@@ -7,6 +7,8 @@ import Image from "next/image";
 import Aside from "./_components/aside";
 import Comments from "./_components/comments";
 import JobContent from "./_components/job-content";
+
+import Button from "@/components/shared/button";
 
 const JobPage = () => {
   const job = JobDummyData[0];
@@ -18,6 +20,7 @@ const JobPage = () => {
             <JobContent job={job} />
             <ActionButtons />
             <Comments />
+           
           </div>
 
           <Aside />

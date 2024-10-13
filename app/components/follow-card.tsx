@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { RoundedImage } from "./rounded-image";
 import { cn } from "@/lib/utils";
+import { followAction } from "@/actions/follow";
+
 
 const FollowCard = ({
   user,
@@ -9,9 +11,7 @@ const FollowCard = ({
   user: { name: string; profile_pic: string; username: string };
   className?: string;
 }) => {
-  const followAction = async () => {
-    "use server";
-  };
+  
 
   return (
     <div className={cn("flex justify-between", className)}>
@@ -25,11 +25,13 @@ const FollowCard = ({
         </div>
         <div className="font-dm-sans">
           <h4 className="text-sm font-bold">{user.name}</h4>
-          <p className="font-medium text-xs">{user.username}</p>
+          <p className="font-medium text-xs">{user.username} . <span>3hrs ago</span></p>
+          
         </div>
+        
       </div>
       <form action={followAction}>
-        <Button className="bg-[#E5E5E5] rounded-full" variant={"secondary"}>
+        <Button className="bg-black rounded-full text-white hover:text-black" variant={"secondary"}>
           Follow
         </Button>
       </form>

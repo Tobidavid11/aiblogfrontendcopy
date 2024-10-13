@@ -1,9 +1,10 @@
-import { BlogCard } from "@/components/blog";
-import { BlogDummyData } from "@/data/mock/blog";
+
+import React from 'react'
+import { BlogDummyData } from '@/data/mock/blog';
+import { BlogCard } from '@/components/blog';
 
 
-
-const Home = () => {
+const Blog = () => {
   return (
     <div className="containerHeight overflow-scroll custom-scroll pb-6">
       {BlogDummyData.map((item, index) => (
@@ -12,9 +13,8 @@ const Home = () => {
           <div className="h-[1px] mb-6 w-full bg-[#E5E5E5]" />
         </>
       ))}
-     
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Blog;
