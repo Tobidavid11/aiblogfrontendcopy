@@ -1,6 +1,7 @@
 "use client";
 
-import Button from "@/app/components/CustomButton/Button";
+
+import Button from "@/components/shared/button";
 import { toast } from "@/hooks/use-toast";
 import imgProfile from "@/public/assets/nav-profile.png";
 import { ImageIcon, Link2Icon, SmileIcon, XIcon } from "lucide-react";

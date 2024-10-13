@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { RoundedImage } from "./rounded-image";
 import { cn } from "@/lib/utils";
 import { followAction } from "@/actions/follow";
-import { article } from "@/data/mock/articles";
+
 
 const FollowCard = ({
   user,

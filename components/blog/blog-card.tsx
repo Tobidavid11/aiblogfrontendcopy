@@ -33,16 +33,15 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
       </CardHeader>
 
       <CardContent className="flex flex-col p-0 gap-y-3">
-        <CardDescription className="flex flex-col p-0 gap-y-3">
-          {/* Title */}
+      
+         
           <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
             {blog.title}
           </CardTitle>
 
           {/* Description */}
-          <p className="text-base font-normal leading-6 text-[#737373]">
+          <CardDescription className="text-base font-normal leading-6 text-[#737373]">
             {blog.description}
-          </p>
         </CardDescription>
 
         <div className="relative block rounded-xl w-full h-[230px] my-3 overflow-hidden">
