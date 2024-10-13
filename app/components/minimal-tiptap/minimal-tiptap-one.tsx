@@ -9,6 +9,11 @@ import SectionTwo from "./components/section/two";
 import useMinimalTiptapEditor, {
   UseMinimalTiptapEditorProps,
 } from "./hooks/use-minimal-tiptap";
+import SectionFive from "./components/section/five";
+import SectionOne from "./components/section/one";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import SectionFour from "./components/section/four";
+import SectionThree from "./components/section/three";
 
 export interface MinimalTiptapProps
   extends Omit<UseMinimalTiptapEditorProps, "onUpdate"> {
@@ -19,14 +24,36 @@ export interface MinimalTiptapProps
 }
 
 const Toolbar = ({ editor }: { editor: Editor }) => (
-  <div className="shrink-0 overflow-x-auto border-border p-2 w-full">
-    <div className="flex items-center gap-px">
-      <SectionTwo
-        editor={editor}
-        activeActions={["bold", "italic", "strikethrough", "code"]}
-        mainActionCount={5}
-      />
-    </div>
+  <div className="w-full border-border p-2">
+    <ScrollArea className="w-full">
+      <div className="w-max shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] border rounded-xl py-3 px-4 flex flex-nowrap gap-4 items-center bg-modals-and-dropdown border-gainsboro">
+        <SectionOne editor={editor} activeLevels={[1, 2, 3]} />
+        <SectionThree editor={editor} variant="outline" />
+        <SectionTwo
+          editor={editor}
+          activeActions={[
+            "italic",
+            "bold",
+            "code",
+            "strikethrough",
+            "clearFormatting",
+          ]}
+          mainActionCount={5}
+        />
+        <SectionFour
+          editor={editor}
+          activeActions={["bulletList", "orderedList"]}
+          mainActionCount={2}
+        />
+
+        <SectionFive
+          editor={editor}
+          activeActions={["blockquote", "codeBlock", "horizontalRule"]}
+          mainActionCount={3}
+        />
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   </div>
 );
 
@@ -58,9 +85,9 @@ export const MinimalTiptapOne = React.forwardRef<
           editor={editor}
           className={cn("minimal-tiptap-editor h-full", editorContentClassName)}
         />
-        <LinkBubbleMenu editor={editor} />
-        <ImageBubbleMenu editor={editor} />
       </div>
+      {/* <LinkBubbleMenu editor={editor} /> */}
+      {/* <ImageBubbleMenu editor={editor} /> */}
       <Toolbar editor={editor} />
     </>
   );
