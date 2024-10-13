@@ -9,27 +9,36 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Ellipsis } from "lucide-react";
+import { Node, NodeViewProps } from "@tiptap/core";
 
-export default function ImageConfig() {
+const ImageConfig = ({ updateAttributes, node }: NodeViewProps) => {
   const [openPopovers, setOpenPopovers] = useState<{ [key: string]: boolean }>(
     {},
   );
+  const [localAttributes, setLocalAttributes] = useState({
+    alt: (node.attrs.alt as string) || "",
+    title: (node.attrs.title as string) || "",
+    width: (node.attrs.width as string) || "",
+  });
 
   const config = [
     {
       title: "Edit Caption",
       popoverTitle: "New Caption text...",
       popoverPlaceholder: "Caption here ...",
+      key: "title",
     },
     {
       title: "Edit Alt",
       popoverTitle: "New Alt text...",
       popoverPlaceholder: "Alt text here ...",
+      key: "alt",
     },
     {
       title: "Wide Width",
       popoverTitle: "New Image Width here ...",
       popoverPlaceholder: "Image Width here ...",
+      key: "width",
     },
   ];
 
@@ -47,9 +56,24 @@ export default function ImageConfig() {
     }));
   };
 
+  const handleInputChange = (key: string, value: string) => {
+    setLocalAttributes((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleSave = (key: string) => {
+    // updateAttributes({
+    //   [key]: localAttributes[key as keyof typeof localAttributes],
+    // });
+    updateAttributes({ title: "Hello Im new asf" });
+    closePopover(key);
+  };
+
   return (
     <Popover>
-      <PopoverTrigger asChild className="absolute z-50 top-3 right-3">
+      <PopoverTrigger
+        asChild
+        className="absolute z-[999999999999999999999999999999999999999999999] top-3 right-3"
+      >
         <Button size="icon" variant="outline">
           <Ellipsis />
         </Button>
@@ -77,6 +101,10 @@ export default function ImageConfig() {
                 <Input
                   placeholder={item.popoverPlaceholder}
                   className="rounded-xl text-neutral-800 bg-neutral-50 mt-3"
+                  value={
+                    localAttributes[item.key as keyof typeof localAttributes]
+                  }
+                  onChange={(e) => handleInputChange(item.key, e.target.value)}
                 />
                 <div className="justify-end flex gap-4 mt-4">
                   <Button
@@ -90,7 +118,7 @@ export default function ImageConfig() {
                   <Button
                     size="sm"
                     className="bg-cta-primary-normal flex items-center gap-3 rounded-full text-neutral-800 hover:text-white transition-colors duration-300"
-                    onClick={() => closePopover(item.title)}
+                    onClick={() => handleSave(item.key)}
                   >
                     Save
                   </Button>
@@ -102,4 +130,5 @@ export default function ImageConfig() {
       </PopoverContent>
     </Popover>
   );
-}
+};
+export default ImageConfig;

@@ -86,8 +86,8 @@ export const MinimalTiptapOne = React.forwardRef<
           className={cn("minimal-tiptap-editor h-full", editorContentClassName)}
         />
       </div>
-      {/* <LinkBubbleMenu editor={editor} /> */}
-      {/* <ImageBubbleMenu editor={editor} /> */}
+      <LinkBubbleMenu editor={editor} />
+      <ImageBubbleMenu editor={editor} />
       <Toolbar editor={editor} />
     </>
   );

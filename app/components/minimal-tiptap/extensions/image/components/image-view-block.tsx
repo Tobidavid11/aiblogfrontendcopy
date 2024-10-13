@@ -2,14 +2,6 @@ import { isNumber, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { useMemo } from "react";
 import { useImageLoad } from "../../../hooks/use-image-load";
 import { cn } from "@/lib/utils";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Ellipsis } from "lucide-react";
-import Image from "next/image";
 import ImageConfig from "./image-config";
 
 const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
@@ -22,6 +14,17 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
 
     return (imgSize.height / imgSize.width) * 100;
   }, [imgSize.width, imgSize.height]);
+
+  const updateAttributes = (attrs: Record<string, any>) => {
+    if (typeof getPos === "function") {
+      editor
+        .chain()
+        .focus()
+        .setNodeSelection(getPos())
+        .updateAttributes(attrs)
+        .run();
+    }
+  };
 
   return (
     <NodeViewWrapper>
@@ -46,18 +49,25 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
                 }}
               >
                 <div className="relative flex h-full max-h-full w-full max-w-full overflow-hidden">
-                  {/* eslint-disable-next-line */}
-                  <ImageConfig />
-                  {/* eslint-disable-next-line */}
+                  <ImageConfig
+                    updateAttributes={updateAttributes}
+                    node={node}
+                  />
                   <img
-                    alt="Hello moshi mosh"
+                    alt={node.attrs.alt || "Image"}
                     src={node.attrs.src}
                     className="absolute w-full left-2/4 top-2/4 m-0 h-full max-w-full -translate-x-2/4 -translate-y-2/4 transform object-contain"
+                    style={{ width: node.attrs.width || "100%" }}
                   />
                 </div>
               </div>
             </div>
           </div>
+          {node.attrs.title && (
+            <figcaption className="text-center mt-2">
+              {node.attrs.title}
+            </figcaption>
+          )}
         </figure>
       </div>
     </NodeViewWrapper>
