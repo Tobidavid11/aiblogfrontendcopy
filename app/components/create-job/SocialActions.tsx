@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { X, Plus, ChevronDown, CirclePlus, Trash, Trash2 } from "lucide-react";
+import { X, ChevronDown, CirclePlus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
