@@ -5,6 +5,7 @@ import { Ellipsis, ImageIcon, List, MapPin, Smile, Sparkles, Tag } from "lucide-
 import { useCallback, useMemo } from "react";
 import { Descendant, Editor, createEditor } from "slate";
 import { Editable, Slate, withReact } from "slate-react";
+import Image from "next/image";
 
 const HOTKEYS = {
   "mod+b": "bold",
@@ -172,7 +173,7 @@ const Element = ({ attributes, children, element }: any) => {
         </a>
       );
     case "image":
-      return <img src={element.url} alt={element.alt} {...attributes} />;
+      return <Image src={element.url} alt={element.alt} {...attributes} />;
     case "video":
       return (
         <video controls {...attributes}>

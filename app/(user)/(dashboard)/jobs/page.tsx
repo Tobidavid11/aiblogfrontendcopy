@@ -2,7 +2,7 @@
 import { JobCard } from "@/components/job";
 import { JobsHeader } from "@/components/job/jobs-header";
 import { JobDummyData } from "@/data/mock/job";
-import JobQuestion from "../../(jobs)/jobs/[id]/_components/job-question";
+
 
 const Jobs = () => {
   return (

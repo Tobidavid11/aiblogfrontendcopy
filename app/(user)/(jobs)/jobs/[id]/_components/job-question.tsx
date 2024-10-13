@@ -51,7 +51,7 @@ const initialQuestions: Question[] = [
 ];
 
 export default function TaskQuestionsUI() {
-  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [questions] = useState<Question[]>(initialQuestions);
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
     questions[0].id
   );
@@ -62,7 +62,7 @@ export default function TaskQuestionsUI() {
     // questionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleOptionChange = (questionId: string, option: string) => {
+  const handleOptionChange = () => {
     // Handle radio button change
   };
 
@@ -84,7 +84,7 @@ export default function TaskQuestionsUI() {
                 id={`option-${question.id}-${index}`}
                 name={`option-${question.id}`}
                 value={option}
-                onChange={() => handleOptionChange(question.id, option)}
+                onChange={() => handleOptionChange()}
                 className="w-5 h-5 border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label
