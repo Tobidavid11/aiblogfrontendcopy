@@ -29,7 +29,7 @@ const ImageEditBlock = ({
   };
 
   const handleLink = () => {
-    editor.chain().focus().setImage({ src: link, alt, title, caption }).run();
+    editor.chain().focus().setImage({ src: link, alt, title }).run();
     close();
   };
 
@@ -40,7 +40,7 @@ const ImageEditBlock = ({
     const reader = new FileReader();
     reader.onload = (e) => {
       const src = e.target?.result as string;
-      editor.chain().focus().setImage({ src, alt, title, caption }).run();
+      editor.chain().focus().setImage({ src, alt, title }).run();
     };
 
     reader.readAsDataURL(files[0]);

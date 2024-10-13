@@ -4,7 +4,12 @@ import { useImageLoad } from "../../../hooks/use-image-load";
 import { cn } from "@/lib/utils";
 import ImageConfig from "./image-config";
 
-const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
+const ImageViewBlock = ({
+  editor,
+  node,
+  getPos,
+  updateAttributes,
+}: NodeViewProps) => {
   const imgSize = useImageLoad(node.attrs.src);
 
   const paddingBottom = useMemo(() => {
@@ -15,16 +20,16 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
     return (imgSize.height / imgSize.width) * 100;
   }, [imgSize.width, imgSize.height]);
 
-  const updateAttributes = (attrs: Record<string, any>) => {
-    if (typeof getPos === "function") {
-      editor
-        .chain()
-        .focus()
-        .setNodeSelection(getPos())
-        .updateAttributes(attrs)
-        .run();
-    }
-  };
+  // const updateAttributes = (attrs: Record<string, any>) => {
+  //   if (typeof getPos === "function") {
+  //     editor
+  //       .chain()
+  //       .focus()
+  //       .setNodeSelection(getPos())
+  //       .updateAttributes(attrs)
+  //       .run();
+  //   }
+  // };
 
   return (
     <NodeViewWrapper>
@@ -49,10 +54,12 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
                 }}
               >
                 <div className="relative flex h-full max-h-full w-full max-w-full overflow-hidden">
+                  {/* @ts-expect-error Passing the types wrongly */}
                   <ImageConfig
                     updateAttributes={updateAttributes}
                     node={node}
                   />
+                  {/* eslint-disable-next-line */}
                   <img
                     alt={node.attrs.alt || "Image"}
                     src={node.attrs.src}

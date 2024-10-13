@@ -2,15 +2,15 @@
 import { cn } from "@/lib/utils";
 import MinimalTiptapOne from "../minimal-tiptap/minimal-tiptap-one";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function PostEditor() {
-  const [editorContent, setEditorContent] = useState("");
-
-  const handleEditorChange = (content: string) => {
-    setEditorContent(content);
-    console.log("Editor content:", content); // For debugging
-  };
+  // const [editorContent, setEditorContent] = useState("");
+  //
+  // const handleEditorChange = (content: string) => {
+  //   setEditorContent(content);
+  //   console.log("Editor content:", content); // For debugging
+  // };
 
   return (
     <div className="order-2 md:order-1 w-full relative overflow-x-hidden shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] rounded-2xl bg-modals-and-dropdown border-neutral-100 border h-[743px] flex flex-col items-start justify-start p-6 gap-8 text-left text-base text-gray font-dm-sans">
@@ -26,7 +26,7 @@ export default function PostEditor() {
           " focus:border-neutral-100 active:border-neutral-100",
         )}
         editorContentClassName="overflow-auto h-full"
-        onChange={handleEditorChange}
+        // onChange={handleEditorChange}
         output="html"
         placeholder="Start writing ..."
         editable={true}

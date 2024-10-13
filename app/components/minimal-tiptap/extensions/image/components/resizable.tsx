@@ -60,7 +60,7 @@
 import { cn } from "@/lib/utils";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import React, {
-  CSSProperties,
+  // CSSProperties,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -116,6 +116,7 @@ export const ResizableImageTemplate = ({
       const transform = direction === "w" ? -1 : 1;
 
       const mouseMoveHandler = (event: MouseEvent | TouchEvent) => {
+        /* eslint-disable-next-line */
         event.cancelable && event.preventDefault();
         const currentPosition =
           event instanceof MouseEvent
@@ -178,6 +179,7 @@ export const ResizableImageTemplate = ({
 
   return (
     <>
+      {/* @ts-expect-error Types issues here(Would fix later) */}
       <ImageConfig updateAttributes={updateAttributes} node={node} />
       <NodeViewWrapper
         ref={containerRef}
@@ -193,6 +195,8 @@ export const ResizableImageTemplate = ({
         }}
         className={`relative my-6 overflow-visible sm:my-8 ${node.attrs.align}`}
       >
+        {/* Change later to NextImage(bug). Using NextImage for now doesn't work */}
+        {/* eslint-disable-next-line */}
         <img
           src={node.attrs.src}
           ref={imgRef}

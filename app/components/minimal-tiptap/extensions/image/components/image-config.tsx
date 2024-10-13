@@ -9,7 +9,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Ellipsis } from "lucide-react";
-import { Node, NodeViewProps } from "@tiptap/core";
+import { NodeViewProps } from "@tiptap/core";
 
 const ImageConfig = ({ updateAttributes, node }: NodeViewProps) => {
   const [openPopovers, setOpenPopovers] = useState<{ [key: string]: boolean }>(
