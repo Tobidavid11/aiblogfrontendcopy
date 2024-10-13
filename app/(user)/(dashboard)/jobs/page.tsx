@@ -1,6 +1,8 @@
+
 import { JobCard } from "@/components/job";
 import { JobsHeader } from "@/components/job/jobs-header";
 import { JobDummyData } from "@/data/mock/job";
+
 
 const Jobs = () => {
   return (
@@ -11,6 +13,7 @@ const Jobs = () => {
           <JobCard key={index} job={item} />
         ))}
       </div>
+    
     </div>
   );
 };

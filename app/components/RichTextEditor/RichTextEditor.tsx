@@ -26,7 +26,6 @@ import {
   AlignRight,
   AlignJustify,
   Link,
-  Image,
   Video,
   Table,
   Quote,
@@ -34,6 +33,7 @@ import {
   Heading2,
   Heading3,
 } from "lucide-react";
+import Image from "next/image";
 
 // Custom types
 type CustomText = { text: string; [key: string]: any };
@@ -253,7 +253,7 @@ const Element = ({ attributes, children, element }: any) => {
         </a>
       );
     case "image":
-      return <img src={element.url} alt={element.alt} {...attributes} />;
+      return <Image src={element.url} alt={element.alt} {...attributes}/>;
     case "video":
       return (
         <video controls {...attributes}>
@@ -388,7 +388,7 @@ const InsertImageButton = () => {
         insertImage();
       }}
     >
-      <Image />
+      <Image src={""} alt={""} />
     </Button>
   );
 };

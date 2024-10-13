@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ProgressBar from "@/app/components/create-job/ProgresBar";
-import Button from "@/app/components/CustomButton/Button";
+
 import Image from "next/image";
 import { CalendarDays, CirclePlus } from "lucide-react";
 import InstructionField from "@/app/components/create-job/InstructionField";
 import SocialActions from "@/app/components/create-job/SocialActions";
+import Button from "@/components/shared/button";
 
 export default function CreateJob() {
   const [socialActions, setSocialActions] = useState<boolean>(false);
