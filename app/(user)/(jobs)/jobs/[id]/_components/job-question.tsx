@@ -2,12 +2,6 @@
 
 import React, { useState, useRef } from "react";
 import {
-  Bold,
-  Italic,
-  Underline,
-  List,
-  ListOrdered,
-  Link as LinkIcon,
   ThumbsUp,
   MessageSquare,
   Share2
@@ -80,7 +74,7 @@ export default function TaskQuestionsUI() {
     >
   <h2 className="text-lg font-semibold mb-3 text-[#525252]">{question.text}</h2>
       {question.type === "open" ? (
-        <JobTextEditor question={question.text}/>
+        <JobTextEditor/>
       ) : (
         <div className="space-y-2">
           {question.options?.map((option, index) => (
