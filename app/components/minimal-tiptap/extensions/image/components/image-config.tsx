@@ -74,7 +74,11 @@ const ImageConfig = ({ updateAttributes, node }: NodeViewProps) => {
         asChild
         className="absolute z-[999999999999999999999999999999999999999999999] top-3 right-3"
       >
-        <Button size="icon" variant="outline">
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-[200px] w-[200px] bg-green-200"
+        >
           <Ellipsis />
         </Button>
       </PopoverTrigger>
