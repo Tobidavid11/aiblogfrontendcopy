@@ -2,8 +2,14 @@ import { isNumber, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { useMemo } from "react";
 import { useImageLoad } from "../../../hooks/use-image-load";
 import { cn } from "@/lib/utils";
+import ImageConfig from "./image-config";
 
-const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
+const ImageViewBlock = ({
+  editor,
+  node,
+  getPos,
+  updateAttributes,
+}: NodeViewProps) => {
   const imgSize = useImageLoad(node.attrs.src);
 
   const paddingBottom = useMemo(() => {
@@ -13,6 +19,17 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
 
     return (imgSize.height / imgSize.width) * 100;
   }, [imgSize.width, imgSize.height]);
+
+  // const updateAttributes = (attrs: Record<string, any>) => {
+  //   if (typeof getPos === "function") {
+  //     editor
+  //       .chain()
+  //       .focus()
+  //       .setNodeSelection(getPos())
+  //       .updateAttributes(attrs)
+  //       .run();
+  //   }
+  // };
 
   return (
     <NodeViewWrapper>
@@ -37,16 +54,27 @@ const ImageViewBlock = ({ editor, node, getPos }: NodeViewProps) => {
                 }}
               >
                 <div className="relative flex h-full max-h-full w-full max-w-full overflow-hidden">
+                  {/* @ts-expect-error Passing the types wrongly */}
+                  <ImageConfig
+                    updateAttributes={updateAttributes}
+                    node={node}
+                  />
                   {/* eslint-disable-next-line */}
                   <img
-                    alt={node.attrs.alt}
+                    alt={node.attrs.alt || "Image"}
                     src={node.attrs.src}
-                    className="absolute left-2/4 top-2/4 m-0 h-full max-w-full -translate-x-2/4 -translate-y-2/4 transform object-contain"
+                    className="absolute w-full left-2/4 top-2/4 m-0 h-full max-w-full -translate-x-2/4 -translate-y-2/4 transform object-contain"
+                    style={{ width: node.attrs.width || "100%" }}
                   />
                 </div>
               </div>
             </div>
           </div>
+          {node.attrs.title && (
+            <figcaption className="text-center mt-2">
+              {node.attrs.title}
+            </figcaption>
+          )}
         </figure>
       </div>
     </NodeViewWrapper>
