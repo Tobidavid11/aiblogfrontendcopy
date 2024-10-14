@@ -7,9 +7,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <>  <NavBar />
-      
-      
-        {children}
+            <main className="relative overflow-hidden h-screen mt-10  sm:px-6 lg:px-8">
+              {children}
+            </main>
     </>
   );
 }
