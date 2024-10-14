@@ -6,6 +6,7 @@ import { BlogCard } from "@/components/blog";
 import { BlogDummyData } from "@/data/mock/blog";
 import { SearchInput } from "@/components/shared";
 import { CategoryItem } from "@/components/shared/category";
+import { cn } from "@/lib/utils";
 
 export default function BlogPlatformLayout() {
   return (
@@ -17,11 +18,12 @@ export default function BlogPlatformLayout() {
         />
       </div>
 
-      <div className="md:hidden mb-6">
+      <div className=" mb-6">
         <h2 className="text-lg font-semibold mb-2">CATEGORY</h2>
-        <div className="flex space-x-2 overflow-x-auto pb-2">
-          {["All", "Technology", "Politics", "Flutter"].map((category) => (
+        <div className="flex space-x-2 overflow-x-auto custom-scroll pb-2">
+          {["All", "Technology", "Politics", "Flutter", "Nigeria" ,"AWS" ,"Crypto" ,"Fluter","5G Connectivity"].map((category) => (
             <Button
+            className={cn("bg-[#f9f7b9]/30 hover:bg-[#f9f7b9] rounded-[20px]", category === "All" && "bg-black")}
               key={category}
               variant={category === "All" ? "default" : "outline"}
               size="sm"
