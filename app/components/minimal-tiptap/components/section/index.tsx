@@ -81,7 +81,7 @@ interface SectionOneProps extends VariantProps<typeof toggleVariants> {
   activeLevels?: Level[];
 }
 
-export const SectionOne: React.FC<SectionOneProps> = React.memo(
+export const Section: React.FC<SectionOneProps> = React.memo(
   ({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
     const filteredActions = React.useMemo(
       () =>
@@ -134,8 +134,8 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
             size={size}
             variant={variant}
           >
-            <LetterCaseCapitalizeIcon className="" />
-            <CaretDownIcon className="" />
+            <LetterCaseCapitalizeIcon className="size-5" />
+            <CaretDownIcon className="size-5" />
           </ToolbarButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-full">
@@ -146,6 +146,6 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
   },
 );
 
-SectionOne.displayName = "SectionOne";
+Section.displayName = "SectionOne";
 
-export default SectionOne;
+export default Section;

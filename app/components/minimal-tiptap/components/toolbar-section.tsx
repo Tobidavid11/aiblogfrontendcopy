@@ -93,7 +93,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
   );
 
   return (
-    <div className="!w-full shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] border rounded-xl py-3 px-4 flex gap-4 items-center bg-modals-and-dropdown border-gainsboro">
+    <div className="">
       {mainActions.map(renderToolbarButton)}
       {dropdownActions.length > 0 && (
         <DropdownMenu>
