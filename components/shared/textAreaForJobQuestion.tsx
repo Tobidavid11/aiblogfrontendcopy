@@ -1,75 +1,72 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Bold, Italic, Underline, List, ListOrdered, Link } from 'lucide-react'
 
-export default function JobTextEditor() {
-  const [text, setText] = useState('')
+type JobTextEditorProps = {
+  onChange: () => void; // Define the correct type for the prop
+};
 
-  const formatText = (command: string) => {
-    const textarea = document.querySelector('textarea')
-    if (!textarea) return
+export default function JobTextEditor({ onChange }: JobTextEditorProps) {
+  const editorRef = useRef<HTMLDivElement>(null)
+  const [isEmpty, setIsEmpty] = useState(true)
 
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const selectedText = text.substring(start, end)
-
-    let formattedText = ''
-    switch (command) {
-      case 'bold':
-        formattedText = `**${selectedText}**`
-        break
-      case 'italic':
-        formattedText = `*${selectedText}*`
-        break
-      case 'underline':
-        formattedText = `__${selectedText}__`
-        break
-      case 'bullet':
-        formattedText = `\n- ${selectedText}`
-        break
-      case 'number':
-        formattedText = `\n1. ${selectedText}`
-        break
-      case 'link':
-        formattedText = `[${selectedText}](url)`
-        break
-      default:
-        formattedText = selectedText
+  const formatText = (command: string, value?: string) => {
+    if (editorRef.current) {
+      document.execCommand(command, false, value ?? undefined)
     }
-
-    const newText = text.substring(0, start) + formattedText + text.substring(end)
-    setText(newText)
-
-    setTimeout(() => {
-      textarea.focus()
-      textarea.setSelectionRange(start + formattedText.length, start + formattedText.length)
-    }, 0)
+    onChange() // Call the onChange function passed from parent when formatting is applied
   }
+
+  const handleInput = () => {
+    const editorContent = editorRef.current?.innerText || ''
+    setIsEmpty(editorContent.trim() === '') // Check if the content is empty
+    onChange()
+  }
+
+  useEffect(() => {
+    const editorContent = editorRef.current?.innerText || ''
+    setIsEmpty(editorContent.trim() === '')
+  }, [])
 
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="rounded-xl">
-        <div className="p-4">
-          <textarea
-            placeholder="Enter your response..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="w-full min-h-[20px] p-2 text-gray-700 border-0 focus:ring-0 focus:outline-none resize-none"
-          />
+        <div className="p-4 border-b border-gray-300 rounded-md relative">
+          {isEmpty && (
+            <span className="absolute top-2 left-2 text-gray-400 pointer-events-none">
+              Enter your response...
+            </span>
+          )}
+          <div
+            ref={editorRef}
+            contentEditable
+            className="w-full min-h-[60px] p-2 text-gray-700 border-0 focus:ring-0 focus:outline-none resize-none"
+            onInput={handleInput}
+            suppressContentEditableWarning={true}
+          ></div>
         </div>
         <div className="flex items-center justify-end space-x-2 px-2 py-1 border-t border-[#E5E5E5]">
           {[
-            { icon: Bold, label: 'Bold' },
-            { icon: Italic, label: 'Italic' },
-            { icon: Underline, label: 'Underline' },
-            { icon: List, label: 'Bullet List' },
-            { icon: ListOrdered, label: 'Numbered List' },
-            { icon: Link, label: 'Insert Link' },
+            { icon: Bold, label: 'Bold', command: 'bold' },
+            { icon: Italic, label: 'Italic', command: 'italic' },
+            { icon: Underline, label: 'Underline', command: 'underline' },
+            { icon: List, label: 'Bullet List', command: 'insertUnorderedList' },
+            { icon: ListOrdered, label: 'Numbered List', command: 'insertOrderedList' },
+            { icon: Link, label: 'Insert Link', command: 'createLink' },
           ].map((item, index) => (
             <button
               key={index}
-              onClick={() => formatText(item.label.toLowerCase())}
+              onClick={() => {
+                if (item.command === 'createLink') {
+                  const url = prompt('Enter the URL')
+                  if (url) {
+                    formatText(item.command, url)
+                  }
+                } else {
+                  formatText(item.command)
+                }
+              }}
               className="p-1 text-gray-500 hover:text-gray-700 focus:outline-none"
             >
               <item.icon className="h-4 w-4" />
