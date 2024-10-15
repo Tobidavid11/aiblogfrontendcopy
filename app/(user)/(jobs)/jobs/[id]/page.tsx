@@ -7,9 +7,9 @@ import Aside from "./_components/aside";
 import Comments from "./_components/comments";
 import JobContent from "./_components/job-content";
 
-import Button from "@/components/shared/button";
+import Link from "next/link";
 
-const JobPage = () => {
+const JobPage = ({ params }: { params: { id: string } }) => {
   const job = JobDummyData[0];
   return (
     <main className="bg-white relative overflow-auto h-full">
@@ -17,7 +17,7 @@ const JobPage = () => {
         <div className="flex gap-[30px] lg:gap-[60px] pt-8 pb-4 max-w-[1180px] mx-auto max-h-full overflow-hidden">
           <div className="max-w-screen-md mx-auto w-full max-h-full overflow-y-auto sm:p-8 space-y-4 rounded-[24px] sm:border border-neutral-200 custom-scroll">
             <JobContent job={job} />
-            <ActionButtons />
+            <ActionButtons id={params.id} />
             <Comments />
           </div>
 
@@ -28,7 +28,7 @@ const JobPage = () => {
   );
 };
 
-const ActionButtons = () => {
+const ActionButtons = ({ id }: { id: string }) => {
   return (
     <div className="flex items-center gap-2">
       <button className="p-2 text-neutral-500 flex gap-1 items-center hover:bg-neutral-100 rounded-sm transition-colors">
@@ -46,9 +46,12 @@ const ActionButtons = () => {
         <span className="leading-none hidden sm:inline">Forward</span>
       </button>
 
-      <Button className="ml-auto font-medium" color="secondary">
+      <Link
+        href={`/jobs/${id}/apply`}
+        className="px-4 py-2 ml-auto bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] text-[#262626] font-medium capitalize rounded-full transition duration-300 ease-in-out"
+      >
         Apply
-      </Button>
+      </Link>
     </div>
   );
 };
