@@ -1,4 +1,3 @@
-
 import { JobDummyData } from "@/data/mock/job";
 import iconComment from "@/public/assets/icons/comment.svg";
 import iconShare from "@/public/assets/icons/share.svg";
@@ -13,14 +12,13 @@ import Button from "@/components/shared/button";
 const JobPage = () => {
   const job = JobDummyData[0];
   return (
-    <main className="bg-white grow relative">
+    <main className="bg-white relative overflow-auto h-full">
       <div className="absolute inset-0 px-8">
         <div className="flex gap-[30px] lg:gap-[60px] pt-8 pb-4 max-w-[1180px] mx-auto max-h-full overflow-hidden">
           <div className="max-w-screen-md mx-auto w-full max-h-full overflow-y-auto sm:p-8 space-y-4 rounded-[24px] sm:border border-neutral-200 custom-scroll">
             <JobContent job={job} />
             <ActionButtons />
             <Comments />
-           
           </div>
 
           <Aside />
@@ -29,7 +27,6 @@ const JobPage = () => {
     </main>
   );
 };
-
 
 const ActionButtons = () => {
   return (
