@@ -54,8 +54,8 @@ export const PostConfig = () => {
   }
 
   return (
-    <Card className="order-1 md:order-2 bg-neutral-50 flex flex-col gap-3 font-dm-sans shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] rounded-2xl">
-      <CardHeader>
+    <Card className="order-1 md:order-2 bg-transparent border-none md:border shadow-none md:bg-neutral-50 flex flex-col gap-3 font-dm-sans md:shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] rounded-2xl">
+      <CardHeader className="px-0 md:px-6">
         <Card className="shadow-none bg-palegoldenrod rounded-xl border-transparent flex flex-col gap-0">
           <CardHeader className="pb-4">
             <Select>
@@ -84,7 +84,7 @@ export const PostConfig = () => {
           </CardFooter>
         </Card>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0 md:px-6">
         <Card className="shadow-none bg-neutral-100 border-transparent rounded-xl">
           <CardHeader className="">
             <div className="h-[180px] bg-white border-neutral-100 border flex items-center justify-center text-xl text-neutral-200 roundex-xl">
@@ -153,7 +153,7 @@ export const PostConfig = () => {
             </Form>
             <Separator />
           </CardContent>
-          <CardFooter className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <CardFooter className="flex flex-col sm:flex-row sm:items-center gap-3 px-0 md:px-6">
             <Button
               formAction={saveToDraft}
               className="border-text-color text-neutral-700 font-medium rounded-full py-6 px-6"
