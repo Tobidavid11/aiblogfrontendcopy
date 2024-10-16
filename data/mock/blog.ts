@@ -14,7 +14,7 @@
 //     isFollowing: boolean;
 //     location: string;
 //   }
-  
+
 //   // Mock data for articles
 //   const articles: Article[] = [
 //     {
@@ -78,7 +78,7 @@
 //       location: "Nigeria",
 //     }
 //   ];
-  
+
 //   export default articles;
 import { BlogType } from "@/types/blog";
 import { UserData } from "./user";
@@ -91,6 +91,7 @@ const BlogData: BlogType = {
   description:
     "Explore Tesla's journey from its inception to the groundbreaking advancements in autonomous driving technology and AI integration.",
   metrics: dummyMetrics[0],
+  extra_info: ["Nigeria", "Web3", "Crypto"],
 };
 
 export const BlogDummyData = [BlogData, BlogData, BlogData, BlogData, BlogData];

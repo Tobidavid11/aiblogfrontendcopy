@@ -11,6 +11,7 @@ import {
 import { PostMetrics, UserProfile } from "../shared";
 import { BlogType } from "@/types/blog";
 import Image from "next/image";
+import BlogExtraInfo from "./blog-extra-info";
 
 interface MainBloyType {
   blog: BlogType;
@@ -33,15 +34,13 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
       </CardHeader>
 
       <CardContent className="flex flex-col p-0 gap-y-3">
-      
-         
-          <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
-            {blog.title}
-          </CardTitle>
+        <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] ">
+          {blog.title}
+        </CardTitle>
 
-          {/* Description */}
-          <CardDescription className="text-base font-normal leading-6 text-[#737373]">
-            {blog.description}
+        {/* Description */}
+        <CardDescription className="text-base font-normal leading-6 text-[#737373]">
+          {blog.description}
         </CardDescription>
 
         <div className="relative block rounded-xl w-full h-[230px] my-3 overflow-hidden">
@@ -55,11 +54,13 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
         </div>
       </CardContent>
 
-      <CardFooter className="p-0">
+      <CardFooter className="p-0 flex flex-row items-center justify-between">
         <PostMetrics
           item={blog.metrics}
           key={blog.user?.username + blog.title}
         />
+
+        <BlogExtraInfo items={blog.extra_info} />
       </CardFooter>
     </Card>
   );

@@ -7,4 +7,5 @@ export interface BlogType {
   description: string;
   image: string;
   metrics: PostMetrics;
+  extra_info: string[];
 }

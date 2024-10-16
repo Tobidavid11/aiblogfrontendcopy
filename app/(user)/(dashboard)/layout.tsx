@@ -29,7 +29,7 @@ export default function DashboardLayout({
         </section>
 
         {/* Blog */}
-        <section className="w-full flex-1 h-full col-span-2 px-6 pt-6 bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
+        <section className="w-full flex-1 h-full col-span-2 px-6 pt-6 bg-[#F5F5F5] border border-[#E5E5E5] rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 
