@@ -31,6 +31,7 @@ import { Sparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Publish from "./publish";
+import TagsInput from "./tags-input";
 
 const formSchema = z.object({
   category: z
@@ -118,18 +119,36 @@ export const PostConfig = () => {
                   name="tags"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Tags</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Tags here"
-                          className="border border-neutral-200 rounded-sm"
+                        <TagsInput
+                          value={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
+                      {/* {description && <FormDescription>{description}</FormDescription>} */}
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {/* <TagsInput /> */}
+                {/* <FormField */}
+                {/*   control={form.control} */}
+                {/*   name="tags" */}
+                {/*   render={({ field }) => ( */}
+                {/*     <FormItem> */}
+                {/*       <FormLabel>Category</FormLabel> */}
+                {/*       <FormControl> */}
+                {/*         <Input */}
+                {/*           {...field} */}
+                {/*           placeholder="Tags here" */}
+                {/*           className="border border-neutral-200 rounded-sm" */}
+                {/*         /> */}
+                {/*       </FormControl> */}
+                {/*       <FormMessage /> */}
+                {/*     </FormItem> */}
+                {/*   )} */}
+                {/* /> */}
               </form>
             </Form>
             <Separator />
