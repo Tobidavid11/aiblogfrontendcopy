@@ -10,6 +10,7 @@ import {
 } from "../ui/card";
 import { PostMetrics, UserProfile } from "../shared";
 import { JobType } from "@/types/job";
+import JobExtraInfo from "./job-extra-info";
 
 const JobCard = memo<{ job: JobType }>(({ job }) => {
   return (
@@ -32,8 +33,13 @@ const JobCard = memo<{ job: JobType }>(({ job }) => {
         </CardDescription>
       </CardContent>
 
-      <CardFooter className="p-0 mt-1">
+      <CardFooter className="p-0 mt-1 flex flex-row items-center justify-between">
         <PostMetrics item={job.metrics} key={job.user?.username + job.title} />
+        <JobExtraInfo
+          customOption={job.extra_info.customOption}
+          normalStrings={job.extra_info?.normalStrings}
+          repliesCount={job.extra_info?.repliesCount}
+        />
       </CardFooter>
     </Card>
   );
