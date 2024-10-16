@@ -178,42 +178,42 @@ export const ResizableImageTemplate = ({
   }, [editing]);
 
   return (
-    <>
-      {/* @ts-expect-error Types issues here(Would fix later) */}
-      <ImageConfig updateAttributes={updateAttributes} node={node} />
-      <NodeViewWrapper
-        ref={containerRef}
-        as="div"
-        draggable
-        data-drag-handle
-        onMouseDown={() => setEditing(true)}
-        onTouchStart={() => setEditing(true)}
-        onBlur={() => setEditing(false)}
+    <NodeViewWrapper
+      ref={containerRef}
+      as="div"
+      // draggable
+      // data-drag-handle
+      onMouseDown={() => setEditing(true)}
+      onTouchStart={() => setEditing(true)}
+      onBlur={() => setEditing(false)}
+      // style={{
+      //   display: "table",
+      //   lineHeight: "0px",
+      // }}
+      className={`relative my-6 overflow-visible bg-green-700 sm:my-8 ${node.attrs.align}`}
+    >
+      <div className="relative">
+        {/* @ts-expect-error Types issues here(Would fix later) */}
+        <ImageConfig updateAttributes={updateAttributes} node={node} />
+      </div>
+      {/* Change later to NextImage(bug). Using NextImage for now doesn't work */}
+      {/* eslint-disable-next-line */}
+      <img
+        src={node.attrs.src}
+        ref={imgRef}
         style={{
-          display: "table",
-          lineHeight: "0px",
+          width: `${width}px`,
         }}
-        className={`relative my-6 overflow-visible sm:my-8 ${node.attrs.align}`}
-      >
-        {/* Change later to NextImage(bug). Using NextImage for now doesn't work */}
-        {/* eslint-disable-next-line */}
-        <img
-          src={node.attrs.src}
-          ref={imgRef}
-          style={{
-            width: `${width}px`,
-          }}
-          alt={node.attrs.alt || "Image"}
-          className={cn(
-            editing && `cursor-default ring-1 ring-foreground`,
-            "min-w-[200px] max-w-full rounded-md",
-          )}
-        />
-        <div className="group">
-          {dragCornerButton("w", "-left-3.5 cursor-w-resize")}
-          {dragCornerButton("e", "-right-3.5 cursor-e-resize")}
-        </div>
-      </NodeViewWrapper>
-    </>
+        alt={node.attrs.alt || "Image"}
+        className={cn(
+          editing && `cursor-default ring-1 ring-foreground`,
+          "min-w-[200px] max-w-full rounded-md",
+        )}
+      />
+      <div className="group">
+        {dragCornerButton("w", "-left-3.5 cursor-w-resize")}
+        {dragCornerButton("e", "-right-3.5 cursor-e-resize")}
+      </div>
+    </NodeViewWrapper>
   );
 };
