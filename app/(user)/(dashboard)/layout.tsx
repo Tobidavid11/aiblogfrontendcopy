@@ -21,20 +21,20 @@ export default function DashboardLayout({
       {/* Navigation */}
       <NavBar />
 
-      <main className="w-full maxHeight overflow-hidden pt-6 bg-[#FAFAFA] px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-4">
+      <main className="w-full maxHeight overflow-hidden md:pt-6 bg-[#FAFAFA] md:px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-1 md:grid-cols-4">
         {/* Featured article */}
-        <section className="col-span-1">
+        <section className="hidden md:block col-span-1">
           <SectionTitle title="Featured Articles" />
           <FeaturedArticles />
         </section>
 
         {/* Blog */}
-        <section className="w-full flex-1 h-full col-span-2 px-6 pt-6 bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
+        <section className="w-full flex-1 h-full md:col-span-2 px-6 pt-6 bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 
         {/* Trending topics | Top writers */}
-        <section className="col-span-1">
+        <section className="hidden md:block col-span-1">
           <div
             className={`h-[88vh] grid ${
               user === "authenticated" ? "grid-rows-2" : "grid-rows-3"
