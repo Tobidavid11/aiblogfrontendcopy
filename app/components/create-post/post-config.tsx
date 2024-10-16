@@ -1,6 +1,3 @@
-"use client";
-
-import { saveToDraft } from "@/actions/posts";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,11 +6,10 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -26,32 +22,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Sparkles } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Sparkles, X } from "lucide-react";
+import { UseFormReturn } from "react-hook-form";
 import Publish from "./publish";
 import TagsInput from "./tags-input";
+import { saveToDraft } from "@/actions/blog";
+import { FormValues } from "./create-post";
+import { useCallback, useState } from "react";
+import Image from "next/image";
 
-const formSchema = z.object({
-  category: z
-    .string({ required_error: "Category is required" })
-    .min(3, "Category can't be less than 3 characters"),
-  tags: z.string(),
-});
+interface PostConfigProps {
+  form: UseFormReturn<FormValues>;
+  onPublish: () => void;
+}
 
-export const PostConfig = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      tags: "",
-      category: "",
+export const PostConfig = ({ form, onPublish }: PostConfigProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const handleImageChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+        form.setValue("coverImage", file);
+      }
     },
-  });
+    [form],
+  );
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const handleRemoveImage = useCallback(() => {
+    setPreviewUrl(null);
+    form.setValue("coverImage", undefined);
+  }, [form]);
 
   return (
     <Card className="order-1 md:order-2 bg-transparent border-none md:border shadow-none md:bg-neutral-50 flex flex-col gap-3 font-dm-sans md:shadow-[-2px_2px_12px_-2px_rgba(16,_24,_40,_0.06),_2px_-2px_16px_-1px_rgba(16,_24,_40,_0.06)] rounded-2xl">
@@ -60,14 +66,11 @@ export const PostConfig = () => {
           <CardHeader className="pb-4">
             <Select>
               <SelectTrigger className="bg-white rounded-xl py-6">
-                <SelectValue
-                  // className="bg-white"
-                  placeholder="Ai Generated Content"
-                />
-                <SelectContent>
-                  <SelectItem value="other">Other things</SelectItem>
-                </SelectContent>
+                <SelectValue placeholder="Ai Generated Content" />
               </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="other">Other things</SelectItem>
+              </SelectContent>
             </Select>
           </CardHeader>
           <CardContent className="pb-4">
@@ -87,82 +90,100 @@ export const PostConfig = () => {
       <CardContent className="px-0 md:px-6">
         <Card className="shadow-none bg-neutral-100 border-transparent rounded-xl">
           <CardHeader className="">
-            <div className="h-[180px] bg-white border-neutral-100 border flex items-center justify-center text-xl text-neutral-200 roundex-xl">
-              Add Cover
-            </div>
+            <FormField
+              control={form.control}
+              name="coverImage"
+              render={({ field: { value, onChange, ...field } }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="relative h-[180px] bg-white border-neutral-100 border rounded-xl overflow-hidden">
+                      {previewUrl ? (
+                        <>
+                          <Image
+                            src={previewUrl}
+                            alt="Cover preview"
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                          <Button
+                            variant={"ghost"}
+                            size={"icon"}
+                            className="absolute top-2 right-2 bg-white/50 hover:bg-white/75 transition-colors z-10"
+                            onClick={handleRemoveImage}
+                            type="button"
+                          >
+                            <X size={15} />
+                          </Button>
+                        </>
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-xl text-neutral-200">
+                          Add Cover
+                        </div>
+                      )}
+                      <Input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer z-0 h-full w-full"
+                        onChange={handleImageChange}
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-3"
-              >
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Sports, Education, Web 3"
-                          className="border border-neutral-200 rounded-sm"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="tags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tags</FormLabel>
-                      <FormControl>
-                        <TagsInput
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      {/* {description && <FormDescription>{description}</FormDescription>} */}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* <TagsInput /> */}
-                {/* <FormField */}
-                {/*   control={form.control} */}
-                {/*   name="tags" */}
-                {/*   render={({ field }) => ( */}
-                {/*     <FormItem> */}
-                {/*       <FormLabel>Category</FormLabel> */}
-                {/*       <FormControl> */}
-                {/*         <Input */}
-                {/*           {...field} */}
-                {/*           placeholder="Tags here" */}
-                {/*           className="border border-neutral-200 rounded-sm" */}
-                {/*         /> */}
-                {/*       </FormControl> */}
-                {/*       <FormMessage /> */}
-                {/*     </FormItem> */}
-                {/*   )} */}
-                {/* /> */}
-              </form>
-            </Form>
+            <div className="flex flex-col gap-3">
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Sports, Education, Web 3"
+                        className="border border-neutral-200 rounded-sm"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tags"
+                render={({ field }) => (
+                  <FormItem className="mb-4">
+                    <FormLabel>Tags</FormLabel>
+                    <FormControl>
+                      <TagsInput
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <Separator />
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row sm:items-center gap-3 px-0 md:px-6">
             <Button
-              formAction={saveToDraft}
+              onClick={(e) => {
+                e.preventDefault();
+                saveToDraft();
+              }}
               className="border-text-color text-neutral-700 font-medium rounded-full py-6 px-6"
-              disabled
               variant={"outline"}
             >
               Save to draft
             </Button>
-            <Publish />
+            <Publish onPublish={onPublish} />
           </CardFooter>
         </Card>
       </CardContent>
