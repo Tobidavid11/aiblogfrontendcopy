@@ -25,7 +25,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   };
 
   return (
-    <div className={cn("flex items-center gap-6", className)}>
+    <div className={cn("flex items-center justify-between gap-6", className)}>
       <div className="w-full flex gap-2 items-center">
         <RoundedImage
           size={40}
@@ -52,21 +52,23 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       </div>
 
       {/* Button (Job or Blog) */}
-      {isJobProfile ? (
-        <Button
-          onClick={applyAction}
-          className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] text-[#262626] font-medium capitalize rounded-full transition duration-300 ease-in-out"
-        >
-          Apply
-        </Button>
-      ) : (
-        <Button
-          onClick={followAction}
-          className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out"
-        >
-          Follow
-        </Button>
-      )}
+      <div className="">
+        {isJobProfile ? (
+          <Button
+            onClick={applyAction}
+            className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] text-[#262626] font-medium capitalize rounded-full transition duration-300 ease-in-out"
+          >
+            Apply
+          </Button>
+        ) : (
+          <Button
+            onClick={followAction}
+            className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out"
+          >
+            Follow
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

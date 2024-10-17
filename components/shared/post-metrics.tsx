@@ -25,7 +25,7 @@ interface MetricsItemProps {
   onIconClick: () => void;
 }
 
-const MetricsItem = ({ icon, count, onIconClick }: MetricsItemProps) => {
+export const MetricsItem = ({ icon, count, onIconClick }: MetricsItemProps) => {
   return (
     <div
       className="flex flex-row items-center gap-x-1 cursor-pointer"
