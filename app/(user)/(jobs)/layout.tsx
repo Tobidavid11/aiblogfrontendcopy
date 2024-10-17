@@ -6,10 +6,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>  <NavBar />
-            <main className="relative overflow-hidden h-screen mt-10  sm:px-6 lg:px-8">
-              {children}
-            </main>
+    <>
+      <NavBar />
+      <main className="relative overflow-hidden h-dvh md:h-[calc(100vh_-72px)]">{children}</main>
     </>
   );
 }
