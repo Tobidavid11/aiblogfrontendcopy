@@ -18,7 +18,7 @@ const ImageBubbleMenu = ({ editor }: { editor: Editor }) => {
     return false;
   };
 
-  const unSetImage = () => {
+  const unSetImage: any = () => {
     editor.commands.deleteSelection();
   };
 
