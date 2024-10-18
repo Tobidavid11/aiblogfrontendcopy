@@ -93,9 +93,7 @@ const BlogData: BlogType = {
     "Explore Tesla's journey from its inception to the groundbreaking advancements in autonomous driving technology and AI integration.",
   metrics: dummyMetrics[0],
   extra_info: ["Nigeria", "Web3", "Crypto"],
-};
-
-export const BlogDummyData = [BlogData, BlogData, BlogData, BlogData, BlogData];
+  publishedDate: "2024-03-15",
   content: [
     {
       type: "paragraph",
@@ -171,8 +169,6 @@ export const BlogDummyData = [BlogData, BlogData, BlogData, BlogData, BlogData];
       text: "In this grand orchestration, data conducts the symphony of business operations, ensuring that every note resonates with precision and purpose.",
     },
   ],
-  publishedDate: "2024-03-15",
-  tags: ["Replies", "Nigeria", "Customs"],
 };
 
 const dataDrivernGrowthBlog: BlogType = {
@@ -183,6 +179,9 @@ const dataDrivernGrowthBlog: BlogType = {
   image: "/images/data-driven-blog/headImage.jpg",
   description:
     "In the ever-evolving business landscape, where volatile markets and burgeoning technologies perpetually redefine the game, one steadfast titan has consistently outstripped the competition: Legacy Ltd, a bastion of industry whose name has become synonymous with sustainable success.",
+  metrics: dummyMetrics[0],
+  extra_info: ["USA", "Business", "Marketing"],
+  publishedDate: "2024-03-15",
   content: [
     {
       type: "paragraph",
@@ -258,9 +257,6 @@ const dataDrivernGrowthBlog: BlogType = {
       text: "In this grand orchestration, data conducts the symphony of business operations, ensuring that every note resonates with precision and purpose.",
     },
   ],
-  metrics: dummyMetrics[0],
-  tags: ["Replies", "Nigeria", "Customs"],
-  publishedDate: "2024-03-15",
 };
 
 export const BlogDummyData = [
