@@ -121,7 +121,7 @@ export default function TaskQuestionsUI() {
   );
 
   return (
-    <div className="flex flex-col relative md:flex-row rounded-xl gap-2">
+    <div className="flex flex-col relative md:flex-row rounded-xl gap-2 pt-10 sm:px-6 lg:px-8">
       {/* Main Content */}
       <div className="bg-gray-100 rounded-xl px-6 max-w-2xl bg-white">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 mt-10">
