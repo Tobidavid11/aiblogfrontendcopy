@@ -1,42 +1,68 @@
-import { API_BASE_URL } from "./constants";
+import { AUTH_API_BASE_URL, BLOG_API_BASE_URL } from "./constants";
+import { PublicError } from "./safe-action";
 
 export function formatNumber(num: number): string {
-  return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
+	return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
+}
+
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+interface NextJsOptions {
+	revalidate?: number | false;
+	tags?: string[];
+}
+
+interface FetchOptions extends Omit<RequestInit, "method" | "body"> {
+	method?: HttpMethod;
+	body?: Record<string, unknown>;
+	next?: NextJsOptions;
 }
 
 export default function makeFetch<T>(
-  auth: boolean,
-  path: string,
-  accessToken: string | null = null,
-  init: RequestInit = {},
-): () => Promise<T | { message: string; statusCode: number }> {
-  return async function () {
-    try {
-      const shouldAddContentType = ["POST", "PATCH"].includes(
-        init.method || "",
-      );
+	service: "blog" | "auth",
+	path: string,
+	accessToken: string | null,
+	options: FetchOptions = {},
+): () => Promise<T> {
+	return async () => {
+		const { method = "GET", body, next, ...restOptions } = options;
 
-      const headers = {
-        ...(auth && accessToken
-          ? { Authorization: `Bearer ${accessToken}` }
-          : {}),
-        ...(shouldAddContentType ? { "Content-Type": "application/json" } : {}),
-        ...init.headers,
-      };
+		const shouldAddContentType =
+			["POST", "PUT", "PATCH"].includes(method) && body;
 
-      const res = await fetch(`${API_BASE_URL}${path}`, {
-        ...init,
-        headers,
-      });
+		const headers = new Headers(restOptions.headers);
 
-      if (!res.ok) {
-        throw new Error(`Request failed with status ${res.status}`);
-      }
+		if (accessToken) {
+			headers.set("Authorization", `Bearer ${accessToken}`);
+		}
 
-      return await res.json();
-    } catch (error) {
-      console.error("Error making fetch request:", error);
-      return { message: "Failed to make request", statusCode: 500 };
-    }
-  };
+		if (shouldAddContentType) {
+			headers.set("Content-Type", "application/json");
+		}
+
+		const fetchOptions: RequestInit & { next?: NextJsOptions } = {
+			...restOptions,
+			method,
+			headers,
+			body: body ? JSON.stringify(body) : undefined,
+		};
+
+		if (next) {
+			fetchOptions.next = next;
+		}
+
+		const res = await fetch(
+			`${service === "blog" ? BLOG_API_BASE_URL : AUTH_API_BASE_URL}${path}`,
+			fetchOptions,
+		);
+
+		if (!res.ok) {
+			throw new PublicError("Req failed");
+		}
+
+		const contentType = res.headers.get("content-type");
+		if (contentType?.includes("application/json")) {
+			return (await res.json()) as T;
+		}
+		return (await res.text()) as unknown as T;
+	};
 }
