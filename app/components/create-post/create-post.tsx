@@ -5,33 +5,23 @@ import { PostConfig } from "./post-config";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
+import { createBlogSchema } from "@/schemas/blog";
+import { postBlogAction } from "@/actions/blog";
+import { useServerAction } from "zsa-react";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(165, "Title can't be more than 165 characters"),
-  content: z.string().min(1, "Content is required"),
-  tags: z.string().min(1, "Tags is required"),
-  category: z.string().min(1, "Category is required"),
-  status: z.string(),
-  coverImage: z
-    .instanceof(File)
-    .refine((file) => file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "Only .jpg, .png, and .webp formats are supported.",
-    )
-    .optional(),
-});
-
-export type FormValues = z.infer<typeof formSchema>;
+export type FormValues = z.infer<typeof createBlogSchema>;
 
 const CreatePost = () => {
+  const { execute, isPending } = useServerAction(postBlogAction, {
+    onError({ err }) {
+      console.log("something went wrong");
+    },
+    onSuccess() {
+      console.log("Successful");
+    },
+  });
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createBlogSchema),
     defaultValues: {
       title: "",
       content: "",
@@ -42,7 +32,30 @@ const CreatePost = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    // const [data, err] = await postBlogAction({
+    //   coverImage: values.coverImage,
+    //   status: values.status,
+    //   category: values.category,
+    //   tags: values.tags,
+    //   content: values.content,
+    //   title: values.title,
+    // });
     console.log(values);
+    navigator.clipboard.writeText(values.content);
+
+    // const formData = new FormData();
+    // if (values.coverImage) {
+    //   formData.append("file", values.coverImage);
+    // }
+    //
+    // await execute({
+    //   fileWrapper: formData,
+    //   status: "published",
+    //   category: values.category,
+    //   tags: values.tags,
+    //   content: values.content,
+    //   title: values.title,
+    // }).then(() => {});
   };
 
   return (
@@ -53,6 +66,7 @@ const CreatePost = () => {
           <PostConfig form={form} onPublish={form.handleSubmit(onSubmit)} />
         </div>
       </form>
+      <div>{form.getValues("content")}</div>
     </Form>
   );
 };

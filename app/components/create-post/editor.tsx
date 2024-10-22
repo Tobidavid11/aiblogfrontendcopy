@@ -1,4 +1,3 @@
-"use client";
 import { cn } from "@/lib/utils";
 import MinimalTiptapOne from "../minimal-tiptap/minimal-tiptap-one";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { content, lol } from "./content";
 
 interface PostConfigProps {
   form: UseFormReturn<FormValues>;
@@ -48,6 +48,7 @@ export default function PostEditor({ form }: PostConfigProps) {
                   "h-full min-h-0 w-full rounded-xl border border-neutral-100 shadow-none pt-0",
                   "focus:border-neutral-100 active:border-neutral-100",
                 )}
+                value={lol}
                 editorContentClassName="overflow-auto h-full"
                 output="html"
                 placeholder="Start writing ..."

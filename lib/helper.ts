@@ -1,15 +1,13 @@
-function formatNumber(num: number): string {
+import { API_BASE_URL } from "./constants";
+
+export function formatNumber(num: number): string {
   return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
 }
-
-export { formatNumber };
-
-import { API_URL } from "./constants";
 
 export default function makeFetch<T>(
   auth: boolean,
   path: string,
-  accessToken: string | null,
+  accessToken: string | null = null,
   init: RequestInit = {},
 ): () => Promise<T | { message: string; statusCode: number }> {
   return async function () {
@@ -19,12 +17,14 @@ export default function makeFetch<T>(
       );
 
       const headers = {
-        ...(auth ? { Authorization: `Bearer ${accessToken}` } : {}),
+        ...(auth && accessToken
+          ? { Authorization: `Bearer ${accessToken}` }
+          : {}),
         ...(shouldAddContentType ? { "Content-Type": "application/json" } : {}),
         ...init.headers,
       };
 
-      const res = await fetch(`${API_URL}${path}`, {
+      const res = await fetch(`${API_BASE_URL}${path}`, {
         ...init,
         headers,
       });
@@ -40,4 +40,3 @@ export default function makeFetch<T>(
     }
   };
 }
-
