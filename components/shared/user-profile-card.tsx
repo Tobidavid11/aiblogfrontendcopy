@@ -5,6 +5,7 @@ import { RoundedImage } from "./rounded-image";
 import { UserProps } from "@/types/user";
 import { followAction } from "@/actions/follow";
 import { useServerAction } from "zsa-react";
+import { Loader } from "lucide-react";
 
 interface ProfileCardProps {
 	user: UserProps;
@@ -19,7 +20,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 }) => {
 	const { execute, isPending } = useServerAction(followAction, {
 		onError({ err }) {
-			console.log("something went wrong");
+			console.log("something went wrong", err);
 		},
 		onSuccess() {
 			console.log("Successful");
@@ -75,7 +76,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 							});
 						}}
 					>
-						<Button className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out">
+						<Button className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
+							{isPending && <Loader className="animate-spin" size={18} />}
 							Follow
 						</Button>
 					</form>

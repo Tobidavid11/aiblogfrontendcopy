@@ -18,10 +18,7 @@ export const postBlogAction = authenticatedAction
 		}),
 	)
 	.handler(
-		async ({
-			input: { title, content, fileWrapper, category, tags },
-			ctx: { user },
-		}) => {
+		async ({ input: { title, content, fileWrapper, tags }, ctx: { user } }) => {
 			const coverImageFile = fileWrapper.get("file") as File;
 			const buffer = Buffer.from(await coverImageFile.arrayBuffer());
 			const base64Str = buffer.toString("base64");
@@ -29,7 +26,7 @@ export const postBlogAction = authenticatedAction
 			const accessToken = user.accessToken;
 			console.log("accessToken", BLOG_API_BASE_URL);
 
-			makeFetch("/posts", accessToken, {
+			makeFetch("blog", "/posts", accessToken, {
 				method: "POST",
 				body: {
 					title,

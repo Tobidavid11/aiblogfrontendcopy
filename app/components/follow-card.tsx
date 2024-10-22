@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { RoundedImage } from "./rounded-image";
 import { cn } from "@/lib/utils";
-import { followAction } from "@/actions/follow";
 
 const FollowCard = ({
 	user,
@@ -27,13 +26,12 @@ const FollowCard = ({
 					</p>
 				</div>
 			</div>
-			<form action={followAction}>
+			<form>
 				<Button
 					className="text-white bg-black rounded-full hover:text-black"
 					variant={"secondary"}
 				>
-					{/* Follow */}
-					Lol
+					Follow
 				</Button>
 			</form>
 		</div>
