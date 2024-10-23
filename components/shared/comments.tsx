@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   ThumbsUp,
   MessageCircle,
   Share2,
@@ -10,7 +19,22 @@ import {
   XIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { toast } from "@/hooks/use-toast";
+import { ShareModal } from "./share-modal";
+import { useMinimalTiptapEditor } from "../../app/components/minimal-tiptap/hooks/use-minimal-tiptap";
+import { EditorContent } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Typography } from "@tiptap/extension-typography";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { Link } from "@tiptap/extension-link";
+import { Mention } from "@tiptap/extension-mention";
+import type { SuggestionKeyDownProps } from "@tiptap/suggestion";
+import EmojiPicker from "emoji-picker-react";
+import { Editor } from "@tiptap/core";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface User {
   id: string;
@@ -46,6 +70,109 @@ interface CommentsProps {
   initialCommentsCount: number;
 }
 
+interface CommentBoxProps {
+  onAddComment: (comment: CommentFormData) => void;
+  replyingTo?: string;
+}
+
+interface LinkDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (text: string, url: string) => void;
+  // editor: Editor | null;
+}
+
+interface ImageModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  imageUrl: string;
+  alt: string;
+}
+
+const ImageModal: React.FC<ImageModalProps> = ({
+  isOpen,
+  onClose,
+  imageUrl,
+  alt,
+}) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[900px] p-0">
+        <div className="relative">
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 p-1 bg-black/50 rounded-full text-white hover:bg-black/70"
+          >
+            <XIcon className="w-5 h-5" />
+          </button>
+          <Image
+            src={imageUrl}
+            alt={alt}
+            width={800}
+            height={600}
+            className="w-full h-auto object-contain"
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const LinkDialog: React.FC<LinkDialogProps> = ({ isOpen, onClose, onSave }) => {
+  const [text, setText] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (text && url) {
+      // Ensure URL has protocol
+      const processedUrl = url.startsWith("http") ? url : `https://${url}`;
+      onSave(text, processedUrl);
+      setText("");
+      setUrl("");
+      onClose();
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Link</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="text">Text</Label>
+              <Input
+                id="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Link text"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="url">URL</Label>
+              <Input
+                id="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit">Save</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const UserProfile: React.FC<{ user: User }> = ({ user }) => {
   return (
     <div className="flex items-center">
@@ -73,6 +200,10 @@ const Comments: React.FC<CommentsProps> = ({
   const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
   const [likes, setLikes] = useState(0);
   const [shares, setShares] = useState(0);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const postUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/posts/` : "";
 
   const handleToggleComments = () => {
     setIsOpen(!isOpen);
@@ -152,7 +283,12 @@ const Comments: React.FC<CommentsProps> = ({
   };
 
   const handleShare = () => {
+    setIsShareModalOpen(true);
     setShares((prevShares) => prevShares + 1);
+  };
+
+  const handleCloseShareModal = () => {
+    setIsShareModalOpen(false);
   };
 
   return (
@@ -187,6 +323,13 @@ const Comments: React.FC<CommentsProps> = ({
         </Button>
       </div>
 
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={handleCloseShareModal}
+        postTitle="Share this post" // You might want to pass this as a prop
+        postUrl={postUrl}
+      />
+
       {isOpen && (
         <div className="mt-4  rounded-xl p-4 w-full">
           <CommentList
@@ -203,34 +346,124 @@ const Comments: React.FC<CommentsProps> = ({
   );
 };
 
-const CommentBox: React.FC<{
-  onAddComment: (comment: CommentFormData) => void;
-  replyingTo?: string;
-}> = ({ onAddComment, replyingTo }) => {
-  const [comment, setComment] = useState("");
+const CommentBox: React.FC<CommentBoxProps> = ({
+  onAddComment,
+  replyingTo,
+}) => {
   const [images, setImages] = useState<File[]>([]);
+  const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
+
+  const editor = useMinimalTiptapEditor({
+    extensions: [
+      StarterKit,
+      Typography,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: "text-blue-500 hover:text-blue-600",
+          rel: "noopener noreferrer",
+        },
+      }),
+      Mention.configure({
+        suggestion: {
+          items: ({ query }: { query: string; editor: Editor }) => {
+            if (typeof query !== "string") {
+              return []; // or handle this case as needed
+            }
+            // Replace this with your actual user data
+            const users = [
+              { id: "1", name: "John Doe", username: "johndoe" },
+              { id: "2", name: "Jane Smith", username: "janesmith" },
+            ];
+            return users
+              .filter((user) =>
+                user.username.toLowerCase().startsWith(query.toLowerCase())
+              )
+              .slice(0, 5);
+          },
+          render: () => {
+            let popup: HTMLElement;
+
+            return {
+              onBeforeStart: () => {
+                // Optional setup before showing popup
+              },
+              onStart: (props) => {
+                popup = document.createElement("div");
+                popup.className = "mention-popup";
+                document.body.appendChild(popup);
+
+                const suggestions = props.items
+                  .map(
+                    (item: any) =>
+                      `<div class="mention-item">${item.name} (@${item.username})</div>`
+                  )
+                  .join("");
+
+                popup.innerHTML = suggestions;
+
+                const rect = props.clientRect?.();
+                if (rect) {
+                  popup.style.left = `${rect.left}px`;
+                  popup.style.top = `${rect.top}px`;
+                }
+              },
+              onUpdate: (props) => {
+                const rect = props.clientRect?.();
+                if (rect) {
+                  popup.style.left = `${rect.left}px`;
+                  popup.style.top = `${rect.top}px`;
+                }
+              },
+              onKeyDown: (props: SuggestionKeyDownProps) => {
+                // Handle keyboard navigation
+                console.log("Keydown event:", props);
+                return false; // Required return value
+              },
+              onExit: () => {
+                console.log(popup);
+                if (popup) {
+                  console.log(popup);
+                  popup.remove();
+                } else {
+                  console.warn("Popup is undefined");
+                }
+              },
+            };
+          },
+        },
+      }),
+      Placeholder.configure({
+        placeholder: replyingTo
+          ? `Reply to @${replyingTo}...`
+          : "Add a comment...",
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class:
+          "prose prose-sm max-w-none focus:outline-none min-h-[96px] px-4 py-2",
+      },
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (comment.trim() || images.length > 0) {
-      onAddComment({ content: comment, images });
-      setComment("");
+
+    if (!editor) return;
+
+    const content = editor.getHTML();
+    if (content.trim() || images.length > 0) {
+      // Strip HTML tags for plain text display
+      const strippedContent = content.replace(/<[^>]*>/g, "");
+      onAddComment({ content: strippedContent, images });
+      editor.commands.clearContent();
       setImages([]);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+  const onImageAdd = (files: File[]) => {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-
-    if (imageFiles.length !== files.length) {
-      toast({
-        title: "Invalid format",
-        description: "Only image files are allowed.",
-        variant: "destructive",
-      });
-    }
-
     setImages((prevImages) => [...prevImages, ...imageFiles]);
   };
 
@@ -240,60 +473,124 @@ const CommentBox: React.FC<{
     );
   };
 
+  const handleLinkAdd = (text: string, url: string) => {
+    if (!editor) return;
+
+    const { from } = editor.state.selection;
+
+    // Insert a space before the link if we're not at the start of the text
+    if (from > 0 && editor.state.doc.textBetween(from - 1, from) !== " ") {
+      editor.chain().focus().insertContent(" ").run();
+    }
+
+    // Insert the linked text
+    editor
+      .chain()
+      .focus()
+      .insertContent([
+        {
+          type: "text",
+          marks: [
+            {
+              type: "link",
+              attrs: {
+                href: url,
+                target: "_blank",
+                rel: "noopener noreferrer",
+              },
+            },
+          ],
+          text: text,
+        },
+      ])
+      .insertContent(" ") // Add space after link
+      .run();
+  };
+  if (!editor) return null;
+
   return (
     <form onSubmit={handleSubmit} className="w-full mb-4">
       <div className="border border-neutral-200 rounded overflow-hidden bg-white">
-        <div className="p-4 min-h-2">
-          <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder={
-              replyingTo ? `Reply to ${replyingTo}...` : "Add a comment..."
-            }
-            className="w-full h-24 resize-none focus:outline-none"
-          />
-          <div className="flex justify-between items-center text-[#D6D5D573] mt-2">
-            <div className="flex space-x-2">
-              <label className="cursor-pointer">
-                <ImageIcon className="w-5 h-5 text-gray-500" />
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
-                  multiple
-                  accept="image/*"
-                />
-              </label>
-              <Link2Icon className="w-5 h-5 text-gray-500 cursor-pointer" />
-              <SmileIcon className="w-5 h-5 text-gray-500 cursor-pointer" />
+        <div className="p-4">
+          <EditorContent editor={editor} />
+
+          {images.length > 0 && (
+            <div className="flex overflow-x-auto gap-2 p-4 bg-gray-50">
+              {images.map((file, index) => (
+                <div key={index} className="relative">
+                  <Image
+                    src={URL.createObjectURL(file)}
+                    alt={file.name}
+                    width={24}
+                    height={24}
+                    className="w-24 h-24 object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 bg-white rounded-full p-1"
+                  >
+                    <XIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
             </div>
+          )}
+
+          <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center space-x-2">
+              <input
+                type="file"
+                className="hidden"
+                id="image-upload"
+                multiple
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    onImageAdd(Array.from(e.target.files));
+                  }
+                }}
+              />
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer text-gray-500 hover:text-gray-700"
+              >
+                <ImageIcon className="w-5 h-5" />
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setIsLinkDialogOpen(true)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <Link2Icon className="w-5 h-5" />
+              </button>
+
+              <Popover>
+                <PopoverTrigger>
+                  <SmileIcon className="w-5 h-5 text-gray-500 hover:text-gray-700" />
+                </PopoverTrigger>
+                <PopoverContent>
+                  <EmojiPicker
+                    onEmojiClick={(emoji) => {
+                      editor.commands.insertContent(emoji.emoji);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
             <Button type="submit" variant="secondary">
               {replyingTo ? "Reply" : "Comment"}
             </Button>
           </div>
+          <LinkDialog
+            isOpen={isLinkDialogOpen}
+            onClose={() => setIsLinkDialogOpen(false)}
+            onSave={handleLinkAdd}
+            // editor={editor}
+          />
         </div>
-        {images.length > 0 && (
-          <div className="flex overflow-x-auto gap-2 p-4 bg-gray-50">
-            {images.map((file, index) => (
-              <div key={index} className="relative">
-                <Image
-                  src={URL.createObjectURL(file)}
-                  width={100}
-                  height={100}
-                  alt={file.name}
-                  className="rounded"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute top-0 right-0 bg-white rounded-full p-1"
-                >
-                  <XIcon className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </form>
   );
@@ -329,6 +626,10 @@ const CommentItem: React.FC<{
   const [isReplying, setIsReplying] = useState(false);
   const [likes, setLikes] = useState(comment.likes);
   const [showAllReplies, setShowAllReplies] = useState(depth < 2);
+  const [selectedImage, setSelectedImage] = useState<{
+    url: string;
+    alt: string;
+  } | null>(null);
 
   const handleLike = () => {
     setLikes((prevLikes) => prevLikes + 1);
@@ -385,16 +686,30 @@ const CommentItem: React.FC<{
           {comment.images && comment.images.length > 0 && (
             <div className="flex mt-2 space-x-2 overflow-x-auto">
               {comment.images.map((image, index) => (
-                <Image
+                <div
                   key={index}
-                  src={image.url}
-                  width={100}
-                  height={100}
-                  alt={image.alt}
-                  className="rounded"
-                />
+                  className="cursor-pointer"
+                  onClick={() => setSelectedImage(image)}
+                >
+                  <Image
+                    key={index}
+                    src={image.url}
+                    width={100}
+                    height={100}
+                    alt={image.alt}
+                    className="rounded"
+                  />
+                </div>
               ))}
             </div>
+          )}
+          {selectedImage && (
+            <ImageModal
+              isOpen={!!selectedImage}
+              onClose={() => setSelectedImage(null)}
+              imageUrl={selectedImage.url}
+              alt={selectedImage.alt}
+            />
           )}
           <div className="flex items-center space-x-4 mt-2">
             <button
