@@ -1,3 +1,4 @@
+import { Breadcrumb } from "@/components/shared";
 import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
