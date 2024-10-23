@@ -13,7 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { JobDummyData } from "@/data/mock/job";
 import { dummyUsers } from "@/data/mock/top-writers";
 import { UserData } from "@/data/mock/user";
-import { ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+import BackArrow from "./back-arrow";
 
 const FollowersPage = () => {
 	const tabs = ["followers", "following", "verified"];
@@ -23,7 +24,7 @@ const FollowersPage = () => {
 		<main className="font-dm-sans grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] max-w-[1440px] mx-auto w-full md:px-4 h-screen md:overflow-hidden">
 			<ScrollArea className="bg-white py-8 px-4">
 				<div className="flex items-center gap-3 mb-6">
-					<ArrowLeft size={24.67} />
+					<BackArrow />
 					<div>
 						<h3 className="text-neutral-900 text-[20px] mb-[-10px]">
 							{user.name}
@@ -35,7 +36,14 @@ const FollowersPage = () => {
 					<TabsList className="flex gap-4 md:gap-7 w-full bg-transparent border-b-[2px] py-6 rounded-none justify-start">
 						{tabs.map((tab) => (
 							<TabsTrigger
-								className="!shadow-none bg-transparent rounded-none capitalize text-neutral-500 p-0"
+								className={cn(
+									"!shadow-none bg-transparent rounded-none capitalize text-neutral-500 relative",
+									"after:absolute after:content-[''] after:h-1 after:w-full after:bg-[#fdc316] after:bottom-[-10px]",
+									"after:rounded-t-md after:rounded-b-none",
+									"after:transition-all after:duration-300 after:ease-in-out",
+									"after:opacity-0 after:scale-x-0",
+									"data-[state=active]:after:opacity-100 data-[state=active]:after:scale-x-100",
+								)}
 								value={tab}
 								key={tab}
 							>
