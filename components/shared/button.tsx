@@ -33,7 +33,7 @@ export default function Button({
 
   const colorClasses = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-    secondary: 'bg-[#FDC316] text-white hover:bg-[#FDC316]/90',
+    secondary: 'bg-[#FDC316] text-black hover:bg-[#FDC316]/90',
     success: 'bg-green-500 text-white hover:bg-green-600',
     danger: 'bg-red-500 text-white hover:bg-red-600',
     warning: 'bg-yellow-500 text-white hover:bg-yellow-600',
