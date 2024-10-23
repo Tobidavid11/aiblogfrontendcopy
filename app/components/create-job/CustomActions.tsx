@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   X,
   ChevronDown,
-  CirclePlus,
   Trash2,
   FileText,
   Upload,
@@ -53,34 +52,34 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
   ]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
-  const addSocialItem = () => {
-    setSocialItems([...socialItems, { url: "", actions: [] }]);
-  };
+  // const addSocialItem = () => {
+  //   setSocialItems([...socialItems, { url: "", actions: [] }]);
+  // };
 
-  const removeSocialItem = (index: number) => {
-    const newItems = socialItems.filter((_, i) => i !== index);
-    setSocialItems(newItems);
-    if (newItems.length === 0 && customItems.length === 0) onEmpty();
-  };
+  // const removeSocialItem = (index: number) => {
+  //   const newItems = socialItems.filter((_, i) => i !== index);
+  //   setSocialItems(newItems);
+  //   if (newItems.length === 0 && customItems.length === 0) onEmpty();
+  // };
 
-  const updateSocialUrl = (index: number, url: string) => {
-    const newItems = [...socialItems];
-    newItems[index].url = url;
-    setSocialItems(newItems);
-  };
+  // const updateSocialUrl = (index: number, url: string) => {
+  //   const newItems = [...socialItems];
+  //   newItems[index].url = url;
+  //   setSocialItems(newItems);
+  // };
 
-  const toggleSocialAction = (index: number, action: Action) => {
-    const newItems = [...socialItems];
-    const actionIndex = newItems[index].actions.indexOf(action);
-    if (actionIndex > -1) {
-      newItems[index].actions = newItems[index].actions.filter(
-        (a) => a !== action
-      );
-    } else {
-      newItems[index].actions.push(action);
-    }
-    setSocialItems(newItems);
-  };
+  // const toggleSocialAction = (index: number, action: Action) => {
+  //   const newItems = [...socialItems];
+  //   const actionIndex = newItems[index].actions.indexOf(action);
+  //   if (actionIndex > -1) {
+  //     newItems[index].actions = newItems[index].actions.filter(
+  //       (a) => a !== action
+  //     );
+  //   } else {
+  //     newItems[index].actions.push(action);
+  //   }
+  //   setSocialItems(newItems);
+  // };
 
   const toggleDropdown = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);

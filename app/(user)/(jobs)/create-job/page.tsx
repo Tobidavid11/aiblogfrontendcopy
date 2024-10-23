@@ -115,7 +115,7 @@ export default function CreateJob() {
   };
 
   const handleAddToDraft = (data: any) => {
-    console.log("Added to draft");
+    console.log("Added to draft", data);
   };
 
   return (
@@ -229,7 +229,7 @@ export default function CreateJob() {
             </div>
             <div>
               <p className="text-sm text-center mt-2 text-[#737373]">
-                You don't have any saved drafts yet.
+                You don&apos;t have any saved drafts yet.
               </p>
             </div>
           </CardContent>
@@ -257,8 +257,8 @@ const StepsHeader: React.FC<StepsHeaderComponentProps> = ({ currentStep }) => {
 };
 
 // Job Details Step
-const JobDetailsStep: React.FC<CreateJobProps> = ({ control, nextStep }) => {
-  const { handleSubmit } = useFormContext();
+const JobDetailsStep: React.FC<CreateJobProps> = ({ control }) => {
+  // const { handleSubmit } = useFormContext();
 
   // const onSubmit = async (data: any) => {
   //   // Perform any additional logic if needed
@@ -347,7 +347,7 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
 };
 
 // Job Review Step
-const ReviewStep: React.FC<CreateJobProps> = ({ control }) => {
+const ReviewStep: React.FC<CreateJobProps> = () => {
   const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(
     null
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ChevronDown, CirclePlus, Trash2 } from "lucide-react";
+import { X, ChevronDown, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,9 +27,7 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
 
   useEffect(() => {
     if (socialItems.length === 0) {
-      {
-        onEmpty && onEmpty();
-      }
+      onEmpty && onEmpty();
     }
   }, [socialItems, onEmpty]);
 

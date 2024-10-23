@@ -2,7 +2,6 @@
 
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,7 +16,6 @@ import CalendarIcon from "@/public/assets/icons/calendar-icon.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@/app/globals.css";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
