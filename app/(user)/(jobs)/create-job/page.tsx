@@ -11,12 +11,7 @@ import Button from "@/components/shared/button";
 import CustomActions from "@/app/components/create-job/CustomActions";
 import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
 import { CustomFormField } from "@/components/shared";
-import {
-  Control,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
+import { Control, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormFieldType } from "@/types/form-types";

@@ -44,9 +44,7 @@ interface CustomActionsProps {
 }
 
 const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
-  const [socialItems, setSocialItems] = useState<SocialItem[]>([
-    { url: "", actions: [] },
-  ]);
+  const [socialItems, setSocialItems] = useState<SocialItem[]>([]); //url: "", actions: []
   const [customItems, setCustomItems] = useState<CustomActionItem[]>([
     { question: "", type: "Select Option", options: [""] },
   ]);
@@ -88,7 +86,7 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
   const removeCustomItem = (index: number) => {
     const newItems = customItems.filter((_, i) => i !== index);
     setCustomItems(newItems);
-    if (newItems.length === 0 && socialItems.length === 0) onEmpty();
+    if (newItems.length === 0 && socialItems?.length === 0) onEmpty();
   };
 
   const updateCustomQuestion = (index: number, question: string) => {
@@ -237,6 +235,7 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
 
   const handleDelete = () => {
     console.log("Deleted!");
+    setSocialItems([]);
   };
 
   return (

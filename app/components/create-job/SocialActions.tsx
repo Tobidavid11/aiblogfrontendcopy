@@ -26,8 +26,8 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
   useEffect(() => {
-    if (socialItems.length === 0) {
-      onEmpty && onEmpty();
+    if (socialItems.length === 0 && onEmpty) {
+      onEmpty();
     }
   }, [socialItems, onEmpty]);
 
