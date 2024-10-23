@@ -1,9 +1,7 @@
 
-import { Inter } from 'next/font/google'
+import EarningsSidebar from '@/components/wallet/wallet-sidebar'
 import { NavBar } from '../(user)/sections'
 
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'dRello',
@@ -16,9 +14,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-       <section className=''>
+       <section className="maxHeight">
         <NavBar/>
-      <main className={inter.className}>{children}</main>
+        <div className="lg:grid grid-cols-3 gap-8  max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
+      <main className="col-span-2  max-h-[100dvh] relative">{children}</main>
+             
+            <EarningsSidebar/>      
+          </div>
       </section>
   )
 }
