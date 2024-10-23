@@ -5,10 +5,10 @@ import type {
   SignUpParams,
   SignUpResponse,
   SignInParams,
+  SignInResponse,
   ForgotPasswordParams,
   ForgotPasswordResponse,
 } from "@/types/auth";
-import type { SignInResponse } from "next-auth/react";
 
 export const signupAuth = async (
   params: SignUpParams
@@ -38,7 +38,9 @@ export const signupAuth = async (
 
 // Toni getting type errors here so i set it to any so i can push
 // Dunno how u get it past build
-export const signInAuth = async (params: SignInParams): Promise<any> => {
+export const signInAuth = async (
+  params: SignInParams
+): Promise<SignInResponse> => {
   const payload = {
     email: params.email,
     password: params.password,
@@ -84,23 +86,6 @@ export const signInAuth = async (params: SignInParams): Promise<any> => {
     };
   }
 };
-
-// export const validateOtp = async (email: string, otp: string): Promise<any> => {
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}/auth/otp/validate`, {
-//       email,
-//       otp,
-//     });
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       throw new Error(
-//         error.response?.data?.message || "Failed to validate OTP"
-//       );
-//     }
-//     throw new Error("An unexpected error occurred");
-//   }
-// };
 
 export const validateOtp = async (email: string, otp: string): Promise<any> => {
   try {
@@ -157,21 +142,6 @@ export const requestNewOtp = async (email: string): Promise<any> => {
     return { success: false, message: "An unexpected error occurred" };
   }
 };
-// export const requestNewOtp = async (email: string): Promise<any> => {
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}auth/otp/sent`, {
-//       email,
-//     });
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       throw new Error(
-//         error.response?.data?.message || "Failed to request new OTP"
-//       );
-//     }
-//     throw new Error("An unexpected error occurred");
-//   }
-// };
 
 export const refreshToken = async () => {
   try {
