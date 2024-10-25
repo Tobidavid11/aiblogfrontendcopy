@@ -5,42 +5,73 @@ import type { UserProps } from "@/types/user";
 /**
  * Dummy user data.
  */
-export const dummyUsers: UserProps[] = [
-	{
-		name: "Alice Johnson",
-		profile_pic: "/profile.png",
-		username: "alice_json",
-		timestamp: Date.now() - 1000 * 60 * 9,
-		userId: "28f99936-addf-4767-a87b-0d90369d199c",
-	},
-	{
-		name: "Bob Smith",
-		profile_pic: "/profile.png",
-		username: "Bob_Sth",
-		timestamp: Date.now() - 1000 * 60 * 2,
-		userId: "28f99936-addf-4767-a87b-0d90369d199c",
-	},
-	{
-		name: "Charlie Brown",
-		profile_pic: "/profile.png",
-		username: "CharBrwn",
-		timestamp: Date.now() - 1000 * 60 * 10,
-		userId: "28f99936-addf-4767-a87b-0d90369d199c",
-	},
-	{
-		name: "Diana Prince",
-		profile_pic: "/profile.png",
-		username: "diana_PR",
-		timestamp: Date.now() - 1000 * 60 * 2,
-		userId: "28f99936-addf-4767-a87b-0d90369d199c",
-	},
-	{
-		name: "Ethan Hunt",
-		profile_pic: "/profile.png",
-		username: "ethan_",
-		timestamp: Date.now() - 1000 * 60 * 8,
-		userId: "28f99936-addf-4767-a87b-0d90369d199c",
-	},
+const dummyUsers: UserProps[] = [
+  {
+    name: "Alice Johnson",
+    profile_pic: "/profile.png",
+    username: "alice_json",
+    timestamp: Date.now() - 1000 * 60 * 9,
+    cover_photo: "/cover.jpg",
+    isVerified: true,
+    user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
+    user_website: "https://www.linkedin.com/",
+    user_join_date: "December, 2006",
+    user_followers: 118,
+    user_following: 335
+  },
+  {
+    name: "Bob Smith",
+    profile_pic: "/profile.png",
+    username: "Bob_Sth",
+    timestamp: Date.now() - 1000 * 60 * 2,
+    cover_photo: "/cover.jpg",
+    isVerified: true,
+    user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
+    user_website: "https://www.linkedin.com/",
+    user_join_date: "December, 2006",
+    user_followers: 118,
+    user_following: 335
+  },
+  {
+    name: "Charlie Brown",
+    profile_pic: "/profile.png",
+    username: "CharBrwn",
+    timestamp: Date.now() - 1000 * 60 * 10,
+    cover_photo: "/cover.jpg",
+    isVerified: true,
+    user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
+    user_website: "https://www.linkedin.com/",
+    user_join_date: "December, 2006",
+    user_followers: 118,
+    user_following: 335
+    
+  },
+  {
+    name: "Diana Prince",
+    profile_pic: "/profile.png",
+    username: "diana_PR",
+    timestamp: Date.now() - 1000 * 60 * 2,
+    cover_photo: "/cover.jpg",
+    isVerified: true,
+    user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
+    user_website: "https://www.linkedin.com/",
+    user_join_date: "December, 2006",
+    user_followers: 118,
+    user_following: 335
+  },
+  {
+    name: "Ethan Hunt",
+    profile_pic: "/profile.png",
+    username: "ethan_",
+    timestamp: Date.now() - 1000 * 60 * 8,
+    cover_photo: "/cover.jpg",
+    isVerified: true,
+    user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
+    user_website: "https://www.linkedin.com/",
+    user_join_date: "December, 2006",
+    user_followers: 118,
+    user_following: 335
+  },
 ];
 
 /**
