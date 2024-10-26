@@ -10,6 +10,7 @@ import { PostMetrics as PostMetricsProps } from "@/types/post-metrics";
  */
 export interface TopWriterProps {
   user: UserProps;
+  userId: string;
   topic: string;
   metrics: PostMetricsProps;
 }

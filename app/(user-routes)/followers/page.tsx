@@ -11,7 +11,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { JobDummyData } from "@/data/mock/job";
-import { dummyUsers } from "@/data/mock/top-writers";
+import dummyUsers from "@/data/mock/top-writers";
 import { UserData } from "@/data/mock/user";
 import { cn } from "@/lib/utils";
 import BackArrow from "./back-arrow";
@@ -58,7 +58,7 @@ const FollowersPage = () => {
 									<Card className="flex flex-col gap-5" key={user.userId}>
 										<CardHeader>
 											<ProfileCard
-												user={user}
+												user={UserData} 
 												following={tab === "following"}
 											/>
 										</CardHeader>
