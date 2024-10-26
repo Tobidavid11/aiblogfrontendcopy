@@ -4,6 +4,7 @@ export interface UserProps {
   username: string;
   timestamp: number;
   cover_photo: string;
+  userId: string,
   isVerified: boolean;
   user_bio: string;
   user_website: string;

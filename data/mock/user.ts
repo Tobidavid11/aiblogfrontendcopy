@@ -11,5 +11,6 @@ export const UserData: UserProps = {
   user_website: "https://www.linkedin.com/",
   user_join_date: "December, 2006",
   user_followers: 118,
-  user_following: 335
+  user_following: 335,
+  userId: ""
 };
