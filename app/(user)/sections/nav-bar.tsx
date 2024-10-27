@@ -41,7 +41,7 @@ const NavBar = () => {
 
   return (
     <>
-      <header className="container hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] bg-white border-b border-[#E7E5E4]">
+      <header className="md:px-12 2xl:px-[8rem] hidden md:flex items-center sticky top-0 z-50 w-full h-[4.5rem] bg-white border-b border-[#E7E5E4]">
         <div className="flex flex-row items-center gap-x-16 mr-auto">
           {/* Logo */}
           <div>

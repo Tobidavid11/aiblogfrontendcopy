@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import SocialActions from "./SocialActions";
@@ -253,24 +253,12 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
                 customItems.length > 1 && "mb-4 md:mb-6"
               }`}
             >
-              <div className="w-full flex flex-col md:flex-row gap-y-4 md:gap-x-4">
-                <div className="flex flex-1 gap-2 md:gap-x-4 items-center">
-                  {/* Cancel btn */}
-                  <button onClick={() => removeCustomItem(index)}>
-                    <X className="w-3.5 md:w-4 h-3.5 md:h-4 text-[#404040] hover:text-black transition-all duration-300 ease-in-out" />
-                  </button>
-
-                  {/* Text input */}
-                  <div className="w-full flex-1 border-b border-[#e5e5e5]">
-                    <Input
-                      placeholder="Add question"
-                      value={item.question}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        updateCustomQuestion(index, e.target.value)
-                      }
-                      className="w-full mb-[1px] p-0 border-none focus-within:outline-0 shadow-none text-[#262626] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
-                    />
-                  </div>
+              <div className="w-full flex flex-col items-center md:flex-row gap-y-4 md:gap-x-4">
+                {/* title */}
+                <div className="h-10 md:h-12 flex items-center flex-1 w-full border-b border-[#e5e5e5]">
+                  <h3 className="text-base font-normal text-[#404040] pb-2 md:pb-1">
+                    Add Question
+                  </h3>
                 </div>
 
                 {/* Drop down */}
@@ -320,9 +308,7 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
             </div>
           ))}
         </CardContent>
-
         <Separator className="bg-[#e5e5e5] mt-4 md:mt-8 mb-4" />
-
         {/* Card footer */}
         <CardFooter className="p-0 flex justify-end items-center gap-x-7">
           <Type className="w-4 h-4 font-normal text-[#737373] hover:text-black/30 transition-all duration-300 ease-in-out cursor-pointer" />
