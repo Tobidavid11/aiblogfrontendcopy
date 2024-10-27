@@ -44,15 +44,15 @@ jobs:
 
       - name: Copy Artifacts to server
         run: |
-          sshpass -p ${{ secrets.NEW_PASSWORD }} scp -o StrictHostKeyChecking=no aiblogfrontend.tar.gz ${{ secrets.NEW_USERNAME }}@${{ secrets.NEW_HOST }}:/tmp/drellofe
+          sshpass -p ${{ secrets.PASSWORD }} scp -o StrictHostKeyChecking=no aiblogfrontend.tar.gz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/tmp/drellofe
           rm -f aiblogfrontend.tar.gz
         
       - name: Deploy on server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.NEW_HOST }}
-          username: ${{ secrets.NEW_USERNAME }}
-          password: ${{ secrets.NEW_PASSWORD }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           script: |
             cd /home/drellofe/aiblogfrontend
             tar -xzf /tmp/drellofe/aiblogfrontend.tar.gz
