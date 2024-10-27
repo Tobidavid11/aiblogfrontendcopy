@@ -34,7 +34,7 @@ const NavBar = () => {
     setActiveLink(path);
   };
 
-  // Example | Re-implement
+  // Re-implement your search functionality here! 🌚
   const handleSearch = (searchTerm: string) => {
     console.log({ searchTerm });
   };
@@ -83,7 +83,7 @@ const NavBar = () => {
 
         <div className="hidden md:flex flex-row items-center gap-x-6 ml-auto">
           {/* Search */}
-          <div className="hidden xl:block">
+          <div className="hidden md:block">
             <SearchInput onSearch={handleSearch} placeholder="Find..." />
           </div>
 
