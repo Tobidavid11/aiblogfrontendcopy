@@ -43,7 +43,8 @@ interface CustomActionsProps {
   onEmpty: () => void;
 }
 
-const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
+// destructure on { onEmpty }
+const CustomActions: React.FC<CustomActionsProps> = () => {
   const [socialItems, setSocialItems] = useState<SocialItem[]>([]); //url: "", actions: []
   const [customItems, setCustomItems] = useState<CustomActionItem[]>([
     { question: "", type: "Select Option", options: [""] },
