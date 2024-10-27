@@ -115,7 +115,7 @@ export default function CreateJob() {
 
   return (
     <FormProvider {...form}>
-      <div className="custom-scroll grid grid-cols-1 md:grid-cols-3 md:gap-x-16 px-4 md:px[2.5rem] lg:px-[5rem]">
+      <div className="custom-scroll grid grid-cols-1 md:grid-cols-3 md:gap-x-16 px-4 md:px-14 2xl:px-[8rem]">
         <div className="md:col-span-2 mb-36">
           <Card className="bg-white shadow-none border-0 md:border md:border-[#e5e5e5] pb-8 md:p-8 rounded-none md:rounded-3xl">
             {/* mobile-nav */}

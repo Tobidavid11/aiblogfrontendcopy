@@ -43,7 +43,8 @@ interface CustomActionsProps {
   onEmpty: () => void;
 }
 
-const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
+// destructure on { onEmpty }
+const CustomActions: React.FC<CustomActionsProps> = () => {
   const [socialItems, setSocialItems] = useState<SocialItem[]>([]); //url: "", actions: []
   const [customItems, setCustomItems] = useState<CustomActionItem[]>([
     { question: "", type: "Select Option", options: [""] },
@@ -83,17 +84,17 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
-  const removeCustomItem = (index: number) => {
-    const newItems = customItems.filter((_, i) => i !== index);
-    setCustomItems(newItems);
-    if (newItems.length === 0 && socialItems?.length === 0) onEmpty();
-  };
+  // const removeCustomItem = (index: number) => {
+  //   const newItems = customItems.filter((_, i) => i !== index);
+  //   setCustomItems(newItems);
+  //   if (newItems.length === 0 && socialItems?.length === 0) onEmpty();
+  // };
 
-  const updateCustomQuestion = (index: number, question: string) => {
-    const newItems = [...customItems];
-    newItems[index].question = question;
-    setCustomItems(newItems);
-  };
+  // const updateCustomQuestion = (index: number, question: string) => {
+  //   const newItems = [...customItems];
+  //   newItems[index].question = question;
+  //   setCustomItems(newItems);
+  // };
 
   const updateCustomType = (index: number, type: CustomActionType) => {
     const newItems = [...customItems];
@@ -253,24 +254,12 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
                 customItems.length > 1 && "mb-4 md:mb-6"
               }`}
             >
-              <div className="w-full flex flex-col md:flex-row gap-y-4 md:gap-x-4">
-                <div className="flex flex-1 gap-2 md:gap-x-4 items-center">
-                  {/* Cancel btn */}
-                  <button onClick={() => removeCustomItem(index)}>
-                    <X className="w-3.5 md:w-4 h-3.5 md:h-4 text-[#404040] hover:text-black transition-all duration-300 ease-in-out" />
-                  </button>
-
-                  {/* Text input */}
-                  <div className="w-full flex-1 border-b border-[#e5e5e5]">
-                    <Input
-                      placeholder="Add question"
-                      value={item.question}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        updateCustomQuestion(index, e.target.value)
-                      }
-                      className="w-full mb-[1px] p-0 border-none focus-within:outline-0 shadow-none text-[#262626] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
-                    />
-                  </div>
+              <div className="w-full flex flex-col items-center md:flex-row gap-y-4 md:gap-x-4">
+                {/* title */}
+                <div className="h-10 md:h-12 flex items-center flex-1 w-full border-b border-[#e5e5e5]">
+                  <h3 className="text-base font-normal text-[#404040] pb-2 md:pb-1">
+                    Add Question
+                  </h3>
                 </div>
 
                 {/* Drop down */}
@@ -320,9 +309,7 @@ const CustomActions: React.FC<CustomActionsProps> = ({ onEmpty }) => {
             </div>
           ))}
         </CardContent>
-
         <Separator className="bg-[#e5e5e5] mt-4 md:mt-8 mb-4" />
-
         {/* Card footer */}
         <CardFooter className="p-0 flex justify-end items-center gap-x-7">
           <Type className="w-4 h-4 font-normal text-[#737373] hover:text-black/30 transition-all duration-300 ease-in-out cursor-pointer" />

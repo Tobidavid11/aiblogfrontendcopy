@@ -16,69 +16,13 @@ interface JobExtraInfoProps {
   normalStrings: string[];
 }
 
-// const JobExtraInfoItem = ({ title, count, onClick }: JobExtraInfoItemProps) => {
-//   return (
-//     <div className="flex items-center">
-//       {title === "Replies" ? (
-//         <div
-//           className="flex items-center justify-center gap-x-1.5 bg-[#FCF4AA] px-2 py-[5px] rounded-full hover:bg-[#f4ea8e]  transition duration-300 ease-in-out cursor-pointer"
-//           onClick={onClick} //Click event for each item
-//         >
-//           <h3 className="text-xs font-medium capitalize text-center text-[#171717]">
-//             {title}
-//           </h3>
-
-//           {count && (
-//             <span className="text-xs font-medium bg-white text-[#525252] p-1.5 min-w-5 h-5 text-center flex items-center justify-center rounded-full">
-//               {count}
-//             </span>
-//           )}
-//         </div>
-//       ) : <div
-//           className="flex items-center justify-center gap-x-1.5 border-[#E5E5E5] bg-[#eeeeee] hover:bg-[#E8E8E880] px-2 py-[5px] rounded-full transition duration-300 ease-in-out cursor-pointer"
-//           onClick={onClick} //Click event for each item
-//         >
-//           <h3 className="text-xs font-normal capitalize text-center text-[#171717]">
-//             {title}
-//           </h3>
-//         </div> ? (
-//         title === "Custom" ||
-//         (title === "Advanced" && (
-//           <div
-//             className="flex items-center justify-center gap-x-1.5 border-[#E5E5E5] bg-[#eeeeee] hover:bg-[#E8E8E880] px-2 py-[5px] rounded-full transition duration-300 ease-in-out cursor-pointer"
-//             onClick={onClick} //Click event for each item
-//           >
-//             <h3 className="text-xs font-normal capitalize text-center text-[#171717]">
-//               Custom
-//               {title}
-//             </h3>
-//           </div>
-//         ))
-//       ) : (
-//         ""
-//       )}
-//     </div>
-//   );
-// };
-
-//   {
-//     /* {count !== undefined && (
-//     <span className="bg-yellow-200 rounded-full p-1.5  text-sm font-semibold">
-//       {count}
-//     </span>
-//   )} */
-//   }
-//   <h3 className="text-xs font-medium capitalize text-center text-[#171717]">
-//     {title}
-//   </h3>;
-
 const JobExtraInfoItem = ({ title, count, onClick }: JobExtraInfoItemProps) => {
   let content;
 
   if (title === "Replies") {
     content = (
       <div
-        className="flex items-center justify-center gap-x-1.5 bg-[#FCF4AA] px-2 py-[5px] rounded-full hover:bg-[#f4ea8e]  transition duration-300 ease-in-out cursor-pointer"
+        className="flex items-center justify-center gap-x-1.5 bg-[#FCF4AA] px-2 py-[5px] rounded-full hover:bg-[#f4ea8e] transition duration-300 ease-in-out cursor-pointer"
         onClick={onClick} //Click event
       >
         <h3 className="text-xs font-normal capitalize text-center text-[#171717]">
