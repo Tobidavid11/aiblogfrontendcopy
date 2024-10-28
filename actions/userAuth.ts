@@ -9,7 +9,6 @@ import {
   ForgotPasswordResponse,
   UpdatePasswordParams,
   UpdatePasswordResponse,
-  ErrorResponse,
 } from "../types/auth";
 import { cookies } from "next/headers";
 import { authConfig } from "@/config/auth.config";
@@ -17,6 +16,7 @@ import { authConfig } from "@/config/auth.config";
 import { redirect } from "next/navigation";
 
 const API_AUTH_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const signupAuth = async (
   params: SignUpParams
@@ -181,118 +181,65 @@ export const refreshToken = async () => {
     throw error;
   }
 };
-// export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
-//   try {
-//     const response = await axios.get(`${API_AUTH_URL}auth/google`);
-//     if (response.data.authUrl) {
-//       return { authUrl: response.data.authUrl };
-//     }
-//     throw new Error("Google auth URL not found");
-//   } catch (error) {
-//     console.error("Error initiating Google sign in:", error);
-//     throw error;
-//   }
-// };
 
-// export const handleGoogleCallback = async (code: string) => {
-//   try {
-//     const response = await axios.post(`${API_AUTH_URL}auth/google/callback`, {
-//       code,
-//     });
-//     if (response.data.user) {
-//       // Handle successful sign in (e.g., store user data, redirect)
-//       return response.data;
-//     }
-//   } catch (error) {
-//     console.error("Error handling Google callback:", error);
-//     throw error;
-//   }
-// };
-
-// Function to handle Google Sign-In
-export const handleGoogleSignIn = async (
-  id_token: string
-): Promise<
-  | {
-      User: { id: string; email: string; username: string; createdAt: string };
-      accessToken: string;
-      refreshToken: string;
-    }
-  | ErrorResponse
-> => {
+export const initiateGoogleSignIn = async () => {
   try {
-    const response = await axios.get(
-      `${API_AUTH_URL}auth/google?id_token=${id_token}`
-    );
-
-    const { user, accessToken, refreshToken } = response.data.data;
-
     return {
-      User: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        createdAt: user.createdAt,
-      },
-      accessToken,
-      refreshToken,
+      authUrl: `${API_URL}auth/google`,
+      error: null,
     };
   } catch (error) {
+    console.error("Failed to initiate Google sign in:", error);
     return {
-      message:
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.data.message
-          ? error.response.data.message
-          : "Something went wrong",
-      status_code:
-        axios.isAxiosError(error) && error.response
-          ? error.response.status
-          : undefined,
+      authUrl: null,
+      error: "Failed to initiate Google sign in",
     };
   }
 };
 
-// Function to handle Google Callback
 export const handleGoogleCallback = async (code: string) => {
   try {
     const response = await axios.get(`${API_AUTH_URL}auth/google/callback`, {
       params: { code },
+      withCredentials: true,
     });
 
-    if (response.data.user) {
-      const { user, accessToken, refreshToken } = response.data;
+    const { user, accessToken, refreshToken } = response.data;
 
-      return {
-        User: {
-          id: user.id,
-          email: user.email,
-          username: user.username,
-          createdAt: user.createdAt,
-        },
-        accessToken,
-        refreshToken,
-      };
+    if (!user || !accessToken || !refreshToken) {
+      throw new Error("Invalid response from Google authentication");
     }
 
-    throw new Error("User data not found in callback response");
-  } catch (error) {
-    console.error("Error handling Google callback:", error);
+    // Set cookies similar to normal sign-in
+    const cookieStore = cookies();
+    cookieStore.set(authConfig.accessTokenKey, accessToken, {
+      ...authConfig.COOKIE_OPTIONS,
+    });
+    cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
+      ...authConfig.COOKIE_OPTIONS,
+    });
+    cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
+      ...authConfig.COOKIE_OPTIONS,
+    });
+
     return {
-      message:
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.data.message
-          ? error.response.data.message
-          : "Something went wrong",
-      status_code:
-        axios.isAxiosError(error) && error.response
-          ? error.response.status
-          : undefined,
+      success: true,
+      data: {
+        user,
+        accessToken,
+        refreshToken,
+      },
+      error: null,
+    };
+  } catch (error) {
+    console.error("Error in Google callback:", error);
+    return {
+      success: false,
+      data: null,
+      error: "Failed to complete Google authentication",
     };
   }
 };
-
 export const forgotPasswordAuth = async (
   params: ForgotPasswordParams
 ): Promise<ForgotPasswordResponse> => {
