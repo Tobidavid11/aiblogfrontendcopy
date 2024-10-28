@@ -1,17 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updatePasswordSchema } from "../../../schemas";
 import { z } from "zod";
 import { updatePasswordAuth } from "@/actions/userAuth";
-// import { UpdatePasswordParams } from "../../../types/auth";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 type UpdatePasswordFormData = z.infer<typeof updatePasswordSchema>;
 
-const UpdatePasswordForm = () => {
+const UpdatePasswordFormContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +59,6 @@ const UpdatePasswordForm = () => {
               <div className="text-green-600 text-center mb-4">
                 Password has been successfully reset.
               </div>
-
               <a
                 href="/auth/sign-in"
                 className="text-blue-500 hover:text-blue-700"
@@ -181,6 +179,20 @@ const UpdatePasswordForm = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-400"></div>
+  </div>
+);
+
+const UpdatePasswordForm = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <UpdatePasswordFormContent />
+    </Suspense>
   );
 };
 

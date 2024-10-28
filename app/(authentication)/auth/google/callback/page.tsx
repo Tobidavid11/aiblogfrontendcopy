@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function GoogleCallbackPage() {
+const GoogleCallbackContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -30,7 +30,6 @@ export default function GoogleCallbackPage() {
       }
 
       try {
-        // Direct API call to handle the response
         const response = await axios.get(`${API_URL}auth/google/callback`, {
           params: { code },
           withCredentials: true,
@@ -41,7 +40,6 @@ export default function GoogleCallbackPage() {
         if (data.statusCode === 200 && data.data) {
           const { user, accessToken, refreshToken } = data.data;
 
-          // Store the tokens and user data
           sessionStorage.setItem("userData", JSON.stringify(user));
           sessionStorage.setItem("accessToken", accessToken);
           sessionStorage.setItem("refreshToken", refreshToken);
@@ -91,4 +89,20 @@ export default function GoogleCallbackPage() {
       </div>
     </div>
   );
-}
+};
+
+const LoadingSpinner = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-400"></div>
+  </div>
+);
+
+const GoogleCallbackPage = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <GoogleCallbackContent />
+    </Suspense>
+  );
+};
+
+export default GoogleCallbackPage;
