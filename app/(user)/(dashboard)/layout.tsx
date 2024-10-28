@@ -21,15 +21,15 @@ export default function DashboardLayout({
       {/* Navigation */}
       <NavBar />
 
-      <main className="w-full maxHeight overflow-hidden md:pt-6 bg-[#FAFAFA] md:px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-1 md:grid-cols-4">
+      <main className="container px-4 md:px-12 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] gap-6 grid grid-cols-1 md:grid-cols-4">
         {/* Featured article */}
         <section className="hidden md:block col-span-1">
           <SectionTitle title="Featured Articles" />
           <FeaturedArticles />
         </section>
 
-        {/* Blog */}
-        <section className="w-full flex-1 h-full md:col-span-2 px-6 pt-6 bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
+        {/* Blog | Jobs */}
+        <section className="w-full flex-1 h-full md:col-span-2 md:px-6 mt-10 md:pt-6 bg-white md:bg-[#F5F5F5] rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 
