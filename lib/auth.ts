@@ -1,32 +1,24 @@
-// export const assertUserAuthenticated = async () => {
-// 	// Auth Guy do some auth stuff here and return user object
-// 	return {
-// 		accessToken:
-// 			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJ2aWN0b3JhZGViYXlvNzY1QGdtYWlsLmNvbSIsImlhdCI6MTcyOTEwMjkyMX0.iijcZKZbaAEIZLYJzqJlsmqMFmYXuWlUl7hL3nE5LVc",
-// 		userId: 5,
-// 	};
-// };
 import { User } from "@/types/auth";
-import axiosInstance from "./axios";
-import axios from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { refreshToken } from "../actions/userAuth";
 
 export const assertUserAuthenticated = async () => {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
   const userDataCookie = cookieStore.get("userData");
 
-  if (!accessToken || !userData) {
+  if (!accessToken || !userDataCookie) {
     throw new Error("User not authenticated");
   }
 
   try {
-    const user = JSON.parse(userData) as User;
-    // Verify token validity with backend
-    const response = await axios.get(`${API_AUTH_URL}auth/verify`, {
-      headers: { Authorization: `Bearer ${accessToken.value}` },
-    });
+    const user = JSON.parse(userDataCookie.value) as User;
+
+    // Set a refresh timer for token renewal every hour if it doesn't exist
+    if (typeof window !== "undefined") {
+      setTokenRefreshTimer();
+    }
 
     return {
       accessToken,
@@ -34,11 +26,18 @@ export const assertUserAuthenticated = async () => {
       user,
     };
   } catch (error) {
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
-    cookieStore.delete("userData");
+    console.error("Error parsing user data:", error);
+    clearAuthCookies();
     throw new Error("Invalid authentication");
   }
+};
+
+// Utility function to delete auth-related cookies
+const clearAuthCookies = () => {
+  const cookieStore = cookies();
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
+  cookieStore.delete("userData");
 };
 
 export const getAuthHeaders = async () => {
@@ -56,9 +55,26 @@ export const isAuthenticated = async () => {
 };
 
 export const logout = async () => {
-  const cookieStore = cookies();
-  cookieStore.delete("accessToken");
-  cookieStore.delete("refreshToken");
-  cookieStore.delete("userData");
+  clearAuthCookies();
   redirect("/auth/sign-in");
+};
+
+// Function to handle token refresh every hour
+let refreshTokenTimeout: ReturnType<typeof setTimeout> | null = null;
+const setTokenRefreshTimer = () => {
+  if (refreshTokenTimeout) {
+    clearTimeout(refreshTokenTimeout);
+  }
+  refreshTokenTimeout = setTimeout(async () => {
+    try {
+      await refreshToken();
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      if (typeof window !== "undefined") {
+        window.location.href = "/auth/sign-in";
+      } else {
+        redirect("/auth/sign-in");
+      }
+    }
+  }, 3600000); // 1 hour
 };

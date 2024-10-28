@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { refreshToken } from "./auth";
+import { refreshToken } from "../actions/userAuth";
 
 const getClientSideCookie = (name: string) => {
   const value = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
@@ -43,8 +43,31 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let refreshTokenTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const setTokenRefreshTimer = () => {
+  if (refreshTokenTimeout) {
+    clearTimeout(refreshTokenTimeout);
+  }
+  refreshTokenTimeout = setTimeout(async () => {
+    try {
+      await refreshToken();
+    } catch (error) {
+      console.error("Failed to refresh token:", error);
+      if (isClient) {
+        window.location.href = "/auth/sign-in";
+      } else {
+        redirect("/auth/sign-in");
+      }
+    }
+  }, 3600000); // 1 hour
+};
+
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    setTokenRefreshTimer(); // Set timer after a successful response
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 
@@ -54,10 +77,15 @@ axiosInstance.interceptors.response.use(
       try {
         const newAccessToken = await refreshToken();
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        setTokenRefreshTimer();
+
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        console.error(
+          "Token refresh failed, redirecting to sign-in:",
+          refreshError
+        );
         if (typeof window !== "undefined") {
-          // Create API route to handle logout
           await fetch("/api/auth/logout", { method: "POST" });
           window.location.href = "/auth/sign-in";
         } else {

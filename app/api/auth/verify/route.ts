@@ -14,6 +14,7 @@ export async function GET() {
     const userData = JSON.parse(userDataCookie.value);
     return NextResponse.json({ user: userData });
   } catch (error) {
+    console.error("Failed to parse user data:", error);
     return NextResponse.json({ error: "Invalid user data" }, { status: 401 });
   }
 }

@@ -6,15 +6,19 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken");
 
   // Protect routes that require authentication
-  if (!token && !request.nextUrl.pathname.startsWith("/auth/")) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+  if (
+    !token &&
+    !request.nextUrl.pathname.startsWith(authConfig.routes.signIn)
+  ) {
+    return NextResponse.redirect(
+      new URL(authConfig.routes.signIn, request.url)
+    );
   }
 
   // Redirect authenticated users away from auth pages
-  if (token && request.nextUrl.pathname.startsWith("/auth/")) {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (token && request.nextUrl.pathname.startsWith(authConfig.routes.signIn)) {
+    return NextResponse.redirect(new URL(authConfig.routes.home, request.url));
   }
-
   return NextResponse.next();
 }
 

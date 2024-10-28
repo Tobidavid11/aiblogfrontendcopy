@@ -11,6 +11,11 @@ export interface SignUpParams {
   password: string;
 }
 
+export interface ErrorResponse {
+  message: string;
+  status_code?: number;
+}
+
 export interface SignUpResponse {
   data?: {
     user?: User;

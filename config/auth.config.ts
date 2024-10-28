@@ -58,8 +58,8 @@ export const authConfig = {
   userDataKey: "userData",
   tokenType: "Bearer",
   routes: {
-    signIn: "/sign-in",
-    signUp: "/sign-up",
+    signIn: "/auth/sign-in",
+    signUp: "/auth/sign-up",
     home: "/",
     otpVerification: "/auth/otp-verification",
   },
@@ -73,5 +73,11 @@ export const authConfig = {
     forgotPassword: "auth/password/forgot",
     validateOtp: "auth/otp/validate",
     requestOtp: "auth/otp/sent",
+  },
+  COOKIE_OPTIONS: {
+    path: "/",
+    maxAge: 3600, // 1 hour
+    sameSite: "strict" as const,
+    secure: process.env.NODE_ENV === "production",
   },
 };

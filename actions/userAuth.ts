@@ -9,8 +9,13 @@ import {
   ForgotPasswordResponse,
   UpdatePasswordParams,
   UpdatePasswordResponse,
+  ErrorResponse,
 } from "../types/auth";
 import { cookies } from "next/headers";
+import { authConfig } from "@/config/auth.config";
+
+import { redirect } from "next/navigation";
+
 const API_AUTH_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
 
 export const signupAuth = async (
@@ -49,9 +54,15 @@ export const signInAuth = async (
       const { accessToken, refreshToken, user } = data.data;
 
       const cookieStore = cookies();
-      cookieStore.set("accessToken", accessToken, COOKIE_OPTIONS);
-      cookieStore.set("refreshToken", refreshToken, COOKIE_OPTIONS);
-      cookieStore.set("userData", JSON.stringify(user), COOKIE_OPTIONS);
+      cookieStore.set(authConfig.accessTokenKey, accessToken, {
+        ...authConfig.COOKIE_OPTIONS,
+      });
+      cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
+        ...authConfig.COOKIE_OPTIONS,
+      });
+      cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
+        ...authConfig.COOKIE_OPTIONS,
+      });
 
       // Return the full response data
       return {
@@ -142,50 +153,143 @@ export const requestNewOtp = async (email: string): Promise<any> => {
 
 export const refreshToken = async () => {
   try {
-    const refreshToken = sessionStorage.getItem("refreshToken");
+    const cookieStore = cookies();
+    const refreshToken = cookieStore.get("refreshToken");
     if (!refreshToken) {
       throw new Error("No refresh token available");
     }
 
     const response = await axios.post(`${API_AUTH_URL}auth/refresh-token`, {
-      refresh_token: refreshToken,
+      refresh_token: refreshToken.value,
     });
+
     const { access_token, refresh_token } = response.data;
-    sessionStorage.setItem("accessToken", access_token);
-    sessionStorage.setItem("refreshToken", refresh_token);
+    cookieStore.set("accessToken", access_token, {
+      ...authConfig.COOKIE_OPTIONS,
+    });
+    cookieStore.set("refreshToken", refresh_token, {
+      ...authConfig.COOKIE_OPTIONS,
+    });
     return access_token;
   } catch (error) {
     console.error("Failed to refresh token:", error);
-    // Handle the error (e.g., redirect to login)
+    const cookieStore = cookies();
+    cookieStore.delete(authConfig.accessTokenKey);
+    cookieStore.delete(authConfig.refreshTokenKey);
+    cookieStore.delete(authConfig.userDataKey);
+    redirect("/auth/sign-in");
     throw error;
   }
 };
+// export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
+//   try {
+//     const response = await axios.get(`${API_AUTH_URL}auth/google`);
+//     if (response.data.authUrl) {
+//       return { authUrl: response.data.authUrl };
+//     }
+//     throw new Error("Google auth URL not found");
+//   } catch (error) {
+//     console.error("Error initiating Google sign in:", error);
+//     throw error;
+//   }
+// };
 
-export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
-  try {
-    const response = await axios.get(`${API_AUTH_URL}auth/google`);
-    if (response.data.authUrl) {
-      return { authUrl: response.data.authUrl };
+// export const handleGoogleCallback = async (code: string) => {
+//   try {
+//     const response = await axios.post(`${API_AUTH_URL}auth/google/callback`, {
+//       code,
+//     });
+//     if (response.data.user) {
+//       // Handle successful sign in (e.g., store user data, redirect)
+//       return response.data;
+//     }
+//   } catch (error) {
+//     console.error("Error handling Google callback:", error);
+//     throw error;
+//   }
+// };
+
+// Function to handle Google Sign-In
+export const handleGoogleSignIn = async (
+  id_token: string
+): Promise<
+  | {
+      User: { id: string; email: string; username: string; createdAt: string };
+      accessToken: string;
+      refreshToken: string;
     }
-    throw new Error("Google auth URL not found");
+  | ErrorResponse
+> => {
+  try {
+    const response = await axios.get(
+      `${API_AUTH_URL}auth/google?id_token=${id_token}`
+    );
+
+    const { user, accessToken, refreshToken } = response.data.data;
+
+    return {
+      User: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        createdAt: user.createdAt,
+      },
+      accessToken,
+      refreshToken,
+    };
   } catch (error) {
-    console.error("Error initiating Google sign in:", error);
-    throw error;
+    return {
+      message:
+        axios.isAxiosError(error) &&
+        error.response &&
+        error.response.data.message
+          ? error.response.data.message
+          : "Something went wrong",
+      status_code:
+        axios.isAxiosError(error) && error.response
+          ? error.response.status
+          : undefined,
+    };
   }
 };
 
+// Function to handle Google Callback
 export const handleGoogleCallback = async (code: string) => {
   try {
-    const response = await axios.post(`${API_AUTH_URL}auth/google/callback`, {
-      code,
+    const response = await axios.get(`${API_AUTH_URL}auth/google/callback`, {
+      params: { code },
     });
+
     if (response.data.user) {
-      // Handle successful sign in (e.g., store user data, redirect)
-      return response.data;
+      const { user, accessToken, refreshToken } = response.data;
+
+      return {
+        User: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          createdAt: user.createdAt,
+        },
+        accessToken,
+        refreshToken,
+      };
     }
+
+    throw new Error("User data not found in callback response");
   } catch (error) {
     console.error("Error handling Google callback:", error);
-    throw error;
+    return {
+      message:
+        axios.isAxiosError(error) &&
+        error.response &&
+        error.response.data.message
+          ? error.response.data.message
+          : "Something went wrong",
+      status_code:
+        axios.isAxiosError(error) && error.response
+          ? error.response.status
+          : undefined,
+    };
   }
 };
 
@@ -217,7 +321,6 @@ export const forgotPasswordAuth = async (
   }
 };
 
-// actions/userAuth.ts
 export const updatePasswordAuth = async (
   params: UpdatePasswordParams
 ): Promise<UpdatePasswordResponse> => {
