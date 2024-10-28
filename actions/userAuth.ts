@@ -1,14 +1,15 @@
 "use server";
 import axios from "axios";
-import { AUTH_API_BASE_URL } from "@/lib/constants";
-import type {
-	SignUpParams,
-	SignUpResponse,
-	SignInParams,
-	ForgotPasswordParams,
-	ForgotPasswordResponse,
-} from "@/types/auth";
-import type { SignInResponse } from "next-auth/react";
+import {
+  SignUpParams,
+  SignUpResponse,
+  SignInParams,
+  ForgotPasswordParams,
+  ForgotPasswordResponse,
+} from "../types/auth";
+// import { cookies } from "next/headers";
+
+const AUTH_API_BASE_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
 
 export const signupAuth = async (
 	params: SignUpParams,
