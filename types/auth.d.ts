@@ -46,3 +46,15 @@ export interface ForgotPasswordResponse {
   error?: string;
   status_code?: number;
 }
+
+export interface UpdatePasswordParams {
+  newPassword: string;
+  confirmPassword: string;
+  resetToken: string;
+}
+
+export interface UpdatePasswordResponse {
+  message?: string;
+  error?: string;
+  status_code: number;
+}

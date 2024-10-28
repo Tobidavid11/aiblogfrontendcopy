@@ -18,11 +18,12 @@ export const useAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        if (isAuthenticated()) {
-          const { user } = await assertUserAuthenticated();
+        const response = await fetch("/api/auth/verify");
+        if (response.ok) {
+          const data = await response.json();
           setAuthState({
             isAuthenticated: true,
-            user,
+            user: data.user,
             loading: false,
           });
         } else {

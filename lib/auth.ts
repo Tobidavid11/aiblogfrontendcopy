@@ -8,19 +8,25 @@
 // };
 import { User } from "@/types/auth";
 import axiosInstance from "./axios";
+import axios from "axios";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const assertUserAuthenticated = async () => {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const userData = sessionStorage.getItem("userData");
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken");
+  const userDataCookie = cookieStore.get("userData");
 
   if (!accessToken || !userData) {
     throw new Error("User not authenticated");
   }
 
   try {
-    // Verify token validity with backend
-    const response = await axiosInstance.get("/auth/verify");
     const user = JSON.parse(userData) as User;
+    // Verify token validity with backend
+    const response = await axios.get(`${API_AUTH_URL}auth/verify`, {
+      headers: { Authorization: `Bearer ${accessToken.value}` },
+    });
 
     return {
       accessToken,
@@ -28,23 +34,31 @@ export const assertUserAuthenticated = async () => {
       user,
     };
   } catch (error) {
-    sessionStorage.clear();
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
+    cookieStore.delete("userData");
     throw new Error("Invalid authentication");
   }
 };
 
-export const getAuthHeaders = () => {
-  const accessToken = sessionStorage.getItem("accessToken");
+export const getAuthHeaders = async () => {
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken");
+
   return {
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: `Bearer ${accessToken?.value || ""}`,
   };
 };
 
-export const isAuthenticated = () => {
-  return !!sessionStorage.getItem("accessToken");
+export const isAuthenticated = async () => {
+  const cookieStore = cookies();
+  return !!cookieStore.get("accessToken");
 };
 
-export const logout = () => {
-  sessionStorage.clear();
-  window.location.href = "/sign-in";
+export const logout = async () => {
+  const cookieStore = cookies();
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
+  cookieStore.delete("userData");
+  redirect("/auth/sign-in");
 };
