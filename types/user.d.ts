@@ -4,12 +4,15 @@ export interface UserProps {
   username: string;
   timestamp: number;
   cover_photo: string;
-  userId: string,
+  userId: string;
   isVerified: boolean;
   user_bio: string;
-  user_website: string;
+  external_link: string; 
   user_join_date: string;
   user_followers: number;
   user_following: number;
-  onFollow?: () => void; // Optional callback for follow action
+  country: string;     
+  state: string;       
+  phoneNumber: string; 
+  onFollow?: () => void;
 }

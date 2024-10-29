@@ -7,10 +7,17 @@ export const UserData: UserProps = {
   timestamp: Date.now() - 1000 * 60 * 5,
   cover_photo: "/cover.jpg",
   isVerified: true,
-  user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry. With a focus on innovation, they help businesses enhance their digital ",
-  user_website: "https://www.linkedin.com/",
+  user_bio: "Miracle is a business owner specializing in digital solutions tailored to the tech industry.",
+  external_link: "https://www.linkedin.com/", 
   user_join_date: "December, 2006",
   user_followers: 118,
   user_following: 335,
-  userId: ""
+  userId: "",
+  country: "", 
+  state: "", 
+  phoneNumber: "", 
+};
+
+export const setUserData = (data: Partial<UserProps>) => {
+  Object.assign(UserData, data);
 };
