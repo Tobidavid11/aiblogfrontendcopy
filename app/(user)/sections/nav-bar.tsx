@@ -105,7 +105,7 @@ const NavBar = () => {
 					{/* User profile */}
 					<RoundedImage
 						size={40}
-						src={UserData.profile_pic}
+						src={UserData.profilePic}
 						alt={`${UserData.username} profile pic`}
 					/>
 				</div>

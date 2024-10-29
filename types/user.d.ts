@@ -3,16 +3,18 @@ export interface UserProps {
 	username: string;
 	name: string;
 	profilePic: string;
-	firstName: string | null;
-	lastName: string;
+	firstName?: string;
+	lastName?: string;
 	bio: string;
-	externalLink: null;
-	country: string;
-	state: string;
-	phoneNumber: string;
+	externalLink: string;
+	country?: string;
+	state?: string;
+	phoneNumber?: string;
 	followersCount: number;
 	followingCount: number;
-	createdAt: string;
+	createdAt?: string | number;
+	coverPhoto: string;
+	verified?: boolean;
 	// timestamp: number;
 	// cover_photo: string;
 	// userId: string,
