@@ -11,14 +11,36 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { JobDummyData } from "@/data/mock/job";
-import dummyUsers from "@/data/mock/top-writers";
 import { UserData } from "@/data/mock/user";
 import { cn } from "@/lib/utils";
-import BackArrow from "./back-arrow";
+import BackArrow from "./_components/back-arrow";
+import { getFollowees, getFollowers } from "./queries";
+import type { UserProps } from "@/types/user";
+import type { SuccessResponse, ErrorResponse } from "@/types/api";
 
-const FollowersPage = () => {
-	const tabs = ["followers", "following", "verified"];
+const FollowersPage = async () => {
+	const [followers, followees] = await Promise.all([
+		getFollowers(),
+		getFollowees(),
+	]);
+
+	const tabs = [
+		{
+			title: "followers",
+			data: followers,
+		},
+		{
+			title: "following",
+			data: followees,
+		},
+		{
+			title: "verified",
+			data: followers,
+		},
+	];
 	const user = UserData;
+
+	console.log(followers, followees);
 
 	return (
 		<main className="font-dm-sans grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] max-w-[1440px] mx-auto w-full md:px-4 h-screen md:overflow-hidden">
@@ -44,33 +66,17 @@ const FollowersPage = () => {
 									"after:opacity-0 after:scale-x-0",
 									"data-[state=active]:after:opacity-100 data-[state=active]:after:scale-x-100",
 								)}
-								value={tab}
-								key={tab}
+								value={tab.title}
+								key={tab.title}
 							>
-								{tab}
+								{tab.title}
 							</TabsTrigger>
 						))}
 					</TabsList>
 					{tabs.map((tab) => (
-						<TabsContent value={tab} key={tab} className="pt-4">
+						<TabsContent value={tab.title} key={tab.title} className="pt-4">
 							<div className="flex flex-col gap-4">
-								{dummyUsers.map((user) => (
-									<Card className="flex flex-col gap-5" key={user.userId}>
-										<CardHeader>
-											<ProfileCard
-												user={UserData} 
-												following={tab === "following"}
-											/>
-										</CardHeader>
-										<CardContent>
-											<CardDescription className="text-neutral-700">
-												lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem
-												ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum
-												lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem
-											</CardDescription>
-										</CardContent>
-									</Card>
-								))}
+								{renderTabContent(tab.data, tab.title)}
 							</div>
 						</TabsContent>
 					))}
@@ -94,7 +100,7 @@ const FollowersPage = () => {
 						/>
 						<div className="flex flex-col gap-4">
 							{JobDummyData.map((job) => (
-								<TaskCard key={job.user.userId} job={job} />
+								<TaskCard key={job.user.id} job={job} />
 							))}
 						</div>
 					</div>
@@ -103,5 +109,44 @@ const FollowersPage = () => {
 		</main>
 	);
 };
+
+function renderTabContent(
+	data: SuccessResponse<UserProps[]> | ErrorResponse | undefined,
+	tabTitle: string,
+) {
+	if (!data) {
+		return <p>Error: No data available</p>;
+	}
+
+	if ("error" in data) {
+		return <p>Error: {data.message}</p>;
+	}
+
+	if (data.statusCode === 404) {
+		return (
+			<p>
+				{tabTitle === "followers"
+					? "You don't have any followers"
+					: tabTitle === "following"
+						? "You are not following any users"
+						: "You don't have any verified followers"}
+			</p>
+		);
+	}
+
+	return data.data.map((user) => (
+		// Key error here cause there isn't a verified followers endpoint yet
+		<Card className="flex flex-col" key={user.id}>
+			<CardHeader>
+				<ProfileCard user={user} following={tabTitle === "following"} />
+			</CardHeader>
+			<CardContent>
+				<CardDescription className="text-neutral-700">
+					{user.bio}
+				</CardDescription>
+			</CardContent>
+		</Card>
+	));
+}
 
 export default FollowersPage;
