@@ -11,6 +11,11 @@ export const getFollowers = async (): Promise<FollowResponse> => {
 		"auth",
 		"/auth/followers",
 		user?.accessToken.value,
+		{
+			next: {
+				tags: ["followers"],
+			},
+		},
 	);
 
 	try {
@@ -29,7 +34,11 @@ export const getFollowees = async (): Promise<FollowResponse> => {
 	const user = await assertUserAuthenticated();
 	const fetchFollowees = makeFetch<
 		SuccessResponse<UserProps[]> | ErrorResponse
-	>("auth", "/auth/followees", user?.accessToken.value);
+	>("auth", "/auth/followees", user?.accessToken.value, {
+		next: {
+			tags: ["followees"],
+		},
+	});
 
 	try {
 		const response = await fetchFollowees();

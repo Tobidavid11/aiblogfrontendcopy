@@ -135,6 +135,7 @@ function renderTabContent(
 	}
 
 	return data.data.map((user) => (
+		// Key error here cause there isn't a verified followers endpoint yet
 		<Card className="flex flex-col" key={user.id}>
 			<CardHeader>
 				<ProfileCard user={user} following={tabTitle === "following"} />

@@ -1,5 +1,4 @@
 import { AUTH_API_BASE_URL, BLOG_API_BASE_URL } from "./constants";
-import { PublicError } from "./safe-action";
 
 export function formatNumber(num: number): string {
 	return new Intl.NumberFormat("en", { notation: "compact" }).format(num);

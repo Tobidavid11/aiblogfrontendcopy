@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { cn, formatTime } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { DefaultImage, RoundedImage } from "./rounded-image";
 import type { UserProps } from "@/types/user";
-import { followAction } from "@/actions/follow";
 import { useServerAction } from "zsa-react";
 import { Loader } from "lucide-react";
+import { action } from "@/actions/follow";
+import { revalidateTagServer } from "@/actions/common";
 
 interface ProfileCardProps {
 	user: UserProps;
@@ -20,7 +21,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 	className,
 	following,
 }) => {
-	const { execute, isPending } = useServerAction(followAction, {
+	const { execute, isPending } = useServerAction(action, {
 		onError({ err }) {
 			console.log("something went wrong", err);
 		},
@@ -28,6 +29,21 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 			console.log("Successful");
 		},
 	});
+
+	async function onSubmit(path: "follow" | "unfollow") {
+		const [data, err] = await execute({
+			followeeId: user.id,
+			path,
+		});
+
+		if (err) {
+			console.error(err);
+		}
+		if (data) {
+			await revalidateTagServer(path === "follow" ? "followers" : "followees");
+			console.log(data);
+		}
+	}
 
 	const applyAction = async () => {
 		console.log("Application for job successful!");
@@ -40,12 +56,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 				<form
 					onSubmit={async (e) => {
 						e.preventDefault();
-						await execute({
-							followeeId: user.id,
-						});
+						onSubmit("unfollow");
 					}}
 				>
-					<Button className="text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
+					<Button
+						className="text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4"
+						disabled={isPending}
+					>
 						{isPending && <Loader className="animate-spin" size={18} />}
 						Unfollow
 					</Button>
@@ -56,12 +73,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 			<form
 				onSubmit={async (e) => {
 					e.preventDefault();
-					await execute({
-						followeeId: user.id,
-					});
+					onSubmit("follow");
 				}}
 			>
-				<Button className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4">
+				<Button
+					className="bg-[#171717] hover:bg-[#525252] text-[#FAFAFA] font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4"
+					disabled={isPending}
+				>
 					{isPending && <Loader className="animate-spin" size={18} />}
 					Follow
 				</Button>
