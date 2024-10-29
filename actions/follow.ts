@@ -6,26 +6,26 @@ import { authenticatedAction } from "@/lib/safe-action";
 import { z } from "zod";
 
 export const followAction = authenticatedAction
-	.createServerAction()
-	.input(
-		z.object({
-			followeeId: z.string().uuid(),
-		}),
-	)
-	.handler(async ({ input: { followeeId } }) => {
-		const user = await assertUserAuthenticated();
-		try {
-			const res = await makeFetch(
-				"auth",
-				`/follow/${followeeId}`,
-				user.accessToken as string,
-				{
-					method: "POST",
-				},
-			)();
-			console.log(res);
-		} catch (err) {
-			console.log(err);
-		}
-		console.log(followeeId);
-	});
+  .createServerAction()
+  .input(
+    z.object({
+      followeeId: z.string().uuid(),
+    })
+  )
+  .handler(async ({ input: { followeeId } }) => {
+    const user = await assertUserAuthenticated();
+    try {
+      const res = await makeFetch(
+        "auth",
+        `/follow/${followeeId}`,
+        user.accessToken.value,
+        {
+          method: "POST",
+        }
+      )();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(followeeId);
+  });

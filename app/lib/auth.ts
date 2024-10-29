@@ -21,7 +21,7 @@ export const handleTokenRefresh = async () => {
     // Clear auth data and redirect to login
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    window.location.href = "/sign-in";
+    window.location.href = "/auth/sign-in";
     throw error;
   }
 };
