@@ -55,10 +55,6 @@ export default function makeFetch<T>(
 			fetchOptions,
 		);
 
-		if (!res.ok) {
-			throw new PublicError("Req failed");
-		}
-
 		const contentType = res.headers.get("content-type");
 		if (contentType?.includes("application/json")) {
 			return (await res.json()) as T;
