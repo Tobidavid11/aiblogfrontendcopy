@@ -1,4 +1,3 @@
-
 name: Staging Deployment
 
 on:
@@ -38,6 +37,7 @@ jobs:
 
       - name: Build Next.js application
         run: pnpm build
+        cp package.json dist
 
       - name: Archive production artifacts
         run: tar -czf aiblogfrontend.tar.gz .next public
@@ -56,7 +56,7 @@ jobs:
           script: |
             cd /home/drellofe/aiblogfrontend
             tar -xzf /tmp/drellofe/aiblogfrontend.tar.gz
+            cp -r /tmp/drellofe/dist .
             rm -f /tmp/drellofe/aiblogfrontend.tar.gz
-            cp -r .next/standalone/* .
             cd ..
             pnpm install
