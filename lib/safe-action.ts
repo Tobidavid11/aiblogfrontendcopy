@@ -34,3 +34,7 @@ export const authenticatedAction = createServerActionProcedure()
 
 		return { user };
 	});
+
+export const unauthenticatedAction = createServerActionProcedure()
+	.experimental_shapeError(shapeErrors)
+	.handler(async () => {});

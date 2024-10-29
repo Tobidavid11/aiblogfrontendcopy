@@ -1,5 +1,4 @@
 import { AUTH_API_BASE_URL, BLOG_API_BASE_URL } from "./constants";
-import { PublicError } from "./safe-action";
 
 export function formatNumber(num: number): string {
 	return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
@@ -54,10 +53,6 @@ export default function makeFetch<T>(
 			`${service === "blog" ? BLOG_API_BASE_URL : AUTH_API_BASE_URL}${path}`,
 			fetchOptions,
 		);
-
-		if (!res.ok) {
-			throw new PublicError("Req failed");
-		}
 
 		const contentType = res.headers.get("content-type");
 		if (contentType?.includes("application/json")) {

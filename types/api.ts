@@ -6,7 +6,7 @@ export type SuccessResponse<T> = {
 
 // May differ
 export type ErrorResponse = {
-	status: number;
+	statusCode: number;
 	error: string;
-	detail: string;
+	message: string;
 };
