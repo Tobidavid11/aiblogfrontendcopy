@@ -1,27 +1,31 @@
 "use server";
 import axios from "axios";
-import {
-  SignUpParams,
-  SignUpResponse,
-  SignInParams,
-  ForgotPasswordParams,
-  ForgotPasswordResponse,
+import type {
+	SignUpParams,
+	SignUpResponse,
+	SignInParams,
+	SignInResponse,
+	ForgotPasswordParams,
+	ForgotPasswordResponse,
+	UpdatePasswordParams,
+	UpdatePasswordResponse,
 } from "../types/auth";
-// import { cookies } from "next/headers";
+import { cookies } from "next/headers";
+import { authConfig } from "@/config/auth.config";
 
-const AUTH_API_BASE_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
+import { redirect } from "next/navigation";
+
+const API_AUTH_URL = process.env.NEXT_PUBLIC_USER_AUTH_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const signupAuth = async (
 	params: SignUpParams,
 ): Promise<SignUpResponse> => {
 	try {
-		console.log(`${AUTH_API_BASE_URL}/auth/register`);
-		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/register`,
-			params,
-		);
+		const response = await axios.post(`${API_AUTH_URL}auth/register`, params);
 		return response.data;
 	} catch (error) {
+		console.error(error);
 		if (axios.isAxiosError(error)) {
 			return {
 				error:
@@ -29,7 +33,6 @@ export const signupAuth = async (
 				status_code: error.response?.status || 500,
 			};
 		}
-		console.error(error);
 		return {
 			error: "An unexpected error occurred",
 			status_code: 500,
@@ -37,64 +40,32 @@ export const signupAuth = async (
 	}
 };
 
-// export const signInAuth = async (
-//   params: SignInParams
-// ): Promise<SignInResponse> => {
-//   const payload = {
-//     email: params.email, // or username, depending on your backend
-//     password: params.password,
-//   };
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}auth/login`, payload);
-//     const { user, access_token, refresh_token } = response.data;
-
-//     cookies().set("access_token", access_token, {
-//       httpOnly: true,
-//       secure: true,
-//     });
-//     cookies().set("refresh_token", refresh_token, {
-//       httpOnly: true,
-//       secure: true,
-//     });
-
-//     return {
-//       data: { user },
-//       status_code: response.status,
-//     };
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       return {
-//         error:
-//           error.response?.data?.message || "An error occurred during sign in",
-//         status_code: error.response?.status || 500,
-//       };
-//     }
-//     return {
-//       error: "An unexpected error occurred",
-//       status_code: 500,
-//     };
-//   }
-// };
-
-// Toni getting type errors here so i set it to any so i can push
-// Dunno how u get it past build
-export const signInAuth = async (params: SignInParams): Promise<any> => {
+export const signInAuth = async (
+	params: SignInParams,
+): Promise<SignInResponse> => {
 	const payload = {
 		email: params.email,
 		password: params.password,
 	};
 	try {
-		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/login`,
-			payload,
-		);
+		const response = await axios.post(`${API_AUTH_URL}auth/login`, payload);
 		const { data } = response;
 
 		if (data.statusCode === 200 && data.data) {
 			const { accessToken, refreshToken, user } = data.data;
 
-			// Return the full response data
+			const cookieStore = cookies();
+			cookieStore.set(authConfig.accessTokenKey, accessToken, {
+				...authConfig.COOKIE_OPTIONS,
+			});
+			cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
+				...authConfig.COOKIE_OPTIONS,
+			});
+			cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
+				...authConfig.COOKIE_OPTIONS,
+			});
 
+			// Return the full response data
 			return {
 				data: {
 					user,
@@ -125,32 +96,12 @@ export const signInAuth = async (params: SignInParams): Promise<any> => {
 	}
 };
 
-// export const validateOtp = async (email: string, otp: string): Promise<any> => {
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}/auth/otp/validate`, {
-//       email,
-//       otp,
-//     });
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       throw new Error(
-//         error.response?.data?.message || "Failed to validate OTP"
-//       );
-//     }
-//     throw new Error("An unexpected error occurred");
-//   }
-// };
-
 export const validateOtp = async (email: string, otp: string): Promise<any> => {
 	try {
-		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/otp/validate`,
-			{
-				email,
-				otp,
-			},
-		);
+		const response = await axios.post(`${API_AUTH_URL}auth/otp/validate`, {
+			email,
+			otp,
+		});
 		if (response.status === 200) {
 			return {
 				success: true,
@@ -174,7 +125,7 @@ export const validateOtp = async (email: string, otp: string): Promise<any> => {
 
 export const requestNewOtp = async (email: string): Promise<any> => {
 	try {
-		const response = await axios.post(`${AUTH_API_BASE_URL}/auth/otp/sent`, {
+		const response = await axios.post(`${API_AUTH_URL}auth/otp/sent`, {
 			email,
 		});
 		if (response.status === 200) {
@@ -197,86 +148,129 @@ export const requestNewOtp = async (email: string): Promise<any> => {
 		return { success: false, message: "An unexpected error occurred" };
 	}
 };
-// export const requestNewOtp = async (email: string): Promise<any> => {
-//   try {
-//     const response = await axios.post(`${API_BASE_URL}auth/otp/sent`, {
-//       email,
-//     });
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       throw new Error(
-//         error.response?.data?.message || "Failed to request new OTP"
-//       );
-//     }
-//     throw new Error("An unexpected error occurred");
-//   }
-// };
 
 export const refreshToken = async () => {
 	try {
-		const refreshToken = sessionStorage.getItem("refreshToken");
+		const cookieStore = cookies();
+		const refreshToken = cookieStore.get("refreshToken");
 		if (!refreshToken) {
 			throw new Error("No refresh token available");
 		}
 
-		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/refresh-token`,
-			{
-				refresh_token: refreshToken,
-			},
-		);
+		const response = await axios.post(`${API_AUTH_URL}auth/refresh-token`, {
+			refresh_token: refreshToken.value,
+		});
+
 		const { access_token, refresh_token } = response.data;
-
-		sessionStorage.setItem("accessToken", access_token);
-		sessionStorage.setItem("refreshToken", refresh_token);
-
+		cookieStore.set("accessToken", access_token, {
+			...authConfig.COOKIE_OPTIONS,
+		});
+		cookieStore.set("refreshToken", refresh_token, {
+			...authConfig.COOKIE_OPTIONS,
+		});
 		return access_token;
 	} catch (error) {
 		console.error("Failed to refresh token:", error);
-		// Handle the error (e.g., redirect to login)
-		throw error;
+		const cookieStore = cookies();
+		cookieStore.delete(authConfig.accessTokenKey);
+		cookieStore.delete(authConfig.refreshTokenKey);
+		cookieStore.delete(authConfig.userDataKey);
+		redirect("/auth/sign-in");
 	}
 };
 
-export const handleGoogleSignIn = async (): Promise<{ authUrl: string }> => {
+export const initiateGoogleSignIn = async () => {
 	try {
-		const response = await axios.get(`${AUTH_API_BASE_URL}/auth/google`);
-		if (response.data.authUrl) {
-			return { authUrl: response.data.authUrl };
-		}
-		throw new Error("Google auth URL not found");
+		return {
+			authUrl: `${API_URL}auth/google`,
+			error: null,
+		};
 	} catch (error) {
-		console.error("Error initiating Google sign in:", error);
-		throw error;
+		console.error("Failed to initiate Google sign in:", error);
+		return {
+			authUrl: null,
+			error: "Failed to initiate Google sign in",
+		};
 	}
 };
 
 export const handleGoogleCallback = async (code: string) => {
 	try {
-		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/google/callback`,
-			{
-				code,
-			},
-		);
-		if (response.data.user) {
-			// Handle successful sign in (e.g., store user data, redirect)
+		const response = await axios.get(`${API_AUTH_URL}auth/google/callback`, {
+			params: { code },
+			withCredentials: true,
+		});
 
-			return response.data;
+		const { user, accessToken, refreshToken } = response.data;
+
+		if (!user || !accessToken || !refreshToken) {
+			throw new Error("Invalid response from Google authentication");
 		}
+
+		// Set cookies similar to normal sign-in
+		const cookieStore = cookies();
+		cookieStore.set(authConfig.accessTokenKey, accessToken, {
+			...authConfig.COOKIE_OPTIONS,
+		});
+		cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
+			...authConfig.COOKIE_OPTIONS,
+		});
+		cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
+			...authConfig.COOKIE_OPTIONS,
+		});
+
+		return {
+			success: true,
+			data: {
+				user,
+				accessToken,
+				refreshToken,
+			},
+			error: null,
+		};
 	} catch (error) {
-		console.error("Error handling Google callback:", error);
-		throw error;
+		console.error("Error in Google callback:", error);
+		return {
+			success: false,
+			data: null,
+			error: "Failed to complete Google authentication",
+		};
 	}
 };
-
 export const forgotPasswordAuth = async (
 	params: ForgotPasswordParams,
 ): Promise<ForgotPasswordResponse> => {
 	try {
 		const response = await axios.post(
-			`${AUTH_API_BASE_URL}/auth/password/forgot`,
+			`${API_AUTH_URL}auth/password/forgot`,
+			params,
+		);
+		return {
+			message: response.data.message,
+			status_code: response.status,
+		};
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				error:
+					error.response?.data?.message ||
+					"An error occurred while processing your request",
+				status_code: error.response?.status || 500,
+			};
+		}
+		return {
+			error: "An unexpected error occurred",
+			status_code: 500,
+		};
+	}
+};
+
+export const updatePasswordAuth = async (
+	params: UpdatePasswordParams,
+): Promise<UpdatePasswordResponse> => {
+	try {
+		const response = await axios.post(
+			`${API_AUTH_URL}auth/password/reset`,
 			params,
 		);
 		return {

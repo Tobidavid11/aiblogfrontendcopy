@@ -1,0 +1,62 @@
+name: Staging Deployment
+
+on:
+  push:
+   branches: [staging]
+   paths-ignore:
+     - "README.md"
+     - ".github/workflows/**"
+     - ".gitignore"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event.repository.fork == false
+
+    steps:
+      - uses: actions/checkout@v4
+    
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build Next.js application
+        run: pnpm build
+        cp package.json dist
+
+      - name: Archive production artifacts
+        run: tar -czf aiblogfrontend.tar.gz .next public
+
+      - name: Copy Artifacts to server
+        run: |
+          sshpass -p ${{ secrets.PASSWORD }} scp -o StrictHostKeyChecking=no aiblogfrontend.tar.gz ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/tmp/drellofe
+          rm -f aiblogfrontend.tar.gz
+        
+      - name: Deploy on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /home/drellofe/aiblogfrontend
+            tar -xzf /tmp/drellofe/aiblogfrontend.tar.gz
+            cp -r /tmp/drellofe/dist .
+            rm -f /tmp/drellofe/aiblogfrontend.tar.gz
+            cd ..
+            pnpm install

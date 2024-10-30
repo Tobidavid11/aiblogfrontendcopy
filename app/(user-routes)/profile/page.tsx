@@ -8,8 +8,8 @@ import EditProfile from "@/components/profile/edit-profile";
 import UserInfo from "@/components/profile/user-info";
 import ContentTab from "@/components/profile/content-tab";
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNDY3N2Y5YS0xY2ZjLTRhYzgtOTgwZi05MWRhNGRlOTYzZmYiLCJlbWFpbCI6ImRyZWxsbzM2MEBnbWFpbC5jb20iLCJpYXQiOjE3MzAxMTUyOTJ9.w57FSl2S17Yv3XPentdt-2zkz2s3IsIKJXX6ruWFtVY";
-const profileId = "c90363c0-7717-476e-932d-65654832c891";
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNDY3N2Y5YS0xY2ZjLTRhYzgtOTgwZi05MWRhNGRlOTYzZmYiLCJlbWFpbCI6ImRyZWxsbzM2MEBnbWFpbC5jb20iLCJpYXQiOjE3MzAxMTUyOTJ9.w57FSl2S17Yv3XPentdt-2zkz2s3IsIKJXX6ruWFtVY"; //Bearer token 
+const profileId = "c90363c0-7717-476e-932d-65654832c891"; //Profile id 
 
 const Profile = () => {
   const [userData, setUserData] = useState(initialUserData);
@@ -29,6 +29,7 @@ const Profile = () => {
         </div>
 
         <div className="flex justify-end gap-2 items-center px-4">
+        {/* Pass token , profileId , and setUserData */}
           <EditProfile userData={userData} setUserData={setUserData} token={token} profileId={profileId} />
           <ViewWallet />
         </div>

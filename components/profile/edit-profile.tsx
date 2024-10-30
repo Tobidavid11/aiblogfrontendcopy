@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Pencil, XIcon } from "lucide-react";
+import { toast, Toaster } from "sonner";
 import type { UserProps } from "@/types/user";
 
-// Actual backend URL 
-const API_BASE_URL = "https://drellouserauth.onrender.com/api/v1/";
+const API_BASE_URL = "https://drellouserauth.onrender.com/api/v1/"; //Base URL 
 
 interface EditProfileProps {
   userData?: UserProps;
@@ -20,14 +20,14 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
   const [formData, setFormData] = useState({
     firstName: userData?.name?.split(" ")[0] || "",
     lastName: userData?.name?.split(" ")[1] || "",
-    bio: userData?.user_bio || "",
+    bio: userData?.bio || "",
     country: userData?.country || "",
     state: userData?.state || "",
     phoneNumber: userData?.phoneNumber || "",
     username: userData?.username || "",
-    externalLink: userData?.external_link || "", // Updated to externalLink
+    externalLink: userData?.externalLink || "",
     profilePic: "",
-    coverPic: "",
+    coverPhoto: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,14 +37,14 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
       setFormData({
         firstName: userData.name?.split(" ")[0] || "",
         lastName: userData.name?.split(" ")[1] || "",
-        bio: userData.user_bio || "",
+        bio: userData.bio || "",
         country: userData.country || "",
         state: userData.state || "",
         phoneNumber: userData.phoneNumber || "",
         username: userData.username || "",
-        externalLink: userData.external_link || "", // Updated to externalLink
+        externalLink: userData.externalLink || "",
         profilePic: "",
-        coverPic: "",
+        coverPhoto: "",
       });
     }
   }, [userData]);
@@ -65,11 +65,11 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
 
     try {
       const response = await axios.put(
-        `${API_BASE_URL}auth/profile/${profileId}`, // Base URL
+        `${API_BASE_URL}auth/profile/${profileId}`,
         {
           username: formData.username,
           profilePic: formData.profilePic,
-          coverPic: formData.coverPic,
+          coverPic: formData.coverPhoto,
           firstName: formData.firstName,
           lastName: formData.lastName,
           bio: formData.bio,
@@ -90,21 +90,24 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
         setUserData({
           ...userData,
           name: `${formData.firstName} ${formData.lastName}`,
-          user_bio: formData.bio,
+          bio: formData.bio,
           country: formData.country,
           state: formData.state,
           phoneNumber: formData.phoneNumber,
           username: formData.username,
-          profile_pic: formData.profilePic,
-          cover_photo: formData.coverPic,
+          profilePic: formData.profilePic,
+          coverPhoto: formData.coverPhoto,
         });
         toggleModal();
+        toast.success("Profile updated successfully!");
       } else {
         setError("Failed to update profile.");
+        toast.error("Failed to update profile.");
       }
     } catch (error) {
       setError("An error occurred while updating the profile.");
       console.error("Error updating profile:", error);
+      toast.error("An error occurred while updating the profile.");
     } finally {
       setLoading(false);
     }
@@ -177,7 +180,7 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
                   <label className="block text-sm font-medium text-gray-700">External Link</label>
                   <input 
                     type="text" 
-                    name="externalLink" // Updated to externalLink
+                    name="externalLink"
                     value={formData.externalLink}
                     onChange={handleChange}
                     className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -220,13 +223,17 @@ function EditProfile({ userData = {} as UserProps, setUserData, token, profileId
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-[#171717] text-white font-medium rounded-md py-2 mt-6" disabled={loading}>
-                {loading ? "Saving..." : "Save Changes"}
-              </Button>
+              <div className="flex justify-end mt-6">
+                <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md" disabled={loading}>
+                  {loading ? "Updating..." : "Update Profile"}
+                </Button>
+              </div>
             </form>
           </div>
         </div>
       )}
+
+      <Toaster />
     </>
   );
 }

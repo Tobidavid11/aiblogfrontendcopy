@@ -67,7 +67,7 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
     <Card className="bg-white shadow-none border border-[#e5e5e5] p-4 rounded-2xl">
       <CardTitle className="p-0 mb-3 md:mb-6">
         <h3 className="text-base font-normal text-[#404040]">
-          Input your socials
+          Input Your Socials
         </h3>
       </CardTitle>
 

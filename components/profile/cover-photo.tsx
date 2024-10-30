@@ -8,6 +8,8 @@ import { CoverImage } from "./cover-image";
 import { PencilLine, MoveLeft, ZoomIn, ZoomOut } from "lucide-react";
 import ProfilePic from "./user-profile-pic";
 import { UserData } from "@/data/mock/user";
+import { toast } from "sonner"; 
+import { Toaster } from "sonner";
 
 interface CoverPhotoProps {
   user: UserProps;
@@ -78,10 +80,30 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({ user, className }) => {
     setPosition({ x: 0, y: 0 });
   };
 
+  const handleCoverApply = () => {
+    if (selectedCoverImage) {
+      UserData.coverPhoto = selectedCoverImage;
+      toast.success("Cover Photo Updated Successfully!");
+      closeCoverOverlay();
+    } else {
+      toast.error("Failed to update Cover Photo!"); 
+    }
+  };
+
+  const handleProfileApply = () => {
+    if (selectedProfileImage) {
+      UserData.profilePic = selectedProfileImage;
+      toast.success("Profile Picture Updated Successfully!");
+      closeProfileOverlay();
+    } else {
+      toast.error("Failed to update Profile Picture!"); 
+    }
+  };
+
   return (
     <div className={cn("relative", className)}>
       <div className="w-full h-40 md:h-56 bg-cover bg-center rounded-2xl overflow-hidden">
-        <CoverImage src={user.cover_photo} alt={`${user.username} cover pic`} />
+        <CoverImage src={user.coverPhoto} alt={`${user.username} cover pic`} />
       </div>
 
       <div className="absolute mb-4 top-4 right-4 flex gap-2 group">
@@ -92,7 +114,7 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({ user, className }) => {
           <PencilLine />
         </Button>
         <span className="opacity-0 group-hover:opacity-100 bg-black text-white text-xs rounded py-1 px-2 absolute -top-8 right-0 transition-opacity">
-          Edit cover image
+          Edit Media
         </span>
         <input
           type="file"
@@ -104,49 +126,47 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({ user, className }) => {
       </div>
 
       {isEditingCover && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-8 rounded-lg shadow-lg w-[600px] h-[400px] flex flex-col items-center justify-center relative">
-      <div className="flex justify-between items-center mb-4 w-full">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <MoveLeft className="cursor-pointer" onClick={closeCoverOverlay} />
-          Edit Cover Photo
-        </h2>
-        <Button onClick={() => alert("Cover Photo Updated")}>Apply</Button>
-      </div>
-      <div
-        className="relative w-full h-48 overflow-hidden bg-gray-200 flex items-center justify-center"
-        onMouseDown={startDragging}
-        onMouseMove={dragImage}
-        onMouseUp={stopDragging}
-        onMouseLeave={stopDragging}
-      >
-        <img
-          src={selectedCoverImage || user.cover_photo}
-          alt="Selected Cover"
-          style={{
-            transform: `scale(${1 + zoomLevel / 100}) translate(${position.x}px, ${position.y}px)`,
-          }}
-          className="cursor-move w-full"
-        />
-      </div>
-      <div className="flex items-center gap-4 mt-4 w-full">
-        <ZoomOut />
-        <input
-          type="range"
-          min="1"
-          max="100"
-          value={zoomLevel}
-          onChange={handleZoomChange}
-          className="flex-1"
-        />
-        <ZoomIn />
-      </div>
-      <div className="text-sm mt-2 text-center">Zoom Level: {zoomLevel}%</div>
-    </div>
-  </div>
-)}
-
-
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[600px] h-[400px] flex flex-col items-center justify-center relative">
+            <div className="flex justify-between items-center mb-4 w-full">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <MoveLeft className="cursor-pointer" onClick={closeCoverOverlay} />
+                Edit Media
+              </h2>
+              <Button onClick={handleCoverApply}>Apply</Button>
+            </div>
+            <div
+              className="relative w-full h-48 overflow-hidden bg-gray-200 flex items-center justify-center"
+              onMouseDown={startDragging}
+              onMouseMove={dragImage}
+              onMouseUp={stopDragging}
+              onMouseLeave={stopDragging}
+            >
+              <img
+                src={selectedCoverImage || user.coverPhoto}
+                alt="Selected Cover"
+                style={{
+                  transform: `scale(${1 + zoomLevel / 100}) translate(${position.x}px, ${position.y}px)`,
+                }}
+                className="cursor-move w-full"
+              />
+            </div>
+            <div className="flex items-center gap-4 mt-4 w-full">
+              <ZoomOut />
+              <input
+                type="range"
+                min="1"
+                max="100"
+                value={zoomLevel}
+                onChange={handleZoomChange}
+                className="flex-1"
+              />
+              <ZoomIn />
+            </div>
+            <div className="text-sm mt-2 text-center">Zoom Level: {zoomLevel}%</div>
+          </div>
+        </div>
+      )}
 
       <div className="bottom-12 left-8 flex gap-2 relative">
         <div className="relative">
@@ -168,48 +188,49 @@ const CoverPhoto: React.FC<CoverPhotoProps> = ({ user, className }) => {
       </div>
 
       {isEditingProfile && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-8 rounded-lg shadow-lg w-[400px] h-[400px] flex flex-col items-center justify-center relative">
-      <div className="flex justify-between items-center mb-4 w-full">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <MoveLeft className="cursor-pointer" onClick={closeProfileOverlay} />
-          Edit Profile Picture
-        </h2>
-        <Button onClick={() => alert("Profile Picture Updated")}>Apply</Button>
-      </div>
-      <div
-        className="relative w-40 h-40 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center"
-        onMouseDown={startDragging}
-        onMouseMove={dragImage}
-        onMouseUp={stopDragging}
-        onMouseLeave={stopDragging}
-      >
-        <img
-          src={selectedProfileImage || user.profile_pic}
-          alt="Selected Profile"
-          style={{
-            transform: `scale(${1 + zoomLevel / 100}) translate(${position.x}px, ${position.y}px)`,
-          }}
-          className="cursor-move rounded-full"
-        />
-      </div>
-      <div className="flex items-center gap-4 mt-4 w-full">
-        <ZoomOut />
-        <input
-          type="range"
-          min="1"
-          max="100"
-          value={zoomLevel}
-          onChange={handleZoomChange}
-          className="flex-1"
-        />
-        <ZoomIn />
-      </div>
-      <div className="text-sm mt-2 text-center">Zoom Level: {zoomLevel}%</div>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[400px] h-[400px] flex flex-col items-center justify-center relative">
+            <div className="flex justify-between items-center mb-4 w-full">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <MoveLeft className="cursor-pointer" onClick={closeProfileOverlay} />
+                Edit Profile Picture
+              </h2>
+              <Button onClick={handleProfileApply}>Apply</Button>
+            </div>
+            <div
+              className="relative w-40 h-40 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center"
+              onMouseDown={startDragging}
+              onMouseMove={dragImage}
+              onMouseUp={stopDragging}
+              onMouseLeave={stopDragging}
+            >
+              <img
+                src={selectedProfileImage || user.profilePic}
+                alt="Selected Profile"
+                style={{
+                  transform: `scale(${1 + zoomLevel / 100}) translate(${position.x}px, ${position.y}px)`,
+                }}
+                className="w-full h-full"
+              />
+            </div>
+            <div className="flex items-center gap-4 mt-4 w-full">
+              <ZoomOut />
+              <input
+                type="range"
+                min="1"
+                max="100"
+                value={zoomLevel}
+                onChange={handleZoomChange}
+                className="flex-1"
+              />
+              <ZoomIn />
+            </div>
+            <div className="text-sm mt-2 text-center">Zoom Level: {zoomLevel}%</div>
+          </div>
+        </div>
+      )}
 
+      <Toaster /> {/* Render the toaster for notifications */}
     </div>
   );
 };
