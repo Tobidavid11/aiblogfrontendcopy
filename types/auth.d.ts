@@ -11,6 +11,11 @@ export interface SignUpParams {
   password: string;
 }
 
+export interface ErrorResponse {
+  message: string;
+  status_code?: number;
+}
+
 export interface SignUpResponse {
   data?: {
     user?: User;
@@ -45,4 +50,16 @@ export interface ForgotPasswordResponse {
   message?: string;
   error?: string;
   status_code?: number;
+}
+
+export interface UpdatePasswordParams {
+  newPassword: string;
+  confirmPassword: string;
+  resetToken: string;
+}
+
+export interface UpdatePasswordResponse {
+  message?: string;
+  error?: string;
+  status_code: number;
 }
