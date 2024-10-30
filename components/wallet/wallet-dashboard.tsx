@@ -63,13 +63,13 @@ export default function WalletDashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <Card>
-        <CardHeader>
+    <div className="space-y-8 maxHeight overflow-scroll custom-scroll">
+      <CardHeader>
           <CardTitle>My Wallet</CardTitle>
         </CardHeader>
+      <Card>
         <CardContent>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 pt-4">
             <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-500">{walletAddress}</span>
               <button onClick={() => navigator.clipboard.writeText(walletAddress)}><Copy className="w-4 h-4 text-gray-400" /></button>
@@ -82,7 +82,7 @@ export default function WalletDashboard() {
               width={32}
               height={32}
             />
-            <span>$ {showBalance ? balance.toFixed(2): "*****"}</span>
+            <span>${showBalance ? balance.toFixed(2): "*****"}</span>
             <button onClick={openBalance}>{showBalance ? <EyeOff size={24} />: <EyeIcon size={24}/>}</button>
           </div>
           <div className="flex space-x-4 mb-8">
@@ -97,8 +97,9 @@ export default function WalletDashboard() {
           </div>
         </CardContent>
       </Card>
+      <div className="">
       <Card>
-        <CardContent className="py-8">
+        <CardContent className="py-8 ">
           <h3 className="lg:text-lg text-[16px] font-semibold mb-4">History</h3>
           <Table>
             <TableHeader>
@@ -120,6 +121,7 @@ export default function WalletDashboard() {
           </Table>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
