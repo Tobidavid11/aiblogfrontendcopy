@@ -16,62 +16,79 @@ import { ChevronLeft, ChevronRight, Eye, Flag, MessageCircle, Share2, ThumbsUp }
 export function PostDetails() {
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Post Details</CardTitle>
+      <div className="flex flex-row items-center justify-between ml-8">
+          <h3 className="text-[20px] font-bold">Post Details</h3>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon">
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Previous</span>
-            </Button>
+            </Button> 
             <Button variant="ghost" size="icon">
               <ChevronRight className="h-4 w-4" />
               <span className="sr-only">Next</span>
             </Button>
           </div>
-        </CardHeader>
+        </div>
+      <Card>
         <CardContent>
-          <div className="grid grid-cols-5 gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Eye className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">4,000</span>
-              </div>
-              <div className="text-sm text-green-500">+20% from last month</div>
+          <div className="grid grid-cols-5 gap-4 p-4">
+            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
+              <div className="flex items-start relative gap-2 w-full justify-between">
               <div className="text-sm text-muted-foreground">Total Views</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <ThumbsUp className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">1500</span>
+                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
+                <Eye size={24}  className="text-muted-foreground" />
+                </div>
               </div>
-              <div className="text-sm text-green-500">+20% from last month</div>
+              <span className="text-lg relative -top-4 font-semibold">4,000</span>
+              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
+              
+            </div>
+            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
+              <div className="flex items-start relative gap-2 w-full justify-between">
               <div className="text-sm text-muted-foreground">Total Likes</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
+                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
+                <ThumbsUp size={24}  className="text-muted-foreground" />
+                </div>
               </div>
-              <div className="text-sm text-red-500">-50% from last month</div>
+              <span className="text-lg relative -top-4 font-semibold">4,000</span>
+              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
+              
+            </div>
+            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
+              <div className="flex items-start relative gap-2 w-full justify-between">
               <div className="text-sm text-muted-foreground">Total Comments</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Share2 className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
+                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
+                <MessageCircle size={24}  className="text-muted-foreground" />
+                </div>
               </div>
-              <div className="text-sm text-green-500">+5% from last month</div>
+              <span className="text-lg relative -top-4 font-semibold">4,000</span>
+              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
+              
+            </div>
+            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
+              <div className="flex items-start relative gap-2 w-full justify-between">
               <div className="text-sm text-muted-foreground">Total Shared</div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Flag className="h-4 w-4 text-muted-foreground" />
-                <span className="text-lg font-semibold">2500</span>
+                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
+                <Share2 size={24}  className="text-muted-foreground" />
+                </div>
               </div>
-              <div className="text-sm text-red-500">-30% from last month</div>
-              <div className="text-sm text-muted-foreground">Flagged Users</div>
+              <span className="text-lg relative -top-4 font-semibold">4,000</span>
+              <div className="text-sm text-green-500 relative -top-4">+10% from last month</div>
+              
             </div>
+           
+            <div className="space-y-2 bg-[#d4d4d4] px-2 pt-3 flex flex-col items-start rounded-lg">
+              <div className="flex items-start relative gap-2 w-full justify-between">
+              <div className="text-sm text-muted-foreground">Flagged Users</div>
+                <div className="w-[40px] aspect-square bg-white rounded-full flex items-center justify-center">
+                <Flag size={24}  className="text-muted-foreground" />
+                </div>
+              </div>
+              <span className="text-lg relative -top-4 font-semibold">4,000</span>
+              <div className="text-sm text-red-500 relative -top-4">-10% from last month</div>
+              
+            </div>
+           
           </div>
         </CardContent>
       </Card>

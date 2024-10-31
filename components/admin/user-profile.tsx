@@ -13,6 +13,7 @@ import {
 import { CheckCircle, Link as LinkIcon } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import UserTotalBlog from "./blog"
 
 export function UserProfile() {
   return (
@@ -56,7 +57,7 @@ export function UserProfile() {
             </div>
           </div>
 
-         
+         <UserTotalBlog/>
         </CardContent>
       </Card>
       <Card>
