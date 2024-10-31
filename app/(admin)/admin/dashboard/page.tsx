@@ -1,64 +1,67 @@
 "use client";
-import React, { useState } from "react";
-import JobsDashboard from "@/components/admin/JobsDashboard";
 
-const PostsDashboard = () => (
-  <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
-    <p className="text-lg text-gray-500">
-      Oops! Posts Dashboard is still under construction 🚧
-    </p>
-  </div>
-);
+import { useState } from "react";
 
-const DashboardPage = () => {
+import { JobDetails } from "@/components/admin/job-detail";
+import UserProfile from "@/components/admin/userInformation";
+import { PostDetails } from "@/components/admin/PostsDashboard";
+
+
+export default function PageComponent() {
   const [activeTab, setActiveTab] = useState<"jobs" | "posts">("jobs");
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Breadcrumb Navigation */}
-      <div className="flex space-x-1 items-center bg-gray-50 p-2 rounded-lg w-fit">
-        <button
-          onClick={() => setActiveTab("jobs")}
-          className="group relative px-4 py-2 rounded-md transition-colors duration-200"
-        >
-          <span
-            className={`${
-              activeTab === "jobs"
-                ? "text-blue-600 font-medium"
-                : "text-gray-600 group-hover:text-gray-800"
-            }`}
-          >
-            Jobs
-          </span>
-          <span
-            className={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full transition-transform duration-200 ${
-              activeTab === "jobs" ? "scale-x-100" : "scale-x-0"
-            }`}
-          />
-        </button>
-        <button
-          onClick={() => setActiveTab("posts")}
-          className="group relative px-4 py-2 rounded-md transition-colors duration-200"
-        >
-          <span
-            className={`${
-              activeTab === "posts"
-                ? "text-blue-600 font-medium"
-                : "text-gray-600 group-hover:text-gray-800"
-            }`}
-          >
-            Posts
-          </span>
-          <span
-            className={`absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full transition-transform duration-200 ${
-              activeTab === "posts" ? "scale-x-100" : "scale-x-0"
-            }`}
-          />
-        </button>
-      </div>
+    <div className="min-h-screen px-[30px]">
+     <div className="flex space-x-1 items-center bg-gray-50 rounded-3xl w-fit bg-white mb-8 mt-2">
+  <button
+    onClick={() => setActiveTab("jobs")}
+    className={`group relative px-4 py-2 rounded-3xl transition-colors duration-200 ${
+      activeTab === "jobs" ? "bg-yellow-200" : ""
+    }`}
+  >
+    <span
+      className={`${
+        activeTab === "jobs"
+          ? " font-medium"
+          : "text-gray-600 group-hover:text-gray-800"
+      }`}
+    >
+      Jobs
+    </span>
+    <span
+      className={`absolute bottom-0 left-0 w-full h-0.5 rounded-full transition-transform duration-200 ${
+        activeTab === "jobs" ? "scale-x-100" : "scale-x-0"
+      }`}
+    />
+  </button>
+  <button
+    onClick={() => setActiveTab("posts")}
+    className={`group relative px-4 py-2 rounded-3xl transition-colors duration-200 ${
+      activeTab === "posts" ? "bg-yellow-200" : ""
+    }`}
+  >
+    <span
+      className={`${
+        activeTab === "posts"
+          ? "font-medium"
+          : "text-gray-600 group-hover:text-gray-800"
+      }`}
+    >
+      Posts
+    </span>
+    <span
+      className={`absolute bottom-0 left-0 w-full h-0.5 rounded-full transition-transform duration-200 ${
+        activeTab === "posts" ? "scale-x-100" : "scale-x-0"
+      }`}
+    />
+  </button>
+</div>
 
-      {/* Dashboard Content with Fade Transition */}
-      <div
+      <div className="container p-0">
+        <div className="space-y-6"> 
+          <UserProfile />
+          
+          <div
         key={activeTab}
         className="transition-opacity duration-200"
         style={{
@@ -66,7 +69,7 @@ const DashboardPage = () => {
           animation: "fadeIn 0.2s ease-in",
         }}
       >
-        {activeTab === "jobs" ? <JobsDashboard /> : <PostsDashboard />}
+        {activeTab === "jobs" ? <JobDetails /> : <PostDetails />}
       </div>
 
       {/* Add the animation keyframes using a style tag */}
@@ -83,7 +86,8 @@ const DashboardPage = () => {
         }
       `}</style>
     </div>
+        </div>   
+      </div>
+    
   );
-};
-
-export default DashboardPage;
+}
