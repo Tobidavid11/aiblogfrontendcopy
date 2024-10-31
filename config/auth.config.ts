@@ -76,7 +76,7 @@ export const authConfig = {
   },
   COOKIE_OPTIONS: {
     path: "/",
-    maxAge: 3600, // 1 hour
+    maxAge: 86000, // 24 hours
     sameSite: "strict" as const,
     secure: process.env.NODE_ENV === "production",
   },
