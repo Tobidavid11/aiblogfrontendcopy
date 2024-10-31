@@ -101,6 +101,7 @@ export default function InstructionField({ text, onChange }: InstructionFieldPro
           {Icons.map(({ Icon, label, command }, index) => (
             <button
               key={index}
+              type="button"
               onClick={() => formatText(command)}
               className="focus:outline-none rounded-full p-1 md:p-1.5 hover:bg-black/5 transition-all duration-300 ease-in-out"
             >

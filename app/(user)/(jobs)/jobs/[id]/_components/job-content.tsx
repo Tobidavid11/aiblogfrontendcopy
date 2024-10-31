@@ -1,28 +1,46 @@
-import { JobType } from "@/types/job";
+"use client"; // use client because dom purify requires window object to present to work
+
+import { APIJobCommentType, APIJobType } from "@/types/job";
+import DOMPurify from "dompurify";
 
 interface JobContentProps {
-  job: JobType;
+  job: APIJobType & { comments: Array<APIJobCommentType> };
 }
 
 const JobContent = ({ job }: JobContentProps) => {
-  const { title, user, content } = job;
+  const { title, instruction, description, username } = job;
+  const sanitizedDescription = DOMPurify.sanitize(description);
+  const sanitizedInstruction = DOMPurify.sanitize(instruction);
+
+  const readingTime = getReadingTime(sanitizedDescription + " " + sanitizedInstruction);
   return (
     <div className="space-y-4 pb-3 border-b border-neutral-200">
       <div className="space-y-4 pb-3 border-dashed-b">
         <h1 className="text-[32px] leading-[1.2] font-bold">{title}</h1>
         <div className="flex text-sm gap-1 leading-[1.36] text-neutral-400 items-center">
-          <p>{user.name}</p>
+          <p>@{username}</p>
           <span className="bg-neutral-300 w-1.5 h-1.5 rounded-full" />
-          <p>4 mins read</p>
+          <p>{readingTime < 1 ? "Less than a min" : `${Math.round(readingTime)} mins read`}</p>
         </div>
       </div>
 
-      <p className="text-neutral-600 leading-[1.6]">{content}</p>
+      <p
+        className="text-neutral-600 leading-[1.6]"
+        dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+      ></p>
+      <article
+        className="text-neutral-600 leading-[1.6]"
+        dangerouslySetInnerHTML={{ __html: sanitizedInstruction }}
+      ></article>
 
       <div className="flex gap-2 items-center flex-wrap">
         <p className="flex items-center font-medium bg-[#FCF4AA] text-black text-sm px-2 py-1 leading-[1.6] rounded-full w-fit">
           <span>Replies</span>
-          <span className="ml-1 p-1 leading-none bg-white rounded-full text-neutral-600">1.5k</span>
+          {job.comments.length > 0 && (
+            <span className="ml-1 p-1 leading-none bg-white rounded-full text-neutral-600">
+              {job.comments.length}
+            </span>
+          )}
         </p>
 
         <div className="text-sm px-2 py-1 font-medium bg-neutral-50 rounded-full">Nigeria</div>
@@ -34,6 +52,12 @@ const JobContent = ({ job }: JobContentProps) => {
       </div>
     </div>
   );
+};
+
+const getReadingTime = (text: string) => {
+  const wordsPerMinute = 200;
+  const words = text.split(" ");
+  return words.length / wordsPerMinute;
 };
 
 export default JobContent;

@@ -1,20 +1,26 @@
 "use client";
 
-
 import Button from "@/components/shared/button";
 import { toast } from "@/hooks/use-toast";
 import imgProfile from "@/public/assets/nav-profile.png";
+import { APIJobCommentType } from "@/types/job";
 import { ImageIcon, Link2Icon, SmileIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 
-const Comments = () => {
+interface CommentsProps {
+  comments: Array<APIJobCommentType>;
+}
+const Comments = ({ comments }: CommentsProps) => {
   return (
-    <div className="border border-neutral-200 bg-[#FDF9D9] rounded-xl p-2 sm:p-4 flex gap-3 items-start">
-      <div className="hidden sm:block w-10 h-10 relative md:w-12 md:h-12 shrink-0">
-        <Image fill src={imgProfile} alt="" className="rounded-full object-center" />
+    <div>
+      {comments.length > 0 && null}
+      <div className="border border-neutral-200 bg-[#FDF9D9] rounded-xl p-2 sm:p-4 flex gap-3 items-start">
+        <div className="hidden sm:block w-10 h-10 relative md:w-12 md:h-12 shrink-0">
+          <Image fill src={imgProfile} alt="" className="rounded-full object-center" />
+        </div>
+        <CommentBox />
       </div>
-      <CommentBox />
     </div>
   );
 };
