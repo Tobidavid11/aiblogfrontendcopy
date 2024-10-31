@@ -1,101 +1,90 @@
-import React, { useState, useEffect } from "react";
-import { X, ChevronDown, Trash2 } from "lucide-react";
+import { JobFormSchema, SOCIAL_ACTION_TYPES } from "@/app/(user)/(jobs)/create-job/schema";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import PlusIcon from "../../../public/assets/icons/plus-icon.svg";
 import { Separator } from "@/components/ui/separator";
+import { ChevronDown, Trash2, X } from "lucide-react";
 import Image from "next/image";
+import React, { useState } from "react";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import PlusIcon from "../../../public/assets/icons/plus-icon.svg";
 
-type Action = "Follow" | "Like" | "Comment" | "Share";
-
-interface SocialItem {
-  url: string;
-  actions: Action[];
-}
-
-interface SocialActionsProps {
-  onEmpty?: () => void;
-}
-
-const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
-  const [socialItems, setSocialItems] = useState<SocialItem[]>([
-    { url: "", actions: [] },
-  ]);
+const SocialActions: React.FC = () => {
+  const form = useFormContext<JobFormSchema>();
+  const { fields, append, remove } = useFieldArray({
+    name: "socialActions",
+    control: form.control,
+  });
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (socialItems.length === 0 && onEmpty) {
-      onEmpty();
-    }
-  }, [socialItems, onEmpty]);
-
   const addSocialItem = () => {
-    setSocialItems([...socialItems, { url: "", actions: [] }]);
+    append({ socialLink: "", actions: [] });
   };
 
   const removeSocialItem = (index: number) => {
-    const newItems = socialItems.filter((_, i) => i !== index);
-    setSocialItems(newItems);
+    remove(index);
   };
 
-  const updateUrl = (index: number, url: string) => {
-    const newItems = [...socialItems];
-    newItems[index].url = url;
-    setSocialItems(newItems);
-  };
+  // const toggleAction = (index: number, action: Action) => {
+  //   let newActions = [...fields[index].actions];
+  //   const actionIndex = newActions.indexOf(action);
+  //   if (actionIndex > -1) {
+  //     newActions = newActions.filter((a) => a !== action);
+  //   } else {
+  //     newActions.push(action);
+  //   }
 
-  const toggleAction = (index: number, action: Action) => {
-    const newItems = [...socialItems];
-    const actionIndex = newItems[index].actions.indexOf(action);
-    if (actionIndex > -1) {
-      newItems[index].actions = newItems[index].actions.filter(
-        (a) => a !== action
-      );
-    } else {
-      newItems[index].actions.push(action);
-    }
-    setSocialItems(newItems);
-  };
+  //   form.setValue(`socialActions.${index}.actions`, newActions, { shouldTouch: true });
+  //   forceRerender();
+  // };
 
   const toggleDropdown = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  const { errors } = form.formState;
+
   return (
     <Card className="bg-white shadow-none border border-[#e5e5e5] p-4 rounded-2xl">
       <CardTitle className="p-0 mb-3 md:mb-6">
-        <h3 className="text-base font-normal text-[#404040]">
-          Input Your Socials
-        </h3>
+        <h3 className="text-base font-normal text-[#404040]">Input Your Socials</h3>
       </CardTitle>
 
       <CardContent className="p-0">
-        {socialItems?.map((item, index) => (
+        {fields?.map((item, index) => (
           <div
             key={index}
-            className={`flex flex-col gap-y-4 md:gap-y-4 ${
-              socialItems.length > 1 && "mb-4 md:mb-6"
-            }`}
+            className={`flex flex-col gap-y-4 md:gap-y-4 ${fields.length > 1 && "mb-4 md:mb-6"}`}
           >
             <div className="w-full flex flex-col md:flex-row gap-y-4 md:gap-x-4">
               <div className="flex flex-1 gap-2 md:gap-x-4 items-center">
                 {/* Cancel btn */}
-                <button onClick={() => removeSocialItem(index)}>
+                <button onClick={() => removeSocialItem(index)} type="button">
                   <X className="w-3.5 md:w-4 h-3.5 md:h-4 text-[#404040] hover:text-black transition-all duration-300 ease-in-out" />
                 </button>
 
                 {/* Text input */}
-                <div className="w-full flex-1 border-b border-[#e5e5e5]">
-                  <Input
-                    placeholder="Enter your profile link"
-                    value={item.url}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      updateUrl(index, e.target.value)
-                    }
-                    className="w-full mb-[1px] p-0 border-none focus-within:outline-0 shadow-none text-[#262626] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
+                <div className="w-full flex-1 ">
+                  <Controller
+                    name={`socialActions.${index}.socialLink`}
+                    control={form.control}
+                    render={({ field: { value, onChange, onBlur } }) => (
+                      <Input
+                        key={item.id}
+                        placeholder="Enter your profile link"
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        className="w-full border-[#e5e5e5] rounded-none !border-b border-0 pb-[1px] p-0 focus-within:outline-0 shadow-none text-[#262626] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
+                      />
+                    )}
                   />
+                  {errors.socialActions?.[index]?.socialLink ? (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.socialActions[index]?.socialLink?.message}
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
@@ -103,36 +92,51 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
               <div className="w-full md:max-w-[14rem] flex-1 relative">
                 <Button
                   variant="outline"
+                  type="button"
                   onClick={() => toggleDropdown(index)}
                   className="w-full flex-1 rounded-xl flex items-center justify-between h-10 md:h-12"
                 >
-                  <p className="font-normal text-base text-[#a3a3a3]">
-                    Select action
-                  </p>
+                  <p className="font-normal text-base text-[#a3a3a3]">Select action</p>
                   <ChevronDown className="font-normal w-5 h-5 text-[#a3a3a3]" />
                 </Button>
+                {errors.socialActions?.[index]?.actions ? (
+                  <p className="text-sm font-medium text-destructive">
+                    {errors.socialActions[index]?.actions?.message}
+                  </p>
+                ) : null}
                 {openDropdown === index && (
                   <div className="absolute z-10 w-full md:w-[14rem] mt-2 bg-white border border-[#e5e5e5] overflow-hidden rounded-xl shadow-xl">
-                    {(["Follow", "Likes", "Comments", "Share"] as Action[]).map(
-                      (action) => (
-                        <Label
-                          key={action}
-                          className="flex items-center gap-x-3 px-4 py-2 hover:bg-black/5 hover:cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            name=""
-                            id=""
-                            checked={item.actions.includes(action)}
-                            onChange={() => toggleAction(index, action)}
-                            className="w-3.5 md:w-4 h-3.5 md:h-4 border border-[#737373]"
-                          />
-                          <span className="font-normal text-sm md:text-base text-[#404040]">
-                            {action}
-                          </span>
-                        </Label>
-                      )
-                    )}
+                    {SOCIAL_ACTION_TYPES.map((action) => (
+                      <Label
+                        key={action}
+                        className="flex items-center gap-x-3 px-4 py-2 hover:bg-black/5 hover:cursor-pointer"
+                      >
+                        <Controller
+                          render={({ field: { value, onChange, onBlur } }) => (
+                            <input
+                              type="checkbox"
+                              name=""
+                              id=""
+                              checked={value.includes(action)}
+                              onChange={() =>
+                                onChange(
+                                  value.includes(action)
+                                    ? value.filter((v) => v !== action)
+                                    : [...value, action]
+                                )
+                              }
+                              onBlur={onBlur}
+                              className="w-3.5 md:w-4 h-3.5 md:h-4 border border-[#737373]"
+                            />
+                          )}
+                          name={`socialActions.${index}.actions`}
+                          control={form.control}
+                        />
+                        <span className="font-normal text-sm md:text-base text-[#404040]">
+                          {action}
+                        </span>
+                      </Label>
+                    ))}
                   </div>
                 )}
               </div>
@@ -140,20 +144,26 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
 
             {/* Selected Actions */}
             <div className="flex flex-wrap justify-end gap-2">
-              {item.actions.map((action) => (
-                <div
-                  key={action}
-                  className="flex items-center gap-1 px-2 py-1 bg-[#F5F5F5] rounded-full  cursor-default"
-                >
-                  <p className="text-xs md:text-sm font-normal text-[#404040]">
-                    {action}
-                  </p>
-                  <X
-                    className="h-3 w-3 font-normal text-[#404040] inline cursor-pointer"
-                    onClick={() => toggleAction(index, action)}
-                  />
-                </div>
-              ))}
+              <Controller
+                render={({ field: { value: actions, onChange } }) => (
+                  <>
+                    {actions.map((action) => (
+                      <div
+                        key={action}
+                        className="flex items-center gap-1 px-2 py-1 bg-[#F5F5F5] rounded-full  cursor-default"
+                      >
+                        <p className="text-xs md:text-sm font-normal text-[#404040]">{action}</p>
+                        <X
+                          className="h-3 w-3 font-normal text-[#404040] inline cursor-pointer"
+                          onClick={() => onChange(actions.filter((v) => v !== action))}
+                        />
+                      </div>
+                    ))}
+                  </>
+                )}
+                name={`socialActions.${index}.actions`}
+                control={form.control}
+              />
             </div>
           </div>
         ))}
@@ -164,6 +174,7 @@ const SocialActions: React.FC<SocialActionsProps> = ({ onEmpty }) => {
       <CardFooter className="p-0 flex justify-between items-center">
         <button
           onClick={addSocialItem}
+          type="button"
           className="flex items-center border-none font-normal text-sm md:text-base text-[#262626] gap-x-2"
         >
           <Image
