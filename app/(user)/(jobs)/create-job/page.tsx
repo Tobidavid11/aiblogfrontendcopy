@@ -10,16 +10,16 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { getAuthHeaders, isAuthenticated } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { FormFieldType } from "@/types/form-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader2Icon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Control, Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-
 import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
-import { useRouter } from "next/navigation";
 import { JobFormSchema, jobFormSchema } from "./schema";
 
 interface StepsHeaderProps {
@@ -62,7 +62,8 @@ const EngagementLevels = [
   { option: "High", value: "HIGH" },
 ];
 
-const apiURL = process.env.NEXT_PUBLIC_JOB_URL;
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -77,6 +78,7 @@ export default function CreateJob() {
       jobTitle: "",
       description: "",
       engagementLevel: "",
+      instructionField: "",
       customActions: [],
       socialActions: [],
     },
@@ -104,12 +106,19 @@ export default function CreateJob() {
       customActions,
     } = data;
 
-    const accessToken = sessionStorage.getItem("accessToken");
     try {
       setIsSubmitting(true);
-      const res = await fetch(`${apiURL}/jobs`, {
+      const isUserAuthenticated = await isAuthenticated();
+      if (!isUserAuthenticated) {
+        toast({ title: "You need to sign in", variant: "destructive" });
+        router.push("/auth/sign-in");
+        return;
+      }
+
+      const authHeaders = await getAuthHeaders();
+      const res = await fetch(`${apiURL}jobs`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify({
           title: jobTitle,
           description,
@@ -368,8 +377,17 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
 
 // Job Review Step
 const ReviewStep: React.FC<CreateJobProps> = () => {
-  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(null);
-  const { control } = useFormContext<JobFormSchema>();
+  const {
+    control,
+    formState: { errors },
+    getValues,
+  } = useFormContext<JobFormSchema>();
+
+  const [customActions, socialActions] = [getValues("customActions"), getValues("socialActions")];
+  const initialActiveForm =
+    customActions.length > 0 ? "custom" : socialActions.length > 0 ? "social" : null;
+
+  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(initialActiveForm);
 
   const toggleForm = (formType: "social" | "custom") => {
     setActiveForm(activeForm === formType ? null : formType);
@@ -378,18 +396,31 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
   return (
     <div className="p-4 md:p-0 bg-[#fafafa] md:bg-transparent border border-[#e5e5e5] md:border-0 rounded-2xl">
       <div className="flex flex-col gap-y-6">
-        <Controller
-          render={({ field }) => (
-            <InstructionField text={field.value || ""} onChange={field.onChange} />
-          )}
-          control={control}
-          name="instructionField"
-        />
+        <div>
+          <Controller
+            render={({ field }) => (
+              <InstructionField text={field.value || ""} onChange={field.onChange} />
+            )}
+            control={control}
+            name="instructionField"
+          />
+          {errors.instructionField ? (
+            <p className="text-sm font-medium text-destructive">
+              {errors.instructionField.message}
+            </p>
+          ) : null}
+        </div>
 
         <Card className="bg-[#fafafa] shadow-none border border-[#e5e5e5] p-4 md:p-6 rounded-2xl">
           {activeForm === "social" && <SocialActions />}
 
           {activeForm === "custom" && <CustomActions />}
+
+          {errors.customActions?.message ? (
+            <p className="text-sm font-medium text-destructive my-2">
+              {errors.customActions.message}
+            </p>
+          ) : null}
 
           <CardContent className="p-0">
             {/* Seperator */}

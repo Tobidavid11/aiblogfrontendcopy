@@ -82,7 +82,7 @@ export default function InstructionField({ text, onChange }: InstructionFieldPro
   return (
     <Card className="bg-white shadow-none border border-[#e5e5e5] p-4 md:py-3 md:px-4 rounded-2xl">
       <CardTitle className="p-0 mb-3 md:mb-6 text-base font-normal text-[#404040]">
-        Intruction Field
+        Instruction Field
       </CardTitle>
 
       <CardContent className="p-0">
