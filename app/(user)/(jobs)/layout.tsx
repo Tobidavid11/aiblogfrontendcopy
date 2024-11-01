@@ -1,5 +1,6 @@
 import { NavBar } from "@/app/(user)/sections";
 import "../../globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function DashboardLayout({
   children,
@@ -9,7 +10,8 @@ export default function DashboardLayout({
   return (
     <>
       <NavBar />
-      <main className="mt-0 md:pt-6 bg-white md:bg-[#fafafa]">{children}</main>
+      <main className="mt-0 bg-white md:bg-[#fafafa]">{children}</main>
+      <Toaster />
     </>
   );
 }

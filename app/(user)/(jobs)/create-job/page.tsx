@@ -1,22 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import ProgressBar from "@/app/components/create-job/ProgresBar";
-import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
-import InstructionField from "@/app/components/create-job/InstructionField";
-import SocialActions from "@/app/components/create-job/SocialActions";
-import Button from "@/components/shared/button";
 import CustomActions from "@/app/components/create-job/CustomActions";
-import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
+import InstructionField from "@/app/components/create-job/InstructionField";
+import ProgressBar from "@/app/components/create-job/ProgresBar";
+import SocialActions from "@/app/components/create-job/SocialActions";
 import { CustomFormField } from "@/components/shared";
-import { Control, FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormFieldType } from "@/types/form-types";
+import Button from "@/components/shared/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { FormFieldType } from "@/types/form-types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Loader2Icon } from "lucide-react";
+import Image from "next/image";
+import React, { useState } from "react";
+import { Control, Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
+
+import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
+import { useRouter } from "next/navigation";
+import { JobFormSchema, jobFormSchema } from "./schema";
 
 interface StepsHeaderProps {
   title: string;
@@ -50,28 +54,6 @@ interface CreateJobProps {
 }
 
 // Form schema
-const formSchema = z.object({
-  jobTitle: z
-    .string()
-    .min(2, { message: "Job title must be at least 2 characters." }),
-  startDate: z.string().min(1, { message: "Start date is required." }),
-  endDate: z.string().min(1, { message: "End date is required." }),
-  description: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters." }),
-  rewardPerParticipant: z
-    .string()
-    .min(1, { message: "Reward per participant is required." }),
-  maxParticipants: z
-    .number()
-    .min(1, { message: "At least one participant is required." }),
-  engagementLevel: z
-    .string()
-    .min(1, { message: "Engagement level is required." }),
-  intructionField: z
-    .string()
-    .min(1, { message: "Instruction(s) are required." }),
-});
 
 // Engagement options
 const EngagementLevels = [
@@ -80,20 +62,23 @@ const EngagementLevels = [
   { option: "High", value: "HIGH" },
 ];
 
+const apiURL = process.env.NEXT_PUBLIC_JOB_URL;
+
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = 3;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<JobFormSchema>({
+    resolver: zodResolver(jobFormSchema),
     defaultValues: {
       jobTitle: "",
-      startDate: "",
-      endDate: "",
       description: "",
-      rewardPerParticipant: "",
-      // maxParticipants: 0,
       engagementLevel: "",
+      customActions: [],
+      socialActions: [],
     },
   });
 
@@ -105,8 +90,50 @@ export default function CreateJob() {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleCreateJob = async (data: any) => {
+  const handleCreateJob = async (data: JobFormSchema) => {
     console.log("Final submission", data);
+    const {
+      jobTitle,
+      startDate,
+      endDate,
+      description,
+      instructionField,
+      rewardPerParticipant,
+      maxParticipants,
+      socialActions,
+      customActions,
+    } = data;
+
+    const accessToken = sessionStorage.getItem("accessToken");
+    try {
+      setIsSubmitting(true);
+      const res = await fetch(`${apiURL}/jobs`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({
+          title: jobTitle,
+          description,
+          startDate: startDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
+          endDate: endDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
+          instruction: instructionField,
+          maxParticipants,
+          reward: rewardPerParticipant,
+          socialActions,
+          customActions,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Server error");
+      }
+      const { data } = await res.json();
+      toast({ title: "Job created successfully." });
+      router.push(`/jobs/${data.id}`);
+    } catch {
+      toast({ title: "An unexpected error occured. Please try again", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddToDraft = (data: any) => {
@@ -126,9 +153,7 @@ export default function CreateJob() {
                 </span>
               )}
 
-              <span className="text-base text-[#78C4FF] font-medium ml-auto">
-                Drafts
-              </span>
+              <span className="text-base text-[#78C4FF] font-medium ml-auto">Drafts</span>
             </div>
 
             {/* Card Title */}
@@ -145,21 +170,14 @@ export default function CreateJob() {
                   : "bg-[#fafafa] p-4 md:p-6 border border-[#e5e5e5] rounded-2xl"
               } `}
             >
-              <form onSubmit={form.handleSubmit(handleCreateJob)}>
-                {currentStep === 1 && (
-                  <JobDetailsStep control={form.control} nextStep={nextStep} />
-                )}
+              <form onSubmit={form.handleSubmit(handleCreateJob)} id="form">
+                {currentStep === 1 && <JobDetailsStep control={form.control} nextStep={nextStep} />}
 
                 {currentStep === 2 && (
-                  <RewardsAndCriteriaStep
-                    control={form.control}
-                    nextStep={nextStep}
-                  />
+                  <RewardsAndCriteriaStep control={form.control} nextStep={nextStep} />
                 )}
 
-                {currentStep === 3 && (
-                  <ReviewStep control={form.control} nextStep={nextStep} />
-                )}
+                {currentStep === 3 && <ReviewStep control={form.control} nextStep={nextStep} />}
               </form>
             </CardContent>
 
@@ -189,17 +207,35 @@ export default function CreateJob() {
                   Save to draft
                 </Button>
 
-                <Button
-                  type="submit"
-                  onClick={nextStep}
-                  size="medium"
-                  color="secondary"
-                  className="md:px-10 w-full md:w-fit"
-                >
-                  <span className="font-normal text-[#262626] text-center">
-                    {currentStep === totalSteps ? "Publish Job" : "Next"}
-                  </span>
-                </Button>
+                {currentStep === totalSteps ? (
+                  <Button
+                    type="submit"
+                    size="medium"
+                    form="form"
+                    disabled={isSubmitting}
+                    color="secondary"
+                    className="md:px-10 w-full md:w-fit"
+                  >
+                    {isSubmitting ? (
+                      <div role="status">
+                        <Loader2Icon className="animate-spin w-6 h-6 text-white" />
+                        <span className="sr-only">Loading</span>
+                      </div>
+                    ) : (
+                      <span className="font-normal text-[#262626] text-center">Publish Job</span>
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    size="medium"
+                    color="secondary"
+                    className="md:px-10 w-full md:w-fit"
+                  >
+                    <span className="font-normal text-[#262626] text-center">Next</span>
+                  </Button>
+                )}
               </div>
             </div>
           </Card>
@@ -215,12 +251,7 @@ export default function CreateJob() {
           </div>
           <CardContent>
             <div className="flex justify-center mt-[7rem]">
-              <Image
-                src="/images/draft.png"
-                width={120}
-                height={94}
-                alt="draft"
-              />
+              <Image src="/images/draft.png" width={120} height={94} alt="draft" />
             </div>
             <div>
               <p className="text-sm text-center mt-2 text-[#737373]">
@@ -241,12 +272,8 @@ const StepsHeader: React.FC<StepsHeaderComponentProps> = ({ currentStep }) => {
 
   return (
     <div className="mb-4 md:mb-8">
-      <h2 className="text-xl md:text-2xl font-bold text-[#171717] leading-none">
-        {title}
-      </h2>
-      <p className="text-sm md:text-base font-normal text-[#404040] mt-1.5">
-        {description}
-      </p>
+      <h2 className="text-xl md:text-2xl font-bold text-[#171717] leading-none">{title}</h2>
+      <p className="text-sm md:text-base font-normal text-[#404040] mt-1.5">{description}</p>
     </div>
   );
 };
@@ -307,7 +334,7 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
     <div className="flex flex-col gap-6">
       <CustomFormField
         control={control}
-        fieldType={FormFieldType.INPUT}
+        fieldType={FormFieldType.NUMBER}
         name="rewardPerParticipant"
         label="Rewards per Participants ETH"
         placeholder="Enter reward amount in ETH"
@@ -331,9 +358,7 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
       >
         {EngagementLevels.map(({ option, value }, key) => (
           <SelectItem key={key} value={value}>
-            <p className="font-normal text-sm md:text-base text-[#404040]">
-              {option}
-            </p>
+            <p className="font-normal text-sm md:text-base text-[#404040]">{option}</p>
           </SelectItem>
         ))}
       </CustomFormField>
@@ -343,11 +368,8 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
 
 // Job Review Step
 const ReviewStep: React.FC<CreateJobProps> = () => {
-  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(
-    null
-  );
-  const [socialActions, setSocialActions] = useState<boolean>(false);
-  const [customActions, setCustomActions] = useState<boolean>(false);
+  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(null);
+  const { control } = useFormContext<JobFormSchema>();
 
   const toggleForm = (formType: "social" | "custom") => {
     setActiveForm(activeForm === formType ? null : formType);
@@ -356,16 +378,18 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
   return (
     <div className="p-4 md:p-0 bg-[#fafafa] md:bg-transparent border border-[#e5e5e5] md:border-0 rounded-2xl">
       <div className="flex flex-col gap-y-6">
-        <InstructionField />
+        <Controller
+          render={({ field }) => (
+            <InstructionField text={field.value || ""} onChange={field.onChange} />
+          )}
+          control={control}
+          name="instructionField"
+        />
 
         <Card className="bg-[#fafafa] shadow-none border border-[#e5e5e5] p-4 md:p-6 rounded-2xl">
-          {activeForm === "social" && (
-            <SocialActions onEmpty={() => setSocialActions(false)} />
-          )}
+          {activeForm === "social" && <SocialActions />}
 
-          {activeForm === "custom" && (
-            <CustomActions onEmpty={() => setCustomActions(false)} />
-          )}
+          {activeForm === "custom" && <CustomActions />}
 
           <CardContent className="p-0">
             {/* Seperator */}
@@ -377,59 +401,57 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
               <Separator className="flex-1 bg-[#e5e5e5]" />
             </div>
 
-            {!socialActions && !customActions && (
-              <div className="flex items-center gap-x-2 md:gap-x-6">
-                {/* Social Actions Btn */}
-                <Button
-                  onClick={() => toggleForm("social")}
-                  disabled={activeForm === "custom"}
-                  className={`bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out ${
-                    activeForm === "custom"
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-x-1 md:gap-x-2">
-                    <Image
-                      src={PlusIcon}
-                      alt="Plus"
-                      width={50}
-                      height={50}
-                      className="w-[20px] md:w-[22px] h-[20px] md:h-[22px]"
-                    />
+            <div className="flex items-center gap-x-2 md:gap-x-6">
+              {/* Social Actions Btn */}
+              <Button
+                onClick={() => toggleForm("social")}
+                disabled={activeForm === "social"}
+                type="button"
+                className={cn(
+                  "bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out",
+                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
+              >
+                <div className="flex items-center gap-x-1 md:gap-x-2">
+                  <Image
+                    src={PlusIcon}
+                    alt="Plus"
+                    width={50}
+                    height={50}
+                    className="w-[20px] md:w-[22px] h-[20px] md:h-[22px]"
+                  />
 
-                    <p className="text-[13px] md:text-base text-[#262626] font-normal">
-                      Social Action
-                    </p>
-                  </div>
-                </Button>
+                  <p className="text-[13px] md:text-base text-[#262626] font-normal">
+                    Social Action
+                  </p>
+                </div>
+              </Button>
 
-                {/* Custom Action Btn  */}
-                <Button
-                  onClick={() => toggleForm("custom")}
-                  disabled={activeForm === "social"}
-                  className={`bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out ${
-                    activeForm === "social"
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-x-1 md:gap-x-2">
-                    <Image
-                      src={PlusIcon}
-                      alt="Plus"
-                      width={50}
-                      height={50}
-                      className="w-[20px] md:w-[22px] h-[20px] md:h-[22px]"
-                    />
+              {/* Custom Action Btn  */}
+              <Button
+                onClick={() => toggleForm("custom")}
+                type="button"
+                disabled={activeForm === "custom"}
+                className={cn(
+                  "bg-white w-full flex-1 inline-flex items-center justify-center hover:bg-black/5 text-black p-2 md:p-3 shadow-md shadow-gray-400 transition-all duration-300 ease-in-out",
+                  "disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
+              >
+                <div className="flex items-center gap-x-1 md:gap-x-2">
+                  <Image
+                    src={PlusIcon}
+                    alt="Plus"
+                    width={50}
+                    height={50}
+                    className="w-[20px] md:w-[22px] h-[20px] md:h-[22px]"
+                  />
 
-                    <p className="text-[13px] md:text-base text-[#262626] font-normal">
-                      Custom Action
-                    </p>
-                  </div>
-                </Button>
-              </div>
-            )}
+                  <p className="text-[13px] md:text-base text-[#262626] font-normal">
+                    Custom Action
+                  </p>
+                </div>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

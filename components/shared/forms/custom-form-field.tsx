@@ -57,17 +57,6 @@ const RenderField: React.FC<RenderFieldProps> = ({ field, props }) => {
     formatNumberValue,
   } = props;
 
-  const handleDateChange = (date: Date | null) => {
-    if (date) {
-      const formattedDate = `${
-        date.getMonth() + 1
-      }/${date.getDate()}/${date.getFullYear()}`;
-      field.onChange(formattedDate);
-    } else {
-      field.onChange("");
-    }
-  };
-
   const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = event.target.value.replace(/,/g, "");
     const numericValue = parseFloat(rawValue);
@@ -153,8 +142,7 @@ const RenderField: React.FC<RenderFieldProps> = ({ field, props }) => {
               selected={field.value ? new Date(field.value) : null}
               {...field}
               placeholderText={placeholder}
-              onChange={handleDateChange}
-              dateFormat={dateFormat ?? "MM/dd/yyyy"}
+              dateFormat={dateFormat ?? "MM/dd/yyyy"}  
               wrapperClassName="date-picker"
               showPopperArrow={false}
               withPortal
