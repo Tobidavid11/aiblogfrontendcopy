@@ -16,7 +16,6 @@ const JobPage = async ({ params }: { params: { id: string } }) => {
     notFound();
   }
 
-  console.log({ job, error, status });
   if (error) {
     return <div>{error.message}</div>;
   }

@@ -17,7 +17,7 @@ const JobCard = memo<{ job: APIJobType }>(({ job }) => {
     <Card className="w-full p-4 md:p-6 mb-4 md:mb-6 border-[0.8px] md:border-0 border-[#e5e5e5] flex flex-col gap-y-3 bg-white rounded-2xl md:rounded-xl shadow-none has-[a:hover]:bg-white/80 transition-colors">
       <CardHeader className="p-0">
         <UserProfile
-          user={{ username: username, id: userId, profilePic: profilePic, name: "" }}
+          user={{ username: username, id: userId, profilePic: profilePic, name: username }}
           isJobProfile
         />
       </CardHeader>
