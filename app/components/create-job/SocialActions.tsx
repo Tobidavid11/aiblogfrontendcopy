@@ -1,4 +1,4 @@
-import { JobFormSchema, SOCIAL_ACTION_TYPES } from "@/app/(user)/(jobs)/create-job/schema";
+import { JobFormSchema, SOCIAL_ACTION_TYPES } from "@/schemas/job";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

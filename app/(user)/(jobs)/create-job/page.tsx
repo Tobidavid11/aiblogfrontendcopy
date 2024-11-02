@@ -10,8 +10,11 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { getAuthHeaders, isAuthenticated } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
+import { createJob } from "@/lib/jobs";
 import { cn } from "@/lib/utils";
+import PlusIcon from "@/public/assets/icons/plus-icon.svg";
+import { JobFormSchema, jobFormSchema } from "@/schemas/job";
 import { FormFieldType } from "@/types/form-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader2Icon } from "lucide-react";
@@ -19,8 +22,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Control, Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
-import { JobFormSchema, jobFormSchema } from "./schema";
 
 interface StepsHeaderProps {
   title: string;
@@ -62,9 +63,6 @@ const EngagementLevels = [
   { option: "High", value: "HIGH" },
 ];
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
-
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = 3;
@@ -93,19 +91,6 @@ export default function CreateJob() {
   };
 
   const handleCreateJob = async (data: JobFormSchema) => {
-    console.log("Final submission", data);
-    const {
-      jobTitle,
-      startDate,
-      endDate,
-      description,
-      instructionField,
-      rewardPerParticipant,
-      maxParticipants,
-      socialActions,
-      customActions,
-    } = data;
-
     try {
       setIsSubmitting(true);
       const isUserAuthenticated = await isAuthenticated();
@@ -115,29 +100,14 @@ export default function CreateJob() {
         return;
       }
 
-      const authHeaders = await getAuthHeaders();
-      const res = await fetch(`${apiURL}jobs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders },
-        body: JSON.stringify({
-          title: jobTitle,
-          description,
-          startDate: startDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
-          endDate: endDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
-          instruction: instructionField,
-          maxParticipants,
-          reward: rewardPerParticipant,
-          socialActions,
-          customActions,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Server error");
+      const { data: jobData, error } = await createJob(data);
+      if (error) {
+        toast({ title: error.message, variant: "destructive" });
+        return;
       }
-      const { data } = await res.json();
+
       toast({ title: "Job created successfully." });
-      router.push(`/jobs/${data.id}`);
+      router.push(`/jobs/${jobData.id}`);
     } catch {
       toast({ title: "An unexpected error occured. Please try again", variant: "destructive" });
     } finally {

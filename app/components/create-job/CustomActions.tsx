@@ -1,4 +1,4 @@
-import { CUSTOM_ACTION_TYPES, JobFormSchema } from "@/app/(user)/(jobs)/create-job/schema";
+import { CUSTOM_ACTION_TYPES, JobFormSchema } from "@/schemas/job";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";

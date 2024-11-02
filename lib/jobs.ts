@@ -1,5 +1,6 @@
 import { APIJobCommentType, APIJobType } from "@/types/job";
 import { getAuthHeaders } from "./auth";
+import { JobFormSchema } from "@/schemas/job";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -92,5 +93,57 @@ export const likeJob = async (jobID: string) => {
   } catch (e) {
     console.log(e);
     return { error: { message: "An error occured liking job" } };
+  }
+};
+
+export const createJob = async (data: JobFormSchema) => {
+  const {
+    jobTitle,
+    startDate,
+    endDate,
+    description,
+    instructionField,
+    rewardPerParticipant,
+    maxParticipants,
+    socialActions,
+    customActions,
+  } = data;
+
+  try {
+    const authHeaders = await getAuthHeaders();
+    const res = await fetch(`${API_URL}jobs`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeaders },
+      body: JSON.stringify({
+        title: jobTitle,
+        description,
+        startDate: startDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
+        endDate: endDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
+        instruction: instructionField,
+        maxParticipants,
+        reward: rewardPerParticipant,
+        socialActions,
+        customActions,
+      }),
+    });
+
+    if (!res.ok) {
+      return {
+        error: {
+          message: "An error occured creating job",
+        },
+        status: res.status,
+      };
+    }
+
+    const { data } = await res.json();
+
+    return { data, status: res.status };
+  } catch {
+    return {
+      error: {
+        message: "An error occured creating job",
+      },
+    };
   }
 };
