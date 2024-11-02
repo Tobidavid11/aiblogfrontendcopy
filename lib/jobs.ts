@@ -1,12 +1,12 @@
 import { APIJobCommentType, APIJobType } from "@/types/job";
 
-const JOB_API_URL = process.env.NEXT_PUBLIC_JOB_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchJobWithComments = async (id: string) => {
   try {
     const [jobRes, commentsRes] = await Promise.all([
-      fetch(`${JOB_API_URL}/jobs/${id}`),
-      fetch(`${JOB_API_URL}/jobs/${id}/comments`),
+      fetch(`${API_URL}jobs/${id}`),
+      fetch(`${API_URL}jobs/${id}/comments`),
     ]);
 
     if (jobRes.status === 404) {
@@ -39,7 +39,7 @@ export const fetchJobWithComments = async (id: string) => {
 
 export const fetchJobs = async () => {
   try {
-    const res = await fetch(`${JOB_API_URL}/jobs/`);
+    const res = await fetch(`${API_URL}jobs/`);
 
     if (!res.ok) {
       return {

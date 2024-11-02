@@ -16,45 +16,6 @@ type Question = {
   options?: string[];
 };
 
-// const initialQuestions: Question[] = [
-//   {
-//     id: "1",
-//     text: "What does data-driven growth mean for Legacy Ltd, and how has it impacted its overall business strategy?",
-//     isAnswered: false,
-//     type: "open",
-//   },
-//   {
-//     id: "2",
-//     text: "Can you provide an overview of how Legacy Ltd uses data to make key business decisions?",
-//     isAnswered: false,
-//     type: "open",
-//   },
-//   {
-//     id: "3",
-//     text: "What does data-driven growth mean for Legacy Ltd, and how has it impacted its overall business strategy?",
-//     isAnswered: false,
-//     type: "multiple",
-//     options: [
-//       "Data-driven growth means Legacy Ltd makes decisions based on market intuition, leading to sporadic growth and reactive strategies.",
-//       "Data-driven growth refers to Legacy Ltd leveraging data to guide business decisions, leading to more informed strategies, improved customer engagement, and enhanced operational efficiency.",
-//       "Data-driven growth for Legacy Ltd is about using customer feedback alone to shape their business strategy, without the need for other forms of data or analytics.",
-//       "Data-driven growth at Legacy Ltd means relying on external consultants for data analysis and not integrating insights into everyday business operations.",
-//     ],
-//   },
-//   {
-//     id: "4",
-//     text: "What types of data does Legacy Ltd collect, and how do they ensure data quality and relevance?",
-//     isAnswered: false,
-//     type: "open",
-//   },
-//   {
-//     id: "5",
-//     text: "What does data-driven growth mean, and how has it impacted its overall business strategy?",
-//     isAnswered: false,
-//     type: "open",
-//   },
-// ];
-
 interface TaskQuestionsUIProps {
   job: APIJobType;
 }
@@ -142,7 +103,7 @@ export default function TaskQuestionsUI({ job }: TaskQuestionsUIProps) {
 
         {/* Display all questions */}
         <div className="overflow-y-scroll relative custom-scroll max-h-[60vh] flex flex-col justify-between grow">
-          <div>{questions.map((question) => renderQuestion(question))}</div>
+          <div className="space-y-4">{questions.map((question) => renderQuestion(question))}</div>
 
           <div className="flex justify-between items-center pt-4">
             <div className="flex space-x-6">

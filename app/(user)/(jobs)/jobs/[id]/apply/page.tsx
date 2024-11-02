@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const { data: job, error, status } = await fetchJobWithComments(params.id);
-
   if (status === 404) {
     notFound();
   }
