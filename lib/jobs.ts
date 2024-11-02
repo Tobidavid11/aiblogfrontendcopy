@@ -1,4 +1,5 @@
 import { APIJobCommentType, APIJobType } from "@/types/job";
+import { getAuthHeaders } from "./auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -63,5 +64,33 @@ export const fetchJobs = async () => {
   } catch (e) {
     console.log(e);
     return { error: { message: "An error occured" } };
+  }
+};
+
+export const likeJob = async (jobID: string) => {
+  try {
+    const authHeaders = await getAuthHeaders();
+    const res = await fetch(`${API_URL}jobs/${jobID}/likes`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...authHeaders },
+    });
+
+    if (!res.ok) {
+      return {
+        error: {
+          message: "An error occured liking job",
+        },
+        status: res.status,
+      };
+    }
+
+    const data = (await res.json()) as {
+      message: string;
+      statusCode: number;
+    };
+    return { data, status: res.status };
+  } catch (e) {
+    console.log(e);
+    return { error: { message: "An error occured liking job" } };
   }
 };

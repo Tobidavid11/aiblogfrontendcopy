@@ -51,7 +51,7 @@ export type APIJobType = {
   userId: string;
   username: string;
   profilePic: string;
-  likes: Array<unknown>;
+  likes: Array<string>; // array of user ids that liked job
   likes_count: number;
 };
 

@@ -1,12 +1,7 @@
 import Comments from "@/components/shared/comments";
 import { fetchJobWithComments } from "@/lib/jobs";
-import iconComment from "@/public/assets/icons/comment.svg";
-import iconShare from "@/public/assets/icons/share.svg";
-import { APIJobType } from "@/types/job";
-import { ThumbsUpIcon } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import ActionButtons from "./_components/action-buttons";
 import Aside from "./_components/aside";
 import JobContent from "./_components/job-content";
 
@@ -17,8 +12,9 @@ const JobPage = async ({ params }: { params: { id: string } }) => {
   }
 
   if (error) {
-    return <div>{error.message}</div>;
+    return <div className="p-16 text-center text-2xl font-bold">{error.message}</div>;
   }
+
   return (
     <main className="bg-white relative overflow-auto h-[calc(100dvh-72px)]">
       <div className="absolute inset-0 px-8">
@@ -39,34 +35,6 @@ const JobPage = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
     </main>
-  );
-};
-
-const ActionButtons = ({ job }: { job: APIJobType }) => {
-  return (
-    <div className="flex items-center gap-2">
-      <button className="p-2 text-neutral-500 flex gap-1 items-center hover:bg-neutral-100 rounded-sm transition-colors">
-        <ThumbsUpIcon />
-        <span className="leading-none hidden sm:inline">Like</span>
-      </button>
-
-      <button className="p-2 text-neutral-500 flex gap-1 items-center hover:bg-neutral-100 rounded-sm transition-colors">
-        <Image src={iconComment} width={24} height={24} alt="" />
-        <span className="leading-none hidden sm:inline">Comment</span>
-      </button>
-
-      <button className="p-2 text-neutral-500 flex gap-1 items-center hover:bg-neutral-100 rounded-sm transition-colors">
-        <Image src={iconShare} width={24} height={24} alt="" />
-        <span className="leading-none hidden sm:inline">Forward</span>
-      </button>
-
-      <Link
-        href={`/jobs/${job.id}/apply`}
-        className="px-4 py-2 ml-auto bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] text-[#262626] font-medium capitalize rounded-full transition duration-300 ease-in-out"
-      >
-        Apply
-      </Link>
-    </div>
   );
 };
 
