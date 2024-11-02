@@ -1,4 +1,4 @@
-import { JobFormSchema, SOCIAL_ACTION_TYPES } from "@/app/(user)/(jobs)/create-job/schema";
+import { JobFormSchema, SOCIAL_ACTION_TYPES } from "@/schemas/job";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -184,7 +184,7 @@ const SocialActions: React.FC = () => {
             height={50}
             className="w-[20px] md:w-[22px] h-[20px] md:h-[22px]"
           />
-          <span>Add more</span>
+          {fields.length > 0 ? <span>Add more</span> : <span>Add</span>}
         </button>
 
         <Trash2 className="w-4 md:w-5 h-4 md:h-5 font-normal text-[#737373] hover:text-black/30 transition-all duration-300 ease-in-out cursor-pointer" />

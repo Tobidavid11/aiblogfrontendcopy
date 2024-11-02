@@ -125,7 +125,7 @@ const RenderField: React.FC<RenderFieldProps> = ({ field, props }) => {
             {...field}
             disabled={disabled}
             autoFocus={false}
-            className="w-full px-3 py-2 flex min-h-[9rem] max-h-full border border-[#f5f5f5] focus-within:outline-0 md:border-[#e5e5e5] rounded-[8px] bg-white overflow-hidden  text-[#404040] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
+            className="w-full px-3 py-2 flex min-h-[9rem] max-h-full border border-[#f5f5f5] focus-within:outline-0 md:border-[#e5e5e5] rounded-[8px] bg-white overflow-y-auto custom-scroll resize-none  text-[#404040] font-normal text-sm md:text-base placeholder:font-normal placeholder:text-sm md:placeholder:text-base placeholder:text-[#a3a3a3]"
           />
         </FormControl>
       );

@@ -1,4 +1,4 @@
-import type { JobType } from "@/types/job";
+import type { APIJobType } from "@/types/job";
 import {
 	Card,
 	CardContent,
@@ -8,7 +8,7 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 
-export default function TaskCard({ job }: { job: JobType }) {
+export default function TaskCard({ job }: { job: APIJobType }) {
 	return (
 		<Card className="bg-transparent">
 			<CardHeader>

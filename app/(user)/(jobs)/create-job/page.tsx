@@ -10,17 +10,18 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { SelectItem } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { isAuthenticated } from "@/lib/auth";
+import { createJob } from "@/lib/jobs";
 import { cn } from "@/lib/utils";
+import PlusIcon from "@/public/assets/icons/plus-icon.svg";
+import { JobFormSchema, jobFormSchema } from "@/schemas/job";
 import { FormFieldType } from "@/types/form-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader2Icon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Control, Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
-
-import PlusIcon from "../../../../public/assets/icons/plus-icon.svg";
-import { useRouter } from "next/navigation";
-import { JobFormSchema, jobFormSchema } from "./schema";
 
 interface StepsHeaderProps {
   title: string;
@@ -62,8 +63,6 @@ const EngagementLevels = [
   { option: "High", value: "HIGH" },
 ];
 
-const apiURL = process.env.NEXT_PUBLIC_JOB_URL;
-
 export default function CreateJob() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = 3;
@@ -77,6 +76,7 @@ export default function CreateJob() {
       jobTitle: "",
       description: "",
       engagementLevel: "",
+      instructionField: "",
       customActions: [],
       socialActions: [],
     },
@@ -91,44 +91,23 @@ export default function CreateJob() {
   };
 
   const handleCreateJob = async (data: JobFormSchema) => {
-    console.log("Final submission", data);
-    const {
-      jobTitle,
-      startDate,
-      endDate,
-      description,
-      instructionField,
-      rewardPerParticipant,
-      maxParticipants,
-      socialActions,
-      customActions,
-    } = data;
-
-    const accessToken = sessionStorage.getItem("accessToken");
     try {
       setIsSubmitting(true);
-      const res = await fetch(`${apiURL}/jobs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
-        body: JSON.stringify({
-          title: jobTitle,
-          description,
-          startDate: startDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
-          endDate: endDate.toISOString().slice(0, 10), // just the date e.g  2024-10-30
-          instruction: instructionField,
-          maxParticipants,
-          reward: rewardPerParticipant,
-          socialActions,
-          customActions,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Server error");
+      const isUserAuthenticated = await isAuthenticated();
+      if (!isUserAuthenticated) {
+        toast({ title: "You need to sign in", variant: "destructive" });
+        router.push("/auth/sign-in");
+        return;
       }
-      const { data } = await res.json();
+
+      const { data: jobData, error } = await createJob(data);
+      if (error) {
+        toast({ title: error.message, variant: "destructive" });
+        return;
+      }
+
       toast({ title: "Job created successfully." });
-      router.push(`/jobs/${data.id}`);
+      router.push(`/jobs/${jobData.id}`);
     } catch {
       toast({ title: "An unexpected error occured. Please try again", variant: "destructive" });
     } finally {
@@ -368,8 +347,17 @@ const RewardsAndCriteriaStep: React.FC<CreateJobProps> = ({ control }) => {
 
 // Job Review Step
 const ReviewStep: React.FC<CreateJobProps> = () => {
-  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(null);
-  const { control } = useFormContext<JobFormSchema>();
+  const {
+    control,
+    formState: { errors },
+    getValues,
+  } = useFormContext<JobFormSchema>();
+
+  const [customActions, socialActions] = [getValues("customActions"), getValues("socialActions")];
+  const initialActiveForm =
+    customActions.length > 0 ? "custom" : socialActions.length > 0 ? "social" : null;
+
+  const [activeForm, setActiveForm] = useState<"social" | "custom" | null>(initialActiveForm);
 
   const toggleForm = (formType: "social" | "custom") => {
     setActiveForm(activeForm === formType ? null : formType);
@@ -378,18 +366,31 @@ const ReviewStep: React.FC<CreateJobProps> = () => {
   return (
     <div className="p-4 md:p-0 bg-[#fafafa] md:bg-transparent border border-[#e5e5e5] md:border-0 rounded-2xl">
       <div className="flex flex-col gap-y-6">
-        <Controller
-          render={({ field }) => (
-            <InstructionField text={field.value || ""} onChange={field.onChange} />
-          )}
-          control={control}
-          name="instructionField"
-        />
+        <div>
+          <Controller
+            render={({ field }) => (
+              <InstructionField text={field.value || ""} onChange={field.onChange} />
+            )}
+            control={control}
+            name="instructionField"
+          />
+          {errors.instructionField ? (
+            <p className="text-sm font-medium text-destructive">
+              {errors.instructionField.message}
+            </p>
+          ) : null}
+        </div>
 
         <Card className="bg-[#fafafa] shadow-none border border-[#e5e5e5] p-4 md:p-6 rounded-2xl">
           {activeForm === "social" && <SocialActions />}
 
           {activeForm === "custom" && <CustomActions />}
+
+          {errors.customActions?.message ? (
+            <p className="text-sm font-medium text-destructive my-2">
+              {errors.customActions.message}
+            </p>
+          ) : null}
 
           <CardContent className="p-0">
             {/* Seperator */}

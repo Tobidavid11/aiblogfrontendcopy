@@ -1,4 +1,4 @@
-import { CUSTOM_ACTION_TYPES, JobFormSchema } from "@/app/(user)/(jobs)/create-job/schema";
+import { CUSTOM_ACTION_TYPES, JobFormSchema } from "@/schemas/job";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,11 +26,11 @@ type CustomActionItem = JobFormSchema["customActions"][number];
 type CustomActionType = JobFormSchema["customActions"][number]["actionType"];
 
 const CustomActions: React.FC = () => {
-  const { control } = useFormContext<JobFormSchema>();
+  const { control, getValues } = useFormContext<JobFormSchema>();
   const {
     fields: customActions,
     append,
-    // remove,
+    remove,
     update,
   } = useFieldArray({ control, name: "customActions" });
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -44,7 +44,7 @@ const CustomActions: React.FC = () => {
   };
 
   const updateCustomType = (index: number, type: CustomActionType) => {
-    const customAction = customActions[index];
+    const customAction = getValues("customActions")[index]; //
     if (type === customAction.actionType) return;
 
     switch (type) {
@@ -119,6 +119,7 @@ const CustomActions: React.FC = () => {
                 />
                 <Button
                   variant="ghost"
+                  type="button"
                   onClick={() => removeCheckboxOption(index, optionIndex)}
                   disabled={item.checkboxChoices?.length === 1}
                 >
@@ -201,22 +202,33 @@ const CustomActions: React.FC = () => {
             >
               <div className="w-full flex flex-col items-center md:flex-row gap-y-4 md:gap-x-4">
                 {/* title */}
-                <Controller
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Add Question"
-                      className="border-b border-t-0 border-x-0 rounded-none px-0"
-                    />
-                  )}
-                  name={`customActions.${index}.questionText`}
-                  control={control}
-                />
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => remove(index)}
+                    type="button"
+                    className="shrink-0 p-1 h-auto rounded-full -ml-1"
+                  >
+                    <X className="w-3.5 md:w-4 h-3.5 md:h-4 text-[#404040] hover:text-black transition-all duration-300 ease-in-out" />
+                  </Button>
+                  <Controller
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="Add Question"
+                        className="border-b border-t-0 border-x-0 rounded-none px-0 grow"
+                      />
+                    )}
+                    name={`customActions.${index}.questionText`}
+                    control={control}
+                  />
+                </div>
 
                 {/* Drop down */}
                 <div className="w-full md:max-w-[14rem] flex-1 relative">
                   <Button
                     variant="outline"
+                    type="button"
                     onClick={() => toggleDropdown(index)}
                     className="w-full flex-1 rounded-xl flex items-center justify-between h-10 md:h-12"
                   >
@@ -233,6 +245,7 @@ const CustomActions: React.FC = () => {
                       {CUSTOM_ACTION_TYPES.map((type) => (
                         <button
                           key={type}
+                          type="button"
                           className="w-full flex items-center gap-x-3 px-4 py-2 hover:bg-[#E0F2FF] hover:cursor-pointer"
                           onClick={() => updateCustomType(index, type)}
                         >
@@ -263,7 +276,7 @@ const CustomActions: React.FC = () => {
             className="mr-auto flex items-center border-none justify-between font-normal text-sm md:text-base text-[#262626] gap-x-2"
           >
             <PlusCircleIcon size={22} className="text-foreground" />
-            <span>Add more</span>
+            {customActions.length > 0 ? <span>Add more</span> : <span>Add</span>}
           </Button>
           <Type className="w-4 h-4 font-normal text-[#737373] hover:text-black/30 transition-all duration-300 ease-in-out cursor-pointer" />
           <Copy
