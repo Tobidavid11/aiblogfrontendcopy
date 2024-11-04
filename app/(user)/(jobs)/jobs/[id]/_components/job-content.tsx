@@ -1,7 +1,8 @@
 "use client";
 
+import { sanitizeContent } from "@/hooks/sanitize";
 import { APIJobCommentType, APIJobType } from "@/types/job";
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
 
 interface JobContentProps {
   job: APIJobType & { comments: Array<APIJobCommentType> };
@@ -10,14 +11,14 @@ interface JobContentProps {
 const JobContent = ({ job }: JobContentProps) => {
   const { title, instruction, description, username } = job;
 
-  const sanitizeContent = (content: string) => {
-    try {
-      return DOMPurify?.sanitize?.(content) || content;
-    } catch (error) {
-      console.error("DOMPurify sanitization failed:", error);
-      return content;
-    }
-  };
+  // const sanitizeContent = (content: string) => {
+  //   try {
+  //     return DOMPurify?.sanitize?.(content) || content;
+  //   } catch (error) {
+  //     console.error("DOMPurify sanitization failed:", error);
+  //     return content;
+  //   }
+  // };
 
   const sanitizedDescription = sanitizeContent(description);
   const sanitizedInstruction = sanitizeContent(instruction);
