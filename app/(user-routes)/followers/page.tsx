@@ -99,8 +99,8 @@ const FollowersPage = async () => {
 							className="text-neutral-600 text-xl mb-4 sticky top-0 bg-neutral-50"
 						/>
 						<div className="flex flex-col gap-4">
-							{JobDummyData.map((job) => (
-								<TaskCard key={job.user.id} job={job} />
+							{JobDummyData.map((job, index) => (
+								<TaskCard key={index} job={job} />
 							))}
 						</div>
 					</div>

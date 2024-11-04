@@ -19,7 +19,7 @@ export default function Sidebar({
   onSelectQuestion,
 }: SidebarProps) {
   return (
-    <div className="w-[450px] md:block hidden bg-white rounded-xl ml-6 fixed right-16 top-24 bottom-0 h-[500px]">
+    <div className="w-[450px] md:block hidden bg-white rounded-xl ml-6  h-[500px]">
       <div className="bg-[#FDF9D9] p-6 rounded-t-xl">
         <h2 className="text-xl font-bold mb-4">Questions</h2>
         <p className="text-sm text-gray-600 mb-4">

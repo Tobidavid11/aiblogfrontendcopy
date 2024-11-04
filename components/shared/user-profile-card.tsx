@@ -2,14 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DefaultImage, RoundedImage } from "./rounded-image";
-import type { UserProps } from "@/types/user";
 import { useServerAction } from "zsa-react";
 import { Loader } from "lucide-react";
 import { action } from "@/actions/follow";
 import { revalidateTagServer } from "@/actions/common";
 
 interface ProfileCardProps {
-	user: UserProps;
+	user: {id: string, name: string, username: string, profilePic: string};
 	isJobProfile?: boolean;
 	className?: string;
 	following?: boolean;

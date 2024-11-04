@@ -1,8 +1,8 @@
-import { JobType } from "@/types/job";
+import { APIJobType } from "@/types/job";
 import Link from "next/link";
 
 interface TaskProps {
-  job: JobType;
+  job: APIJobType;
 }
 
 const padNumber = (number: number, padLength = 2, fillString = "0") => {
@@ -13,7 +13,7 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const DAYS = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
 
 const RelatedTask = ({ job }: TaskProps) => {
-  const taskDate = new Date(job.date);
+  const taskDate = new Date(job.startDate);
   const dateString = `${MONTHS[taskDate.getMonth()]} ${padNumber(
     taskDate.getDate()
   )}, ${taskDate.getFullYear()}`;
