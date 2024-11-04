@@ -61,7 +61,7 @@ jobs:
           target: "~/aiblogfrontend"
         
       - name: Deploy on server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
