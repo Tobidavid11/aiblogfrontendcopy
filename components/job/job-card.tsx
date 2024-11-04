@@ -19,7 +19,6 @@ const JobCard = memo<{ job: APIJobType }>(({ job }) => {
   const { id, title, description, username, userId, profilePic, likes_count } =
     job;
 
-  // Add safety check for DOMPurify
   const sanitizeContent = (content: string) => {
     try {
       return DOMPurify?.sanitize?.(content) || content;
@@ -79,5 +78,7 @@ const JobCard = memo<{ job: APIJobType }>(({ job }) => {
     </Card>
   );
 });
+
+JobCard.displayName = "JobCard";
 
 export default JobCard;
