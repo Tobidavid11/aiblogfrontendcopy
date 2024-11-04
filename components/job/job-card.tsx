@@ -13,20 +13,21 @@ import {
   CardTitle,
 } from "../ui/card";
 import JobExtraInfo from "./job-extra-info";
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
+import { sanitizeContent } from "@/hooks/sanitize";
 
 const JobCard = memo<{ job: APIJobType }>(({ job }) => {
   const { id, title, description, username, userId, profilePic, likes_count } =
     job;
 
-  const sanitizeContent = (content: string) => {
-    try {
-      return DOMPurify?.sanitize?.(content) || content;
-    } catch (error) {
-      console.error("DOMPurify sanitization failed:", error);
-      return content;
-    }
-  };
+  // const sanitizeContent = (content: string) => {
+  //   try {
+  //     return DOMPurify?.sanitize?.(content) || content;
+  //   } catch (error) {
+  //     console.error("DOMPurify sanitization failed:", error);
+  //     return content;
+  //   }
+  // };
 
   const sanitizedDescription = sanitizeContent(description);
 
