@@ -69,7 +69,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ~/aiblogfrontend
-            rm -rf .env .next public app
+            [ -d .next ] && rm -rf .next public app .env
             tar -xzf build_artifacts.tar.gz
             pnpm install
-            pnpm run start
+            pm2 delete drello || true
+            pm2 start 'pnpm start' --name drello --watch
