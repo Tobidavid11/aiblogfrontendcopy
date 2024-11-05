@@ -42,9 +42,9 @@ const EarningsSidebar = () => {
   ];
 
   return (
-    <div className="w-96 h-screen hidden lg:block  bg-white">
+    <div className="bg-white">
     
-      <div className="bg-yellow-50 rounded-lg p-6 mb-6 text-center">
+      <div className="bg-yellow-50 rounded-lg p-6 text-center">
         <h1 className="text-xl font-semibold text-gray-900 mb-2">
           Ways to Earn on dRello
         </h1>
@@ -54,7 +54,7 @@ const EarningsSidebar = () => {
       </div>
 
       
-      <div className="space-y-4 p-4">
+      <div className="space-y-4 p-4 maxHeight overflow-scroll custom-scroll bg-white">
         {earningOptions.map((option, index) => (
           <div 
             key={index} 

@@ -1,22 +1,12 @@
 "use client";
 
-import { RefAttributes, ForwardRefExoticComponent, useState } from "react";
-import {
-  Bold,
-  Italic,
-  Underline,
-  List,
-  ListOrdered,
-  Link,
-  LucideProps,
-} from "lucide-react";
+import { RefAttributes, ForwardRefExoticComponent } from "react";
+import { Bold, Italic, Underline, List, ListOrdered, Link, LucideProps } from "lucide-react";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 interface IconProps {
-  Icon: ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >;
+  Icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
   label: string;
   command: string;
 }
@@ -30,9 +20,11 @@ const Icons: IconProps[] = [
   { Icon: Link, label: "Insert Link", command: "link" },
 ];
 
-export default function InstructionField() {
-  const [text, setText] = useState("");
-
+interface InstructionFieldProps {
+  text: string;
+  onChange: (value: string) => void;
+}
+export default function InstructionField({ text, onChange }: InstructionFieldProps) {
   const formatText = (command: string) => {
     const textarea = document.querySelector("textarea");
     if (!textarea) return;
@@ -67,22 +59,18 @@ export default function InstructionField() {
         formattedText = selectedText;
     }
 
-    const newText =
-      text.substring(0, start) + formattedText + text.substring(end);
-    setText(newText);
+    const newText = text.substring(0, start) + formattedText + text.substring(end);
+    onChange(newText);
 
     // Update the cursor position after text is formatted
     setTimeout(() => {
       textarea.focus();
-      textarea.setSelectionRange(
-        start + formattedText.length,
-        start + formattedText.length
-      );
+      textarea.setSelectionRange(start + formattedText.length, start + formattedText.length);
     }, 0);
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+    onChange(e.target.value);
     adjustHeight(e.target);
   };
 
@@ -93,10 +81,8 @@ export default function InstructionField() {
 
   return (
     <Card className="bg-white shadow-none border border-[#e5e5e5] p-4 md:py-3 md:px-4 rounded-2xl">
-      <CardTitle className="p-0 mb-3 md:mb-6">
-        <h3 className="text-base font-normal text-[#404040]">
-          Intruction Field
-        </h3>
+      <CardTitle className="p-0 mb-3 md:mb-6 text-base font-normal text-[#404040]">
+        Instruction Field
       </CardTitle>
 
       <CardContent className="p-0">
@@ -115,6 +101,7 @@ export default function InstructionField() {
           {Icons.map(({ Icon, label, command }, index) => (
             <button
               key={index}
+              type="button"
               onClick={() => formatText(command)}
               className="focus:outline-none rounded-full p-1 md:p-1.5 hover:bg-black/5 transition-all duration-300 ease-in-out"
             >
