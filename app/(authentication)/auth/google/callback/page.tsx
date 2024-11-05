@@ -4,8 +4,6 @@ import React, { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
-import { cookies } from "next/headers";
-import { authConfig } from "@/config/auth.config";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -71,28 +69,6 @@ const GoogleCallbackContent = () => {
           console.log("Access token received:", accessToken ? "Yes" : "No");
           console.log("Refresh token received:", refreshToken ? "Yes" : "No");
           console.log("User email from response:", user.email);
-
-          try {
-            const cookieStore = cookies();
-            console.log(
-              "Setting cookies with options:",
-              authConfig.COOKIE_OPTIONS
-            );
-
-            cookieStore.set(authConfig.accessTokenKey, accessToken, {
-              ...authConfig.COOKIE_OPTIONS,
-            });
-            cookieStore.set(authConfig.refreshTokenKey, refreshToken, {
-              ...authConfig.COOKIE_OPTIONS,
-            });
-            cookieStore.set(authConfig.userDataKey, JSON.stringify(user), {
-              ...authConfig.COOKIE_OPTIONS,
-            });
-
-            console.log("Cookies set successfully");
-          } catch (cookieError) {
-            console.error("Error setting cookies:", cookieError);
-          }
 
           toast({
             title: "Sign in successful",
