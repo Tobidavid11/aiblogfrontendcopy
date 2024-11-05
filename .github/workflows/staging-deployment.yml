@@ -69,6 +69,7 @@ jobs:
           script: |
             cd ~/aiblogfrontend
             git reset --hard
-            git pull origin staging
+            git pull origin dev
+            pnpm install
             pnpm run build
             pnpm run start
