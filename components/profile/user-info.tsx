@@ -29,12 +29,17 @@ const UserInfo: React.FC<ProfileCardProps> = ({ user, className }) => {
 			</div>
 
 			<div className="flex justify-between max-w-fit gap-6">
-				<Link href={user.externalLink} className="flex items-center space-x-2">
-					<Link2 size={16} className=" text-[#262626]" />
-					<p className="text-xs  text-[#262626] font-bold">
-						{user.externalLink}
-					</p>
-				</Link>
+				{user.externalLink && (
+					<Link
+						href={user.externalLink}
+						className="flex items-center space-x-2"
+					>
+						<Link2 size={16} className=" text-[#262626]" />
+						<p className="text-xs  text-[#262626] font-bold">
+							{user.externalLink}
+						</p>
+					</Link>
+				)}
 
 				<div className="flex items-center space-x-2">
 					<CalendarDays size={16} className=" text-[#262626]" />
