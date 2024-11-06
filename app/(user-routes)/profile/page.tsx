@@ -35,6 +35,7 @@ const Profile = async () => {
 		user.accessToken.value as string,
 		user.user.profileId as string,
 	);
+	console.log(user);
 
 	if (!userData) {
 		return notFound();
@@ -51,7 +52,11 @@ const Profile = async () => {
 				</div>
 
 				<div className="p-4">
-					<CoverPhoto user={userData.data} />
+					<CoverPhoto
+						user={userData.data}
+						token={user.accessToken.value as string}
+						profileId={user.user.profileId}
+					/>
 				</div>
 
 				<div className="flex justify-end gap-2 items-center px-4">

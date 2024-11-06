@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/select";
 import { filterRegions } from "@/lib/country-state";
 
-//@ts-ignore
+// @ts-expect-error There are no types for the package
 import countryRegionData from "country-region-data/dist/data-umd";
 import { useEffect, useState } from "react";
 
@@ -53,7 +53,7 @@ function RegionSelect({
 				filterRegions(regions.regions, priorityOptions, whitelist, blacklist),
 			);
 		}
-	}, [countryCode]);
+	}, [countryCode, blacklist, priorityOptions, whitelist]);
 
 	return (
 		<Select

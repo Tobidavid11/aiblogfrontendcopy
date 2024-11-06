@@ -21,8 +21,6 @@ import {
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./scroll-area";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
-
 type PhoneInputProps = Omit<
 	React.InputHTMLAttributes<HTMLInputElement>,
 	"onChange" | "value"
@@ -41,16 +39,9 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
 					flagComponent={FlagComponent}
 					countrySelectComponent={CountrySelect}
 					inputComponent={InputComponent}
-					/**
-					 * Handles the onChange event.
-					 *
-					 * react-phone-number-input might trigger the onChange event as undefined
-					 * when a valid phone number is not entered. To prevent this,
-					 * the value is coerced to an empty string.
-					 *
-					 * @param {E164Number | undefined} value - The entered value
-					 */
-					onChange={(value) => onChange?.(value || "")}
+					onChange={(value) => {
+						if (value) onChange?.(value);
+					}}
 					{...props}
 				/>
 			);
@@ -58,15 +49,16 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
 	);
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
-	({ className, ...props }, ref) => (
-		<Input
-			className={cn("rounded-e-lg rounded-s-none", className)}
-			{...props}
-			ref={ref}
-		/>
-	),
-);
+const InputComponent = React.forwardRef<
+	HTMLInputElement,
+	React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, ...props }, ref) => (
+	<Input
+		className={cn("rounded-e-lg rounded-s-none", className)}
+		{...props}
+		ref={ref}
+	/>
+));
 InputComponent.displayName = "InputComponent";
 
 type CountrySelectOption = { label: string; value: RPNInput.Country };
