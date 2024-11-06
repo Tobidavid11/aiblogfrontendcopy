@@ -1,4 +1,8 @@
-import { AUTH_API_BASE_URL, BLOG_API_BASE_URL } from "./constants";
+import {
+	API_BASE_URL,
+	AUTH_API_BASE_URL,
+	BLOG_API_BASE_URL,
+} from "./constants";
 
 export function formatNumber(num: number): string {
 	return new Intl.NumberFormat("en", { notation: "compact" }).format(num);
@@ -17,7 +21,7 @@ interface FetchOptions extends Omit<RequestInit, "method" | "body"> {
 }
 
 export default function makeFetch<T>(
-	service: "blog" | "auth",
+	service: "blog" | "auth" | "general",
 	path: string,
 	accessToken: string | null,
 	options: FetchOptions = {},
@@ -50,7 +54,7 @@ export default function makeFetch<T>(
 		}
 
 		const res = await fetch(
-			`${service === "blog" ? BLOG_API_BASE_URL : AUTH_API_BASE_URL}${path}`,
+			`${service === "blog" ? BLOG_API_BASE_URL : service === "general" ? API_BASE_URL : AUTH_API_BASE_URL}${path}`,
 			fetchOptions,
 		);
 
