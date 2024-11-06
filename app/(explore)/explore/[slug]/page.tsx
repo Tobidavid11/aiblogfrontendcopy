@@ -1,26 +1,30 @@
-"use client";
+//app\(explore)\explore\[slug]\page.tsx
+
 import React from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { BlogDummyData } from "@/data/mock/blog";
-import { UserProfile } from "../../../../components/shared";
-import { ItemComment } from "../../../../components/shared/comments";
-import { PostEngagement } from "../../../../components/shared/social/PostEngagement";
-// import { CommentType } from "../../../../types/comment";
+import { UserProfile } from "@/components/shared";
+// import { ItemComment } from "@/components/shared/comments";
+import { PostEngagement } from "@/components/shared/social/PostEngagement";
+import { fetchBlogPost } from "@/hooks/useBlogPost";
+// import type { BlogPost } from "@/types/blog";
 
-// type DOMComment = globalThis.Comment;
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = BlogDummyData.find(
-    (post) => post.title.toLowerCase().replace(/ /g, "-") === params.slug
-  );
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await fetchBlogPost(params.slug);
 
   if (!post) {
-    notFound();
+    return notFound();
   }
 
   const postUrl =
     typeof window !== "undefined"
-      ? `${window.location.origin}/posts/${params.slug}`
+      ? `${window.location.origin}/explore/${post.title
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`
       : "";
 
   return (
@@ -28,11 +32,20 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
       <div className="flex items-center mb-6 border-b-6 border-dashed border-gray pb-4">
-        <UserProfile user={post.user} />
+        <UserProfile
+          user={{
+            username: post.username,
+            profilePic: "/default-avatar.png", // Add a default avatar
+            name: post.username,
+            id: post.id,
+          }}
+        />
       </div>
+
       <div className="border-b-2 border-dashed"></div>
+
       <Image
-        src={post.image}
+        src={post.thumbnail}
         alt={post.title}
         width={800}
         height={400}
@@ -40,56 +53,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       />
 
       <div className="prose max-w-none mb-8">
-        <p className="text-xl mb-4">{post.description}</p>
-        {post.content.map((item, index) => {
-          switch (item.type) {
-            case "paragraph":
-              return (
-                <p key={index} className="mb-4">
-                  {item.text}
-                </p>
-              );
-            case "subtitle":
-              return (
-                <h2 key={index} className="text-2xl font-bold mt-6 mb-4">
-                  {item.text}
-                </h2>
-              );
-            case "list":
-              return (
-                <ul key={index} className="list-disc pl-6 mb-4">
-                  {item.items.map((listItem, listIndex) => (
-                    <li key={listIndex}>{listItem}</li>
-                  ))}
-                </ul>
-              );
-            case "image-gallery":
-              return (
-                <div key={index}>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    {item.images.map((img, imgIndex) => (
-                      <Image
-                        key={imgIndex}
-                        src={img}
-                        alt={`Additional image ${imgIndex + 1}`}
-                        width={400}
-                        height={300}
-                        className="w-full h-auto rounded-lg"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-center text-gray-500 mb-8">
-                    Business Week Image Gallery
-                  </p>
-                </div>
-              );
-          }
-        })}
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
 
       {post.tags && (
         <div className="flex flex-wrap p-2 bg-gray-500 gap-2">
-          {post.tags.map((tag) => (
+          {post.tags?.map((tag: string) => (
             <span
               key={tag}
               className="bg-[#E5E7EB] text-gray-700 px-2 py-1 rounded-full text-xs"
@@ -101,30 +70,23 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       )}
 
       <PostEngagement
-        postId={post.id ?? ""}
+        postId={post.id}
         postTitle={post.title}
         postUrl={postUrl}
-        initialLikes={post.metrics.likesCount}
-        initialComments={post.comments as ItemComment[]}
-        initialCommentsCount={post.metrics.commentsCount}
-        initialShares={post.metrics.sharesCount}
-        onLike={() => {
-          // Handle like analytics or API calls
-        }}
-        onComment={() => {
-          // Handle comment analytics or API calls
-        }}
-        onShare={() => {
-          // Handle share analytics or API calls
-        }}
+        initialLikes={post.likes}
+        initialComments={[]} // You'll need to implement comments fetching
+        initialCommentsCount={post.comments}
+        initialShares={0}
+        // onLike={() => {
+        //   // Implement like functionality
+        // }}
+        // onComment={() => {
+        //   // Implement comment functionality
+        // }}
+        // onShare={() => {
+        //   // Implement share functionality
+        // }}
       />
-      {/* <div className="flex items-center space-x-4 mb-4">
-        <Comments
-          postId={post.id ?? ""}
-          initialComments={(post.comments as ItemComment[]) ?? []}
-          initialCommentsCount={post.metrics.commentsCount}
-        />
-      </div> */}
     </article>
   );
 }

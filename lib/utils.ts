@@ -13,6 +13,27 @@ export function slugify(text: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+}
+
+export function matchSlug(slug1: string, slug2: string): boolean {
+  const normalizeSlug = (s: string) =>
+    s
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+
+  return normalizeSlug(slug1) === normalizeSlug(slug2);
+}
+
 // Function to format likes, comments, views
 export function formatViews(views: number): string {
   if (views < 1_000) return views.toString();
