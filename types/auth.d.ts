@@ -44,6 +44,11 @@ export interface SignInResponse {
 	message?: string;
 }
 
+export interface GoogleSignInResponse {
+  authUrl: string | null;
+  error: string | null;
+}
+
 export interface ForgotPasswordParams {
 	email: string;
 }
