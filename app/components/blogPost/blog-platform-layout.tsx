@@ -59,8 +59,9 @@ export default function BlogPlatformLayout() {
       const response = await getBlogs(1, false, searchTerm);
       setBlogs(response.data.results);
     } catch (error) {
-      throw error;
       setError("Search failed. Please try again.");
+      throw error;
+     
     } finally {
       setLoading(false);
     }
