@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import type { UserProps } from "@/types/user";
-import Link from "next/link";
 import { Link2 } from "lucide-react";
 import { CalendarDays } from "lucide-react";
 import { formatJoinDate } from "@/lib/helper";

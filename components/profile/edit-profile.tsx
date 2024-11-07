@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Pencil, EllipsisVertical} from "lucide-react";
+import { Pencil } from "lucide-react";
 import { toast } from "sonner";
 import {
 	Dialog,

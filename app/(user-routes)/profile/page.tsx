@@ -1,6 +1,5 @@
 import { MoveLeft } from "lucide-react";
 import CoverPhoto from "@/components/profile/cover-photo";
-import ViewWallet from "@/components/profile/view-wallet";
 import EditProfile from "@/components/profile/edit-profile";
 import UserInfo from "@/components/profile/user-info";
 import ContentTab from "@/components/profile/content-tab";

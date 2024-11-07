@@ -96,17 +96,17 @@ export default function CoverPhoto({
 		setPosition({ x: 0, y: 0 });
 	};
 
-	const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files?.[0]) {
-			const file = e.target.files[0];
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setSelectedProfileImage(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-			setIsEditingProfile(true);
-		}
-	};
+	// const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	if (e.target.files?.[0]) {
+	// 		const file = e.target.files[0];
+	// 		const reader = new FileReader();
+	// 		reader.onloadend = () => {
+	// 			setSelectedProfileImage(reader.result as string);
+	// 		};
+	// 		reader.readAsDataURL(file);
+	// 		setIsEditingProfile(true);
+	// 	}
+	// };
 
 	const closeProfileOverlay = () => {
 		setIsEditingProfile(false);
