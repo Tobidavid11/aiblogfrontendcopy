@@ -1,3 +1,4 @@
+//aiblogfrontend\actions\getBlogs.ts
 "use server";
 import type { BlogResponse, SingleBlogResponse } from "@/types/blog";
 import { cookies } from "next/headers";

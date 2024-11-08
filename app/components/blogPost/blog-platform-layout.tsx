@@ -1,3 +1,4 @@
+//aiblogfrontend\app\components\blogPost\blog-platform-layout.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -61,7 +62,6 @@ export default function BlogPlatformLayout() {
     } catch (error) {
       setError("Search failed. Please try again.");
       throw error;
-     
     } finally {
       setLoading(false);
     }

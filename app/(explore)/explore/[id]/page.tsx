@@ -1,4 +1,4 @@
-//app\(explore)\explore\[slug]\page.tsx
+//app\(explore)\explore\[id]\page.tsx
 
 import React from "react";
 import Image from "next/image";
@@ -12,9 +12,9 @@ import { fetchBlogPost } from "@/hooks/useBlogPost";
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: { id: string };
 }) {
-  const post = await fetchBlogPost(params.slug);
+  const post = await fetchBlogPost(params.id);
 
   if (!post) {
     return notFound();
@@ -77,15 +77,6 @@ export default async function BlogPostPage({
         initialComments={[]} // You'll need to implement comments fetching
         initialCommentsCount={post.comments}
         initialShares={0}
-        // onLike={() => {
-        //   // Implement like functionality
-        // }}
-        // onComment={() => {
-        //   // Implement comment functionality
-        // }}
-        // onShare={() => {
-        //   // Implement share functionality
-        // }}
       />
     </article>
   );
