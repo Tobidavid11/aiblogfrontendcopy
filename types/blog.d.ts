@@ -65,7 +65,7 @@ export interface BlogType {
   tags?: string[];
   publishedDate?: string;
   description: string;
-  blogContent: string;
+  blogContent?: string;
   image: string;
   metrics: PostMetrics;
   extra_info: string[];

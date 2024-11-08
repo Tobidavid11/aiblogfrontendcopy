@@ -55,7 +55,9 @@ const PostMetrics = memo<{ item: PostMetricsProps }>(({ item }) => {
           />
         }
         count={item.likesCount}
-        onIconClick={item.onLike}
+        onIconClick={() => {
+          item.onLike?.();
+        }}
       />
       <MetricsItem
         icon={<MessagesSquare className="size-4" color="#A3A3A3" />}
