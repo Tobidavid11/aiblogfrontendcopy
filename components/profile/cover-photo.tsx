@@ -8,7 +8,6 @@ import type { UserProps } from "@/types/user";
 import { CoverImage } from "./cover-image";
 import { PencilLine, MoveLeft, ZoomIn, ZoomOut } from "lucide-react";
 import ProfilePic from "./user-profile-pic";
-import { UserData } from "@/data/mock/user";
 import { toast } from "sonner";
 import {
 	Tooltip,
@@ -96,17 +95,17 @@ export default function CoverPhoto({
 		setPosition({ x: 0, y: 0 });
 	};
 
-	// const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	if (e.target.files?.[0]) {
-	// 		const file = e.target.files[0];
-	// 		const reader = new FileReader();
-	// 		reader.onloadend = () => {
-	// 			setSelectedProfileImage(reader.result as string);
-	// 		};
-	// 		reader.readAsDataURL(file);
-	// 		setIsEditingProfile(true);
-	// 	}
-	// };
+	const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files?.[0]) {
+			const file = e.target.files[0];
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setSelectedProfileImage(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+			setIsEditingProfile(true);
+		}
+	};
 
 	const closeProfileOverlay = () => {
 		setIsEditingProfile(false);
@@ -134,7 +133,7 @@ export default function CoverPhoto({
 			toast.success("Profile updated successfully!");
 			closeCoverOverlay();
 		} else {
-			console.log(res);
+		
 			toast.error("Failed to update profile.");
 		}
 	};
@@ -165,11 +164,12 @@ export default function CoverPhoto({
 	return (
 		<div className={cn("relative", className)}>
 			<div className="w-full h-40 md:h-56 bg-cover bg-center rounded-2xl overflow-hidden">
-				{user?.coverPhoto}
+				{user?.coverPic &&
 				<CoverImage
-					src={selectedCoverImage || user?.coverPhoto || "/images/coverPhoto.png"}
+					src= {selectedCoverImage || user.coverPic || "/images/cover-photo.jpg" }
 					alt={`${user?.username} cover pic`}
 				/>
+				}
 			</div>
 			<div className="absolute mb-4 top-4 right-4 flex gap-2 group">
 				<TooltipProvider>
@@ -216,7 +216,7 @@ export default function CoverPhoto({
 						onMouseLeave={stopDragging}
 					>
 						<Image
-							src={selectedCoverImage || user?.coverPhoto}
+							src={selectedCoverImage || user?.coverPhoto || '/images/cover-photo.jpg'}
 							alt="Selected Cover"
 							layout="fill"
 							objectFit="cover"
@@ -248,7 +248,7 @@ export default function CoverPhoto({
 			</Dialog>
 			<div className="bottom-12 left-4 flex gap-2 relative md:left-8">
 				<div className="relative">
-					<ProfilePic user={UserData} />
+					<ProfilePic user={user} selectedProfileImage={selectedProfileImage} handleProfileImageChange ={handleProfileImageChange}/>
 				</div>
 			</div>
 			<Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
@@ -269,6 +269,7 @@ export default function CoverPhoto({
 						onMouseUp={stopDragging}
 						onMouseLeave={stopDragging}
 					>
+					{selectedProfileImage &&
 						<Image
 							src={selectedProfileImage || user.profilePic}
 							alt="Selected Cover"
@@ -279,6 +280,7 @@ export default function CoverPhoto({
 							}}
 							className="cursor-move"
 						/>
+}
 					</div>
 					<div className="flex items-center gap-4 mt-4 w-full">
 						<ZoomOut />
