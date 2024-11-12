@@ -122,7 +122,7 @@ function EditProfile({
 				toggleModal();
 				toast.success("Profile updated successfully!");
 			} else {
-				toast.error("Failed to update profile.");
+				toast.error(res?.message);
 			}
 		} catch (error) {
 			console.error(error);
