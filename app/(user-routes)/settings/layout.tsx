@@ -24,7 +24,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             <div className="absolute inset-0 flex gap-8">
               <Aside />
               <div
-                className="grow bg-neutral-50 border p-6 rounded-[24px]"
+                className="grow bg-neutral-50 border p-6 rounded-[24px] overflow-y-auto"
                 style={{
                   boxShadow: "0px 10px 15px -3px #1018281A, 0px 4px 6px -4px #1018281A",
                 }}
