@@ -43,7 +43,12 @@ const General = async () => {
 
   return (
     <div className="space-y-8">
-      <div className="bg-white rounded-[16px] p-5 space-y-6">
+      <div
+        className="bg-white rounded-[16px] p-5 space-y-6"
+        style={{
+          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+        }}
+      >
         <div className="border-b pb-2">
           <h2 className="text-2xl font-bold leading-[1.375]">Account</h2>
         </div>
@@ -103,7 +108,12 @@ const General = async () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-[16px] p-5 space-y-6">
+      <div
+        className="bg-white rounded-[16px] p-5 space-y-6"
+        style={{
+          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+        }}
+      >
         <div className="border-b pb-2">
           <h2 className="text-2xl font-bold leading-[1.375]">Notification Preferences</h2>
         </div>
@@ -194,7 +204,12 @@ const General = async () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-[16px] p-5 space-y-6">
+      <div
+        className="bg-white rounded-[16px] p-5 space-y-6"
+        style={{
+          boxShadow: "2px -2px 16px -1px #1018280F, -2px 2px 12px -2px #1018280F",
+        }}
+      >
         <div className="border-b pb-2">
           <h2 className="text-2xl font-bold leading-[1.375]">Theme Mode</h2>
         </div>
