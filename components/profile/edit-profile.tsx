@@ -73,6 +73,7 @@ function EditProfile({
 }: EditProfileProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
+	console.log(userData)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -121,7 +122,7 @@ function EditProfile({
 				toggleModal();
 				toast.success("Profile updated successfully!");
 			} else {
-				toast.error("Failed to update profile.");
+				toast.error(res?.message);
 			}
 		} catch (error) {
 			console.error(error);
