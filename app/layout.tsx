@@ -3,6 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme.provider";
+import ProfileProvider from "@/context/contextProvider";
+
 
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
@@ -25,15 +27,19 @@ export default function RootLayout({
       <body
         className={`${DmSans.className} antialiased bg-[#FAFAFA] dark:bg-black/90`}
       >
+        <ProfileProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          
           <Toaster />
           {children}
+          
         </ThemeProvider>
+        </ProfileProvider>
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+"use client"
 import { SectionTitle } from "@/components/shared";
 import "../../globals.css";
 import {
@@ -6,6 +7,7 @@ import {
   TopWriters,
   TrendingTopics,
 } from "../sections";
+
 
 // For the grid, to check if the user is
 // authenticated and change the layout accordingly
@@ -19,6 +21,7 @@ export default function DashboardLayout({
   return (
     <>
       {/* Navigation */}
+      
       <NavBar />
 
       <main className="flex justify-center">
@@ -58,6 +61,7 @@ export default function DashboardLayout({
           </section>
         </div>
       </main>
+      
     </>
   );
 }
