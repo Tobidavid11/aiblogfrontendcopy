@@ -26,6 +26,8 @@ import { useEffect, useState } from "react";
 import MobileNav from "./mobile-nav";
 import Image from "next/image";
 import LogoDark from "@/public/assets/icons/logo-dark.svg";
+import { useUser } from "@/context/userProfilectx";
+
 
 interface NavLinksProps {
   routeName: string;
@@ -41,7 +43,8 @@ const NavBar = () => {
   ];
 
   const router = useRouter();
-
+  const {user, loading} = useUser()
+  console.log(user)
   useEffect(() => {
     setActiveLink(window.location.pathname);
   }, []);
@@ -123,15 +126,18 @@ const NavBar = () => {
               asChild
               className="p-0 hover:cursor-pointer ring-0 outline-0 focus-within:ring-0 focus-within:outline-0 focus-visible:outline-0 focus-visible:ring-0"
             >
+              {!loading &&
               <div className="flex flex-row gap-x-1 items-center">
                 <RoundedImage
                   size={40}
-                  src={UserData.profilePic}
+                  src={user?.profilePic || UserData.profilePic}
                   alt={`${UserData.username} profile pic`}
+            
                 />
 
                 <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
               </div>
+              }
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="w-[10rem] rounded-lg flex flex-col  mt-4 mr-12 border  bg-white dark:bg-black">
@@ -139,12 +145,12 @@ const NavBar = () => {
               <DropdownMenuSeparator />
               <DropdownMenuGroup className="flex flex-col">
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
-                  <div className="flex items-center gap-x-1.5 py-1">
+                  <Link className="flex items-center gap-x-1.5 py-1" href="/profile">
                     <UserIcon className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316] group-hover:fill-[#fdc316]" />
                     <span className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]">
                       Profile
                     </span>
-                  </div>
+                  </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
