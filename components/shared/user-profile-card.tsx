@@ -10,7 +10,7 @@ interface ProfileCardProps {
   isJobProfile?: boolean;
   className?: string;
   following?: boolean;
-  isFollowing: boolean;
+  isFollowing?: boolean;
 
 }
 

@@ -12,11 +12,11 @@ import { cn } from "@/lib/utils";
 
 interface FollowButtonProps {
   userId: string;
-  isFollowing: boolean
+  isFollowing?: boolean
 }
 
 const FollowButton: React.FC<FollowButtonProps> = ({ userId ,  isFollowing }) => {
-  const [following, setFollowing] = useState<boolean>(isFollowing);
+  const [following, setFollowing] = useState<boolean | undefined>(isFollowing);
   const { execute, isPending } = useServerAction(action, {
     onError({ err }) {
       console.log("Something went wrong", err);
