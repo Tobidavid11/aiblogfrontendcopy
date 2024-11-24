@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { UserProfile } from "@/components/shared";
+// import { UserProfile } from "@/components/shared";
 // import { ItemComment } from "@/components/shared/comments";
 import { PostEngagement } from "@/components/shared/social/PostEngagement";
 import { fetchBlogPost } from "@/hooks/useBlogPost";
@@ -32,14 +32,14 @@ export default async function BlogPostPage({
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
       <div className="flex items-center mb-6 border-b-6 border-dashed border-gray pb-4">
-        <UserProfile
+        {/* <UserProfile
           user={{
             username: post.username,
             profilePic: "/default-avatar.png", // Add a default avatar
             name: post.username,
             id: post.id,
           }}
-        />
+        /> */}
       </div>
 
       <div className="border-b-2 border-dashed"></div>
