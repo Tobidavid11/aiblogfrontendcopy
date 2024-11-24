@@ -216,6 +216,8 @@ export default function BlogPlatformLayout() {
                     followersCount: 0,
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
+                    userId: "",
+            
                   },
                   metrics: {
                     likesCount: blog.likes,
