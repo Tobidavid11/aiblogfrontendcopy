@@ -37,7 +37,7 @@ export default function BlogPlatformLayout() {
       setLoading(true);
       const response = await getBlogs(1, false, "");
       const blogData = response.data.results;
-
+      console.log(blogData)
       // Store blog posts in state
       setBlogs(blogData);
       blogData.forEach((blog: BlogPost) => {
@@ -216,6 +216,8 @@ export default function BlogPlatformLayout() {
                     followersCount: 0,
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
+                    userId: "",
+            
                   },
                   metrics: {
                     likesCount: blog.likes,
