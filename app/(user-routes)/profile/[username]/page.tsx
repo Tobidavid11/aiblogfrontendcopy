@@ -11,7 +11,8 @@ import { CoverImage } from "@/components/profile/cover-image";
 import ProfileImageModal from "@/components/profile/modal";
 import FollowButton from "@/app/components/follow-button";
 import { CheckFollowing } from "@/actions/follow";
-import { BackButton } from "../../settings/_components/back-button";
+
+import BackArrow from "../../follow/_components/back-arrow";
 
 export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
@@ -60,7 +61,7 @@ const Profile = async ({ params }: { params: { username: string } }) => {
       <div className="bg-white">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <span>
-            <BackButton />
+            <BackArrow />
           </span>
           Profile
         </div>

@@ -9,7 +9,8 @@ import type { SuccessResponse } from "@/types/api";
 import type { UserProps } from "@/types/user";
 import { notFound } from "next/navigation";
 import Button from "@/components/shared/button";
-import { BackButton } from "../settings/_components/back-button";
+import BackArrow from "../follow/_components/back-arrow";
+
 
 
 const getUserProfile = async (accessToken: string, userId: string) => {
@@ -48,7 +49,7 @@ const Profile = async () => {
       <div className="bg-white">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <span>
-            <BackButton />
+            <BackArrow />
           </span>
           Profile
         </div>
