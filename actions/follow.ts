@@ -26,7 +26,7 @@ export const action = authenticatedAction
 			{
 				method: "POST",
 				next: {
-               tags: ['profile'],
+               tags: ['profile' , "followers", "followees"],
         }
 			},
 		);
@@ -88,7 +88,7 @@ export const CheckFollowing = async (accessToken: string, userId: string): Promi
     );
 
     const response = await fetchUserProfile();
-    console.log(response , "resss")
+    
     return response.isFollowing; 
   } catch (err) {
     console.error(err);

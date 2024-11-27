@@ -14,7 +14,7 @@ import { JobDummyData } from "@/data/mock/job";
 
 import { cn } from "@/lib/utils";
 
-import { getFollowees, getFollowers, isFollowing } from "./queries";
+import { getFollowees, getFollowers, isFollowing } from "./uueries";
 import type { UserProps } from "@/types/user";
 import type { SuccessResponse, ErrorResponse } from "@/types/api";
 
