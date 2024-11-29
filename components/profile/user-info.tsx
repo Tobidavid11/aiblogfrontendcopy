@@ -11,12 +11,13 @@ interface ProfileCardProps {
   user: UserProps;
   isJobProfile?: boolean;
   className?: string;
-  isFolloweBy?:boolean
+  isFolloweBy?:boolean;
+  isExternal?: boolean;
 }
 
 
 
-const UserInfo: React.FC<ProfileCardProps> = ({ user, className , isFolloweBy }) => {
+const UserInfo: React.FC<ProfileCardProps> = ({ user, className , isFolloweBy, isExternal }) => {
   const DateJoined = formatJoinDate(user?.createdAt);
   return (
     <div className={cn("flex flex-col  justify-between gap-2 px-4", className)}>
@@ -56,12 +57,12 @@ const UserInfo: React.FC<ProfileCardProps> = ({ user, className , isFolloweBy })
       </div>
 
       <div className="flex justify-start  gap-4 my-3">
-        <Link href="/follow" className="text-xs font-bold flex items-center gap-2  text-[#262626]">
+        <Link href={!isExternal ? "/follow":`/profile/${user.username}/follow`} className="text-xs font-bold flex items-center gap-2  text-[#262626]">
           {user?.followingCount}  <span className="font-normal"> Following</span>
         </Link>
         {/* <Separator /> */}
         <span className="w-2 h-full bg-white/30" />
-        <Link href="/follow" className="text-xs font-bold flex items-center gap-2 text-[#262626]">
+        <Link href={!isExternal ? "/follow":`/profile/${user.username}/follow`} className="text-xs font-bold flex items-center gap-2 text-[#262626]">
           {user?.followersCount} <span className="font-normal"> Followers </span>
         </Link>
       </div>

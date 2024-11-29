@@ -25,9 +25,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   const applyAction = async () => {
     console.log("Application for job successful!");
+
   };
 
-  
+  console.log(user, "Folling User")
   
 
   return (
