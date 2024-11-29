@@ -6,11 +6,11 @@ import type { UserProps } from "@/types/user";
 
 type FollowResponse = SuccessResponse<UserProps[]> | ErrorResponse | undefined;
 
-export const getFollowers = async (): Promise<FollowResponse> => {
+export const getFollowers = async (userId : string | undefined): Promise<FollowResponse> => {
 	const user = await assertUserAuthenticated();
 	const fetchFollowers = makeFetch<SuccessResponse<UserProps[]>>(
 		"auth",
-		"auth/followers",
+		`auth/${userId}/followers`,
 		user?.accessToken.value,
 		{
 			next: {
@@ -23,7 +23,7 @@ export const getFollowers = async (): Promise<FollowResponse> => {
 		const response = await fetchFollowers();
 		if ("data" in response) {
 			return response as SuccessResponse<UserProps[]>;
-		}console.log(response)
+		}
 		return response as ErrorResponse;
 	} catch (err) {
 		console.log(err);
@@ -31,11 +31,11 @@ export const getFollowers = async (): Promise<FollowResponse> => {
 	}
 };
 
-export const getFollowees = async (): Promise<FollowResponse> => {
+export const getFollowees = async (userId : string | undefined): Promise<FollowResponse> => {
 	const user = await assertUserAuthenticated();
 	const fetchFollowees = makeFetch<
 		SuccessResponse<UserProps[]> | ErrorResponse
-	>("auth", "auth/followees", user?.accessToken.value, {
+	>("auth", `auth/${userId}/followees`, user?.accessToken.value, {
 		next: {
 			tags: ["followees"],
 		},
@@ -45,7 +45,7 @@ export const getFollowees = async (): Promise<FollowResponse> => {
 		const response = await fetchFollowees();
 		if ("data" in response) {
 			return response as SuccessResponse<UserProps[]>;
-		}console.log(response)
+		}
 		return response as ErrorResponse;
 	} catch (err) {
 		console.log(err);

@@ -72,7 +72,7 @@ const Profile = async ({ params }: { params: { username: string } }) => {
   );
   const isFollowing = await CheckFollowing( user.accessToken.value as string, userData?.data.userId as string);
    const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, userData?.data.userId as string);
-  console.log(userData, "Aik");
+ ;
   if (!userData) {
     return notFound();
   }
@@ -119,7 +119,7 @@ const Profile = async ({ params }: { params: { username: string } }) => {
         </div>
 
         <div className="rounded-b-lg pb-5 -top-[70px] relative">
-          <UserInfo user={userData.data} isFolloweBy={isFollowsYou} />
+          <UserInfo user={userData.data} isFolloweBy={isFollowsYou} isExternal={true} />
         </div>
       </div>
       {/* <div className="rounded-b-lg pb-5 -top-[90px] relative">

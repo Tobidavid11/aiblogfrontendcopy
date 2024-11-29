@@ -18,7 +18,7 @@ export const action = authenticatedAction
 			message: string;
 		};
 		const user = await assertUserAuthenticated();
-		console.log()
+		
 		const followUser = makeFetch<Success>(
 			"auth",
 			`auth/${path}/${followeeId}`,
@@ -30,7 +30,7 @@ export const action = authenticatedAction
         }
 			},
 		);
-		console.log(followUser)
+		
 		try {
 
 			return await followUser();
@@ -38,7 +38,7 @@ export const action = authenticatedAction
 		} catch (err) {
 			console.log(err);
 		}
-		console.log(followeeId);
+		
 	});
 
 // export const unfollowAction = authenticatedAction

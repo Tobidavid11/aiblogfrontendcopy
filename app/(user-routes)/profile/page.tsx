@@ -38,7 +38,7 @@ const Profile = async () => {
     user.accessToken.value as string,
     user.userId as string
   );
-  console.log(user);
+  
 
   if (!userData) {
     return notFound();

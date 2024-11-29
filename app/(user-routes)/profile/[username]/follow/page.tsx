@@ -14,18 +14,51 @@ import { JobDummyData } from "@/data/mock/job";
 
 import { cn } from "@/lib/utils";
 
-import { getFollowees, getFollowers, isFollowing } from "./queries";
 import type { UserProps } from "@/types/user";
 import type { SuccessResponse, ErrorResponse } from "@/types/api";
 
-import UserProfile from "./_components/userProfile";
-import { assertUserAuthenticated } from "@/lib/auth";
 
-const FollowersPage = async () => {
+import { assertUserAuthenticated } from "@/lib/auth";
+import {
+  getFollowees,
+  getFollowers,
+  isFollowing,
+} from "@/app/(user-routes)/follow/queries";
+import makeFetch from "@/lib/helper";
+import BackArrow from "./_components/back-arrow";
+
+const getUserProfile = async (accessToken: string, userId: string) => {
+  try {
+    const fetchUserProfile = makeFetch<SuccessResponse<UserProps>>(
+      "auth",
+      `auth/profile/username/${userId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`profile-${userId}`],
+        },
+      }
+    );
+
+    const fetchUser = await fetchUserProfile();
+    return fetchUser;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const FollowersPage = async ({ params }: { params: { username: string } }) => {
+  console.log(params, "external follow");
+  const profileUsername = params.username;
   const user = await assertUserAuthenticated();
+  const userData = await getUserProfile(
+    user.accessToken.value as string,
+    profileUsername as string
+  );
+
   const [followers, followees] = await Promise.all([
-    getFollowers(user.userId),
-    getFollowees(user.userId),
+    getFollowers(userData?.data.userId),
+    getFollowees(userData?.data.userId),
   ]);
 
   const tabs = [
@@ -43,12 +76,24 @@ const FollowersPage = async () => {
     },
   ];
 
-  
+  console.log(followers, followees);
 
   return (
     <main className="font-dm-sans grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] max-w-[1440px] mx-auto w-full md:px-4 h-screen md:overflow-hidden">
       <ScrollArea className="bg-white py-8 px-4">
-        <UserProfile />
+        <div className="flex items-center gap-3 mb-6">
+          <BackArrow />
+          <div>
+            <h3 className="text-neutral-900 text-[20px] mb-[-10px]">
+              {`${userData?.data.firstName || ""} ${
+                userData?.data.lastName || ""
+              } `}
+            </h3>
+            <small className="text-xs text-neutral-500">
+              {userData?.data.username || ""}
+            </small>
+          </div>
+        </div>
         <Tabs defaultValue="followers">
           <TabsList className="flex gap-4 md:gap-7 w-full bg-transparent border-b-[2px] py-6 rounded-none justify-start">
             {tabs.map((tab) => (
@@ -132,11 +177,12 @@ async function renderTabContent(
   // Ensure all `isFollowing` calls are resolved for each user
   const usersWithFollowStatus = await Promise.all(
     data.data.map(async (user) => {
-      const isFollowingStatus = await isFollowing(user.userId); 
-      
+      const isFollowingStatus = await isFollowing(user.userId);
+      console.log(isFollowingStatus);
       return { ...user, isFollowing: isFollowingStatus };
     })
   );
+  console.log(usersWithFollowStatus)
 
   return usersWithFollowStatus.map((user) => (
     <Card className="flex flex-col" key={user.id}>
