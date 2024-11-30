@@ -13,6 +13,8 @@ import BackArrow from "../follow/_components/back-arrow";
 
 
 
+
+
 const getUserProfile = async (accessToken: string, userId: string) => {
   try {
     const fetchUserProfile = makeFetch<SuccessResponse<UserProps>>(
@@ -32,13 +34,36 @@ const getUserProfile = async (accessToken: string, userId: string) => {
   }
 };
 
+
+
+const getUserBlogs = async (accessToken: string, userId: string) => {
+  try {
+    const fetchUserBlogs = makeFetch<SuccessResponse<any>>(
+      "blog",
+      `blog/?userId=${userId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`blog-${userId}`],
+        },
+      }
+    );
+
+    const fetchBlog = await fetchUserBlogs();
+    return fetchBlog
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const Profile = async () => {
   const user = await assertUserAuthenticated();
   const userData = await getUserProfile(
     user.accessToken.value as string,
     user.userId as string
   );
-  
+  const userBlogs = await getUserBlogs ( user.accessToken.value as string , user.userId as string)
+   console.log(userBlogs , "yyyy")
 
   if (!userData) {
     return notFound();
@@ -89,7 +114,7 @@ const Profile = async () => {
       </div> */}
       <div className="bg-white rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-          <ContentTab />
+          <ContentTab blogs={userBlogs?.data?.results} user={userData.data}  />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { DefaultImage, RoundedImage } from "./rounded-image";
 import { UserProps } from "@/types/user";
 import FollowButton from "@/app/components/follow-button";
+import { useUser } from '@/context/userProfilectx'
 
 interface ProfileCardProps {
   user:UserProps;
@@ -29,6 +30,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   };
 
   console.log(user, "Folling User")
+
+  const {user: loginedInUser , loading} = useUser()
   
 
   return (
@@ -45,7 +48,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         )}
         <div className="flex-1 gap-y-1">
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
-            {`${user?.firstName}  ${user?.lastName}`}
+            {`${user.name}`}
           </h4>
 
           <div className="w-fit flex items-center gap-x-2">
@@ -73,9 +76,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             Apply
           </Button>
         ) : (
-          // renderFollowButton()
-        
-          <FollowButton userId={user.userId} isFollowing={isFollowing}/>
+                loginedInUser?.userId !== user.id && !loading && <FollowButton userId={user.userId} isFollowing={isFollowing}/>
         )}
       </div>
     </div>
