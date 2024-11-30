@@ -28,6 +28,7 @@ interface MainBloyType {
 }
 
 const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
+   
   // Clean and shorten content for preview
   const rawText = he.decode(
     (Array.isArray(blog.content)
@@ -74,7 +75,7 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
     console.log("BlogCard: Blog post fetched:", post);
     router.push(`/explore/${blog.id}`);
   };
-
+ 
   return (
     <Card
       className={`w-full  flex flex-col gap-y-3 border-none ${

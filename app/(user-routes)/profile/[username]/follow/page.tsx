@@ -1,6 +1,4 @@
-import { TrendingTopics } from "@/app/(user)/sections";
-import { SectionTitle } from "@/components/shared";
-import TaskCard from "@/components/shared/task-card";
+
 import ProfileCard from "@/components/shared/user-profile-card";
 import {
   Card,
@@ -8,9 +6,8 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { JobDummyData } from "@/data/mock/job";
+
 
 import { cn } from "@/lib/utils";
 
@@ -79,8 +76,8 @@ const FollowersPage = async ({ params }: { params: { username: string } }) => {
   console.log(followers, followees);
 
   return (
-    <main className="font-dm-sans grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] max-w-[1440px] mx-auto w-full md:px-4 h-screen md:overflow-hidden">
-      <ScrollArea className="bg-white py-8 px-4">
+    <main className="font-dm-sans   mx-auto w-full md:px-4 h-screen md:overflow-hidden">
+      
         <div className="flex items-center gap-3 mb-6">
           <BackArrow />
           <div>
@@ -121,31 +118,6 @@ const FollowersPage = async ({ params }: { params: { username: string } }) => {
             </TabsContent>
           ))}
         </Tabs>
-      </ScrollArea>
-      <div className="py-4 px-4 md:px-0 flex-col gap-6 h-full overflow-hidden hidden md:flex">
-        <ScrollArea className="flex-1">
-          <div className="pr-4">
-            <SectionTitle
-              title="Trending Topics"
-              className="text-neutral-600 text-xl mb-4 sticky top-0 bg-neutral-50"
-            />
-            <TrendingTopics />
-          </div>
-        </ScrollArea>
-        <ScrollArea className="flex-1">
-          <div className="pr-4">
-            <SectionTitle
-              title="Trending Jobs"
-              className="text-neutral-600 text-xl mb-4 sticky top-0 bg-neutral-50"
-            />
-            <div className="flex flex-col gap-4">
-              {JobDummyData.map((job, index) => (
-                <TaskCard key={index} job={job} />
-              ))}
-            </div>
-          </div>
-        </ScrollArea>
-      </div>
     </main>
   );
 };

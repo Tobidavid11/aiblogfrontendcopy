@@ -63,6 +63,27 @@ const checkFollowedBy   = async (accessToken: string, followId: string) => {
 };
 
 
+
+const getUserBlogs = async (accessToken: string, userId: string) => {
+  try {
+    const fetchUserBlogs = makeFetch<SuccessResponse<any>>(
+      "blog",
+      `blog?userId=${userId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`profile-${userId}`],
+        },
+      }
+    );
+
+    const fetchBlogs = await fetchUserBlogs();
+    return fetchBlogs
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const Profile = async ({ params }: { params: { username: string } }) => {
   const user = await assertUserAuthenticated();
   const profileUsername = params.username;
@@ -70,6 +91,12 @@ const Profile = async ({ params }: { params: { username: string } }) => {
     user.accessToken.value as string,
     profileUsername as string
   );
+
+  const userBlogs = await getUserBlogs(
+    user.accessToken.value as string,
+    userData?.data.userId as string
+  );
+
   const isFollowing = await CheckFollowing( user.accessToken.value as string, userData?.data.userId as string);
    const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, userData?.data.userId as string);
  ;
@@ -127,7 +154,7 @@ const Profile = async ({ params }: { params: { username: string } }) => {
       </div> */}
       <div className="bg-white rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-          <ContentTab />
+          <ContentTab blogs={userBlogs?.data?.results} user={userData.data}  />
         </div>
       </div>
     </div>

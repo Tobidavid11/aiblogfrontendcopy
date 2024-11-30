@@ -6,12 +6,21 @@ import { cn } from "@/lib/utils";
 import ProfileJobs from './jobs';
 import Posts from './posts';
 import SavedPosts from './saved-posts';
+import { BlogPost } from '@/types/blog';
+import { UserProps } from '@/types/user';
 
-function ContentTab() {
-    const [activeTab, setActiveTab] = useState('posts');
 
+function ContentTab({
+  blogs,
+  user
+}:{
+  blogs:BlogPost[]
+  user:UserProps
+}) {
+  console.log("rrrr" , user)     
+    const [activeTab, setActiveTab] = useState('posts')
     const tabs = [
-      { id: 'posts', label: 'Posts', component: <Posts /> },
+      { id: 'posts', label: 'Posts', component: <Posts blogs={blogs} user={user}/> },
       { id: 'jobs', label: 'Jobs', component: <ProfileJobs /> },
       { id: 'saved', label: 'Saved Posts', component: <SavedPosts /> },
     ];
