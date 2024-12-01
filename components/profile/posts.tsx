@@ -5,11 +5,13 @@ import { UserProps } from '@/types/user'
 
 function Posts({
   blogs,
-  user
+  user,
+  isFollowing
 }:{
   blogs:BlogPost[];
-  user:UserProps
-}) {
+  user:UserProps;
+  isFollowing?:boolean}
+) {
   return (
     <div>
     <div className=" gap-6">
@@ -42,6 +44,7 @@ function Posts({
                   },
                 }}
                 hasBackground
+                isFollowing={isFollowing}
               />
             ))}
           </div>
