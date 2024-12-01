@@ -134,7 +134,7 @@ async function renderTabContent(
     data.data.map(async (user) => {
       const isFollowingStatus = await isFollowing(user.userId); 
       
-      return { ...user, isFollowing: isFollowingStatus };
+      return { ...user, isFollowing: isFollowingStatus, name:`${user.firstName} ${user.lastName}`};
     })
   );
 

@@ -1,12 +1,12 @@
 import React from 'react'
 import { JobCard } from '../job'
-import { JobDummyData } from '@/data/mock/job'
+import { APIJobType } from '@/types/job'
 
-function ProfileJobs() {
+function ProfileJobs({job}:{job:APIJobType[]}) {
   return (
     <>
       <div className="flex flex-col gap-4 pb-10">
-    {JobDummyData.map((item, index) => (
+    {job.map((item, index) => (
       <div key={index} className="border rounded-lg">
         <JobCard job={item} />
       </div>
