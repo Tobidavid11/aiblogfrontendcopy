@@ -31,7 +31,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   console.log(user, "Folling User")
 
-  const {user: loginedInUser , loading} = useUser()
+  const {user: loginedInUser} = useUser()
   
 
   return (
@@ -76,7 +76,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             Apply
           </Button>
         ) : (
-                loginedInUser?.userId !== user.id && !loading && <FollowButton userId={user.userId} isFollowing={isFollowing}/>
+                loginedInUser?.userId !== user.id && <FollowButton userId={user.userId} isFollowing={isFollowing}/>
         )}
       </div>
     </div>

@@ -55,6 +55,25 @@ const getUserBlogs = async (accessToken: string, userId: string) => {
     console.error(err);
   }
 };
+const getUserJobs = async (accessToken: string, userId: string) => {
+  try {
+    const fetchUserJobs = makeFetch<SuccessResponse<any>>(
+      "blog",
+      `blog?userId=${userId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`profile-${userId}`],
+        },
+      }
+    );
+
+    const fetchJobs = await fetchUserJobs();
+    return fetchJobs
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const Profile = async () => {
   const user = await assertUserAuthenticated();
@@ -62,8 +81,12 @@ const Profile = async () => {
     user.accessToken.value as string,
     user.userId as string
   );
+
   const userBlogs = await getUserBlogs ( user.accessToken.value as string , user.userId as string)
-   console.log(userBlogs , "yyyy")
+  const userJobs = await getUserJobs(
+    user.accessToken.value as string,
+    userData?.data.userId as string
+  );
 
   if (!userData) {
     return notFound();
@@ -114,7 +137,7 @@ const Profile = async () => {
       </div> */}
       <div className="bg-white rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-          <ContentTab blogs={userBlogs?.data?.results} user={userData.data}  />
+          <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results}  />
         </div>
       </div>
     </div>

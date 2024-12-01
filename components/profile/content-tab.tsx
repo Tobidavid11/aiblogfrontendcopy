@@ -8,20 +8,23 @@ import Posts from './posts';
 import SavedPosts from './saved-posts';
 import { BlogPost } from '@/types/blog';
 import { UserProps } from '@/types/user';
+import { APIJobType } from '@/types/job';
 
 
 function ContentTab({
   blogs,
-  user
+  user,
+  job
 }:{
   blogs:BlogPost[]
   user:UserProps
+  job:APIJobType[]
 }) {
   console.log("rrrr" , user)     
     const [activeTab, setActiveTab] = useState('posts')
     const tabs = [
       { id: 'posts', label: 'Posts', component: <Posts blogs={blogs} user={user}/> },
-      { id: 'jobs', label: 'Jobs', component: <ProfileJobs /> },
+      { id: 'jobs', label: 'Jobs', component: <ProfileJobs job={job} /> },
       { id: 'saved', label: 'Saved Posts', component: <SavedPosts /> },
     ];
   return (
