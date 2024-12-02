@@ -25,9 +25,10 @@ interface MainBloyType {
   blog: BlogType;
   hasShadow?: boolean;
   hasBackground?: boolean;
+  isFollowing?:boolean
 }
 
-const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
+const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow , isFollowing }) => {
    
   // Clean and shorten content for preview
   const rawText = he.decode(
@@ -86,7 +87,7 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow }) => {
       } rounded-xl`}
     >
       <CardHeader className="p-0">
-        <UserProfile user={blog.user} />
+        <UserProfile user={blog.user} isFollowing={isFollowing} />
       </CardHeader>
 
       <CardContent

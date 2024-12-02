@@ -11,10 +11,6 @@ import { notFound } from "next/navigation";
 import Button from "@/components/shared/button";
 import BackArrow from "../follow/_components/back-arrow";
 
-
-
-
-
 const getUserProfile = async (accessToken: string, userId: string) => {
   try {
     const fetchUserProfile = makeFetch<SuccessResponse<UserProps>>(
@@ -33,8 +29,6 @@ const getUserProfile = async (accessToken: string, userId: string) => {
     console.error(err);
   }
 };
-
-
 
 const getUserBlogs = async (accessToken: string, userId: string) => {
   try {
@@ -137,7 +131,7 @@ const Profile = async () => {
       </div> */}
       <div className="bg-white rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
-          <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results}  />
+          <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results} />
         </div>
       </div>
     </div>

@@ -14,17 +14,19 @@ import { APIJobType } from '@/types/job';
 function ContentTab({
   blogs,
   user,
-  job
+  job,
+  isFollowing
 }:{
   blogs:BlogPost[]
   user:UserProps
   job:APIJobType[]
+  isFollowing?:boolean
 }) {
   console.log("rrrr" , user)     
     const [activeTab, setActiveTab] = useState('posts')
     const tabs = [
-      { id: 'posts', label: 'Posts', component: <Posts blogs={blogs} user={user}/> },
-      { id: 'jobs', label: 'Jobs', component: <ProfileJobs job={job} /> },
+      { id: 'posts', label: 'Posts', component: <Posts blogs={blogs} user={user}  isFollowing={isFollowing}/> },
+      { id: 'jobs', label: 'Jobs', component: <ProfileJobs job={job} isFollowing={isFollowing} /> },
       { id: 'saved', label: 'Saved Posts', component: <SavedPosts /> },
     ];
   return (
