@@ -7,3 +7,4 @@ export const AUTH_API_BASE_URL = DEV
 	: `${process.env.NEXT_PUBLIC_USER_AUTH_URL}` || "";
 export const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 export const PROJECT_NAME = "dRello";
+export const NEXT_PUBLIC_FIREBASE_VAPID_KEY = `${process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY}`
