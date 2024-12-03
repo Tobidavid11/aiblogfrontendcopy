@@ -7,6 +7,8 @@ import {
   TopWriters,
   TrendingTopics,
 } from "../sections";
+import { Suspense } from "react";
+import SkeletonTopWriterCard from "@/components/writers/top-writers-skeleton";
 
 
 // For the grid, to check if the user is
@@ -55,7 +57,9 @@ export default function DashboardLayout({
                 }`}
               >
                 <SectionTitle title="Top Writers" />
+                <Suspense fallback={< SkeletonTopWriterCard/>}> 
                 <TopWriters />
+                </Suspense>
               </section>
             </div>
           </section>

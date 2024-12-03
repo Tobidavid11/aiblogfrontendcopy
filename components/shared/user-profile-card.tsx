@@ -44,11 +44,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             alt={`${user.username} profile pic`}
           />
         ) : (
-          <DefaultImage letter="A" />
+          <DefaultImage letter={user.username[0]} />
         )}
         <div className="flex-1 gap-y-1">
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
-            {`${user.name}`}
+            {`${user?.name || user?.firstName}`}
           </h4>
 
           <div className="w-fit flex items-center gap-x-2">
