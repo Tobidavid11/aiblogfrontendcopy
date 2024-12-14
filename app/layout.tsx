@@ -4,6 +4,10 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme.provider";
 import { UserProvider } from "@/context/userProfilectx";
+import ProfileProvider from "@/context/contextProvider";
+import { AuthWrapper } from "../app/AuthWrapper";
+import { Providers } from "./Providers";
+
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
   variable: "--dm-sans",
@@ -41,6 +45,21 @@ export default function RootLayout({
           
         </ThemeProvider>
         </UserProvider>
+        <AuthWrapper>
+          <Providers>
+            <ProfileProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Toaster />
+                {children}
+              </ThemeProvider>
+            </ProfileProvider>
+          </Providers>
+        </AuthWrapper>
       </body>
     </html>
   );
