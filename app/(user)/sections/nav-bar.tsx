@@ -31,6 +31,8 @@ import { useUser } from "@/context/userProfilectx";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { logOutAuth } from "@/actions/userAuth";
+import { WalletConnectButton } from "@/components/wallet/walletConnect";
+import { useWallet } from "@/context/walletContext";
 
 interface NavLinksProps {
   routeName: string;
@@ -48,6 +50,7 @@ const NavBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { disconnectWallet } = useWallet();
   const { user, loading } = useUser();
   console.log(user);
   useEffect(() => {
@@ -72,7 +75,7 @@ const NavBar = () => {
       console.log(message);
 
       // Disconnect wallet
-      // disconnectWallet();
+      disconnectWallet();
 
       router.push("/auth/sign-in");
     } else {
@@ -188,6 +191,12 @@ const NavBar = () => {
                       Profile
                     </span>
                   </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
+                  <div className="flex items-center gap-x-1.5 py-1">
+                    <WalletConnectButton />
+                  </div>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
