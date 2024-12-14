@@ -1,38 +1,27 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { DefaultImage, RoundedImage } from "./rounded-image";
+import { RoundedImage } from "./rounded-image";
 import { UserProps } from "@/types/user";
 import FollowButton from "@/app/components/follow-button";
-import { useUser } from '@/context/userProfilectx'
 
 interface ProfileCardProps {
-  user:UserProps;
+  user: UserProps;
   isJobProfile?: boolean;
   className?: string;
   following?: boolean;
   isFollowing?: boolean;
-
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   user,
   isJobProfile,
   className,
-  isFollowing
+  isFollowing,
 }) => {
-  
-  
-
   const applyAction = async () => {
     console.log("Application for job successful!");
-
   };
-
-  console.log(user, "Folling User")
-
-  const {user: loginedInUser} = useUser()
-  
 
   return (
     <div className={cn("flex items-center justify-between gap-6", className)}>
@@ -44,11 +33,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             alt={`${user.username} profile pic`}
           />
         ) : (
-          <DefaultImage letter="A" />
+          <div className="bg-yellow-500 rounded-full w-10 h-10 flex items-center justify-center text-white font-bold text-lg">
+            {user?.username?.[0].toUpperCase()}
+          </div>
         )}
         <div className="flex-1 gap-y-1">
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
-            {`${user.name}`}
+            {`${user?.firstName || user.username}  ${user?.lastName || ""}`}
           </h4>
 
           <div className="w-fit flex items-center gap-x-2">
@@ -76,7 +67,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             Apply
           </Button>
         ) : (
-                loginedInUser?.userId !== user.id && <FollowButton userId={user.userId} isFollowing={isFollowing}/>
+          // renderFollowButton()
+
+          <FollowButton userId={user.userId} isFollowing={isFollowing} />
         )}
       </div>
     </div>
