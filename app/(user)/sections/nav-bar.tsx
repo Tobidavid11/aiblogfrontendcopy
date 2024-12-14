@@ -191,12 +191,15 @@ const NavBar = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="px-2 rounded-none cursor-pointer group">
-                  <div className="flex items-center gap-x-1.5 py-1">
+                  <Link
+                    className="flex items-center gap-x-1.5 py-1"
+                    href="/settings/general"
+                  >
                     <Settings className="w-5 h-5 text-black/70 dark:text-neutral-50 group-hover:text-[#fdc316]" />
                     <span className="text-sm font-medium text-[#171717] dark:text-neutral-50 leading-none -mb-[0.5px]">
                       Settings
                     </span>
-                  </div>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
 
