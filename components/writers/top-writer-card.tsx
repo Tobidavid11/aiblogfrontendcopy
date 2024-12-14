@@ -12,10 +12,16 @@ export interface TopWriterProps {
   profile: UserProps;
   userId: string;
   title: string;
-  metrics: PostMetricsProps;
+  comments_count:number;
+  likes_count:number
 }
 
 const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
+  const metrics = {
+    commentsCount: item.comments_count,
+    likesCount: item.likes_count,
+    sharesCount:0
+  }
   console.log(item ,"itemsss")
   return (
     <Card className="w-full p-3 flex flex-col gap-y-[0.9rem] border rounded-xl bg-transparent shadow-none border-[#E5E5E5] dark:border-neutral-800">
@@ -24,13 +30,13 @@ const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
       </CardHeader>
 
       <CardContent className="p-0">
-        <h2 className="text-base text-[#525252] dark:text-neutral-200 font-semibold capitalize w-[96%] line-clamp-2">
+        <h2 className="text-base dark:text-neutral-200 font-semibold capitalize w-[96%] line-clamp-2">
           {item?.title}
         </h2>
       </CardContent>
 
       <CardFooter className="p-0">
-        {/* <PostMetrics item={item.metrics} /> */}
+        <PostMetrics item={metrics} />
       </CardFooter>
     </Card>
   );

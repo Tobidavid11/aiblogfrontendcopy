@@ -87,8 +87,8 @@ const Profile = async () => {
   }
 
   return (
-    <div className="flex flex-col relative gap-2 maxHeight overflow-y-scroll custom-scroll overflow-x-hidden">
-      <div className="bg-white">
+    <div className="flex flex-col relative gap-2 maxHeight bg-transparent overflow-y-scroll custom-scroll overflow-x-hidden">
+      <div className="">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <span>
             <BackArrow />
@@ -129,7 +129,7 @@ const Profile = async () => {
       {/* <div className="rounded-b-lg pb-5 -top-[90px] relative">
         <WalletBalance />
       </div> */}
-      <div className="bg-white rounded-lg relative -top-[50px]">
+      <div className="rounded-lg relative -top-[50px]">
         <div className="text-2xl font-bold mb-4 flex gap-2 items-center p-5 border-b-2">
           <ContentTab blogs={userBlogs?.data?.results} user={userData.data} job={userJobs?.data?.results} />
         </div>

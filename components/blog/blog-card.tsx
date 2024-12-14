@@ -20,6 +20,7 @@ import { generateSlug } from "@/lib/utils";
 import { fetchBlogPost } from "@/hooks/useBlogPost";
 import he from "he";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface MainBloyType {
   blog: BlogType;
@@ -78,39 +79,39 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow , isFollow
   };
  
   return (
+    <Link href={`/explore/${blog.id}`}>
     <Card
-      className={`w-full  flex flex-col gap-y-3 border-none ${
+      className={`w-full  flex flex-col gap-y-3 border-none justify-between ${
         hasBackground ? "bg-white" : "bg-transparent"
       } ${hasBackground ? "mb-0" : "mb-6"}
        ${hasBackground ? "p-4" : "p-0"} ${
         hasShadow ? "bg-white" : "shadow-none"
       } rounded-xl`}
     >
-      <CardHeader className="p-0">
+      <CardHeader className="p-0 ">
         <UserProfile user={blog.user} isFollowing={isFollowing} />
       </CardHeader>
 
       <CardContent
-        className="flex flex-col p-0 gap-y-3 cursor-pointer"
-        onClick={handleClick}
+        className="flex flex-col p-0 gap-y-3 relative  justify-stretch grow  cursor-pointer "
+        // onClick={handleClick}
       >
-        <CardTitle className="text-xl font-semibold capitalize leading-7 text-[#262626] dark:text-neutral-100">
+        <CardTitle className="text-xl font-semibold h-[20%] min-h-[50px] overflow-hidden capitalize leading-7 text-[#262626] dark:text-neutral-100">
           {blog.title}
         </CardTitle>
 
         {/* Description */}
-        <CardDescription className="text-base font-normal leading-6 text-[#737373] dark:text-neutral-300">
+        <CardDescription className="text-base font-normal  overflow-hidden line-clamp-[3] min-h-[100px] relative leading-6 text-[#737373] dark:text-neutral-300">
           {previewText}
         </CardDescription>
 
-        <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] rounded-xl overflow-hidden">
+        <div className="relative w-full h-[200px] sm:h-[250px] md:h-[300px] md:max-h-[300px] md:min-h-[300px] bg-white rounded-xl overflow-hidden">
           <Image
             src={blog.image || "/default-blog-image.jpg"}
             alt={`${blog.title} blog image`}
             width={1000}
             height={1000}
-            objectFit="cover"
-            className="rounded-lg"
+            className="rounded-lg object-cover relative w-full h-full"
           />
         </div>
       </CardContent>
@@ -130,6 +131,7 @@ const BlogCard = memo<MainBloyType>(({ blog, hasBackground, hasShadow , isFollow
         <BlogExtraInfo items={blog.extra_info} />
       </CardFooter>
     </Card>
+    </Link>
   );
 });
 

@@ -43,7 +43,6 @@ function Posts({
                     sharesCount: blog.views,
                   },
                 }}
-                hasBackground
                 isFollowing={isFollowing}
               />
             ))}

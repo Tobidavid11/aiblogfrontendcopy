@@ -7,7 +7,11 @@ import { UserProfile } from "@/components/shared";
 // import { ItemComment } from "@/components/shared/comments";
 import { PostEngagement } from "@/components/shared/social/PostEngagement";
 import { fetchBlogPost } from "@/hooks/useBlogPost";
+import { CheckFollowing } from "@/actions/follow";
+import { assertUserAuthenticated } from "@/lib/auth";
 // import type { BlogPost } from "@/types/blog";
+
+
 
 export default async function BlogPostPage({
   params,
@@ -15,6 +19,11 @@ export default async function BlogPostPage({
   params: { id: string };
 }) {
   const post = await fetchBlogPost(params.id);
+
+  const user = await assertUserAuthenticated();
+
+   const isFollowing = await CheckFollowing( user.accessToken.value as string, post?.userId as string);
+  //  const isFollowsYou= await checkFollowedBy(user.accessToken.value as string, post?.userId as string);
 
   if (!post) {
     return notFound();
@@ -38,13 +47,14 @@ export default async function BlogPostPage({
             profilePic: "/default-avatar.png", // Add a default avatar
             name: post.username,
             id: post.id,
-            userId: "",
+            userId: post?.userId,
             followersCount: 0,
             followingCount:0,
             bio: "",
             externalLink: "",
             coverPhoto: ""
           }}
+          isFollowing={isFollowing}
         />
       </div>
 
@@ -67,7 +77,7 @@ export default async function BlogPostPage({
           {post.tags?.map((tag: string) => (
             <span
               key={tag}
-              className="bg-[#E5E7EB] text-gray-700 px-2 py-1 rounded-full text-xs"
+              className=" px-2 py-1 rounded-full text-xs"
             >
               {tag}
             </span>

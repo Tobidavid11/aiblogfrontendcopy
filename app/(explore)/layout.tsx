@@ -1,6 +1,7 @@
 import { SectionTitle } from "@/components/shared";
 import "../globals.css";
 import { NavBar, TrendingTopics, TopWriters } from "../(user)/sections";
+import { Suspense } from "react";
 
 // For the grid, to check if the user is
 // authenticated and change the layout accordingly
@@ -19,7 +20,7 @@ export default function DashboardLayout({
 
       <main className="w-full pt-6 overflow-hidden maxHeight bg-[#FAFAFA] dark:bg-black/90 px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-4">
         {/* Blog */}
-        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight  md:col-span-3 col-span-4 bg-[#F5F5F5] border border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
+        <section className="w-full flex-1 h-full overflow-y-scroll custom-scroll maxHeight  md:col-span-3 col-span-4  border border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 
@@ -32,7 +33,9 @@ export default function DashboardLayout({
           >
             <section className="row-span-1  overflow-hidden">
               <SectionTitle title="Trending Topics" />
+              <Suspense>
               <TrendingTopics />
+              </Suspense>
             </section>
 
             <section

@@ -39,8 +39,8 @@ function ContentTab({
           className={cn(
             "px-4 py-2 -mb-px",
             activeTab === tab.id
-              ? "text-black border-b-2 border-cta-primary-normal bg-transparent"
-              : "text-gray-500 bg-transparent hover:text-black"
+              ? " border-b-2 border-cta-primary-normal "
+              : ""
           )}
           variant="ghost"
         >

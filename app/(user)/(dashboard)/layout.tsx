@@ -48,7 +48,9 @@ export default function DashboardLayout({
             >
               <section className="row-span-1 overflow-hidden">
                 <SectionTitle title="Trending Topics" />
+                 <Suspense fallback={<div>loading........</div>}> 
                 <TrendingTopics />
+                </Suspense>
               </section>
 
               <section
@@ -57,7 +59,7 @@ export default function DashboardLayout({
                 }`}
               >
                 <SectionTitle title="Top Writers" />
-                <Suspense fallback={< SkeletonTopWriterCard/>}> 
+                <Suspense fallback={<div>loading........</div>}> 
                 <TopWriters />
                 </Suspense>
               </section>

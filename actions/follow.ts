@@ -89,9 +89,31 @@ export const CheckFollowing = async (accessToken: string, userId: string): Promi
 
     const response = await fetchUserProfile();
     
+    
     return response.isFollowing; 
   } catch (err) {
     console.error(err);
     return false; 
+  }
+};
+
+
+export const checkFollowedBy   = async (accessToken: string, followId: string) => {
+  try {
+    const followedYou = makeFetch<IsFollowingResponse>(
+      "auth",
+      `auth/is-followed-by/${followId}`,
+      accessToken,
+      {
+        next: {
+          tags: [`profile` , "followers" ,"followees"],
+        },
+      }
+    );
+
+    const fetchFollowed = await followedYou();
+    return fetchFollowed.isFollowedBy
+  } catch (err) {
+    console.error(err);
   }
 };

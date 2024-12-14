@@ -12,8 +12,9 @@ import { Category } from "@/types/categories";
 import { Briefcase, Home, Loader2Icon, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getBlogs } from "../../../actions/getBlogs";
+import Link from "next/link";
 
-export default function BlogPlatformLayout() {
+export default function BlogPlatformLayout({isFollowing}:{isFollowing:boolean}) {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Array<Category>>([]);
@@ -219,8 +220,9 @@ export default function BlogPlatformLayout() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {blogs.map((blog: BlogPost) => (
+              <Link href={`/explore/${blog.id}`} key={blog.id}>
               <BlogCard
-                key={blog.id}
+                 isFollowing={isFollowing}
                 blog={{
                   ...blog,
                   image: blog.thumbnail,
@@ -237,7 +239,8 @@ export default function BlogPlatformLayout() {
                     followersCount: 0,
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
-                    userId: "",
+                    userId:blog.userId ,
+                   
             
                   },
                   metrics: {
@@ -246,8 +249,9 @@ export default function BlogPlatformLayout() {
                     sharesCount: blog.views,
                   },
                 }}
-                hasBackground
+                
               />
+              </Link>
             ))}
           </div>
         </div>

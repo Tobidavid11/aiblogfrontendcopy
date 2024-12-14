@@ -56,8 +56,8 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId ,  isFollowing }) =>
         className={cn(
           "font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4",
           following
-            ? "text-[#FAFAFA]"
-            : "bg-[#171717] hover:bg-[#525252] text-[#FAFAFA]"
+            ? "text-[#FAFAFA] dark:text-black"
+            : " hover:bg-[#FAFAFA]/70 text-[#FAFAFA] dark:text-black"
         )}
         disabled={isPending}
       >
