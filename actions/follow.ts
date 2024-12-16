@@ -71,6 +71,7 @@ export type IsFollowingResponse = {
   isFollowing: boolean | PromiseLike<boolean>;
 	statusCode: number;
 	message: string;
+  isFollowedBy?:boolean
 };
 
 

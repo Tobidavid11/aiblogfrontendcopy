@@ -10,6 +10,7 @@ import type { UserProps } from "@/types/user";
 import { notFound } from "next/navigation";
 import Button from "@/components/shared/button";
 import BackArrow from "../follow/_components/back-arrow";
+import Link from "next/link";
 
 const getUserProfile = async (accessToken: string, userId: string) => {
   try {
@@ -116,10 +117,12 @@ const Profile = async () => {
             token={user.accessToken.value as string}
             userId={user?.userId || ""}
           />
-          <Button className="border rounded-full md:flex justify-center items-center bg-black hidden">
+          <Link href="/wallet">
+          <Button className="border rounded-full md:flex justify-center items-center bg-black hidden"> 
           <WalletMinimal className="mr-2"/>
             View wallet
           </Button>
+          </Link>
         </div>
 
         <div className="rounded-b-lg pb-5 -top-[70px] relative">

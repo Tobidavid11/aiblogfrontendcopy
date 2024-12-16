@@ -8,7 +8,7 @@ import {
   TrendingTopics,
 } from "../sections";
 import { Suspense } from "react";
-import SkeletonTopWriterCard from "@/components/writers/top-writers-skeleton";
+
 
 
 // For the grid, to check if the user is
@@ -27,9 +27,9 @@ export default function DashboardLayout({
       <NavBar />
 
       <main className="flex justify-center">
-        <div className="container mx-auto px-4 md:px-12 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] dark:bg-black/90 gap-6 grid grid-cols-1 md:grid-cols-4 place-content-center place-items-center">
+        <div className="container mx-auto px-4 md:px-1 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] dark:bg-black/90 gap-6 grid grid-cols-1 md:grid-cols-4 lg:place-content-center lg:place-items-center">
           {/* Featured article */}
-          <section className="hidden md:block col-span-1">
+          <section className="hidden relarive md:block w-full col-span-1">
             <SectionTitle title="Featured Articles" />
             <FeaturedArticles />
           </section>

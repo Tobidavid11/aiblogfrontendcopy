@@ -17,28 +17,11 @@ const TopWriters = () => {
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
-        const data = await response.json();
-
-        // Fetch profiles for each writer
-        const augmentedWriters = await Promise.all(
-          data.data.map(async (writer: TopWriterProps) => {
-            try {
-              const profileResponse = await fetch(
-                `https://gateway.drello.xyz/api/v1/auth/profile/${writer.userId}`
-              );
-              if (!profileResponse.ok) {
-                throw new Error(`Error fetching profile for user ${writer.userId}`);
-              }
-              const profileData = await profileResponse.json();
-              return { ...writer, profile: profileData.data }; // Merge profile data into writer object
-            } catch (error) {
-              console.error(`Failed to fetch profile for user ${writer.userId}:`, error);
-              return writer; // Return the original writer if profile fetch fails
-            }
-          })
-        );
-
-        setTopWriter(augmentedWriters); // Update the state with augmented data
+        const data = await response.json()
+       
+       
+    
+        setTopWriter(data.data); // Update the state with augmented data
         setLoading(false);
       } catch (error: any) {
         setError(error.message);

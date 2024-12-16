@@ -8,6 +8,7 @@ import ProfileProvider from "@/context/contextProvider";
 import { AuthWrapper } from "../app/AuthWrapper";
 import { Providers } from "./Providers";
 
+
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
   variable: "--dm-sans",
@@ -32,21 +33,9 @@ export default function RootLayout({
       <body
         className={`${DmSans.className} antialiased bg-[#FAFAFA] dark:bg-black/90`}
       >
-        <UserProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          
-          <Toaster />
-          {children}
-          
-        </ThemeProvider>
-        </UserProvider>
         <AuthWrapper>
           <Providers>
+             <UserProvider>
             <ProfileProvider>
               <ThemeProvider
                 attribute="class"
@@ -58,8 +47,10 @@ export default function RootLayout({
                 {children}
               </ThemeProvider>
             </ProfileProvider>
+            </UserProvider>
           </Providers>
         </AuthWrapper>
+  
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo } from "react";
 import TrendingTopicCard from "@/components/trends/trending-topic-card";
 
+
 const fetchTrendingTopics = async () => {
   const url = "https://gateway.drello.xyz/api/v1/blog/trending-topics";
 
@@ -19,7 +20,7 @@ const fetchTrendingTopics = async () => {
 };
 
 const TrendingTopics = () => {
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,15 +32,15 @@ const TrendingTopics = () => {
   }, []); // Runs once on component mount.
 
   const parsedTopics = useMemo(() => {
-    return topics.map((datum) => ({
+    return topics.map((datum: any) => ({
       topic: datum?.category,
-      sub_topic: "",
-      related_topics: datum?.topics.map((topic) => ({
+      num_posts: datum?.totalPosts || 0, // Ensure `num_posts` is present
+      related_topics: datum?.topics.map((topic: any) => ({
         topic: topic.title,
         num_posts: topic.totalPosts,
       })),
     }));
-  }, [topics]); // Recomputes only when `topics` changes.
+  }, [topics]);
 
   return (
     <div className="h-full overflow-scroll custom-scroll pr-2 pt-2">
