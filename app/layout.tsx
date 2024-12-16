@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme.provider";
 import { UserProvider } from "@/context/userProfilectx";
-import ProfileProvider from "@/context/contextProvider";
 import { AuthWrapper } from "../app/AuthWrapper";
 import { Providers } from "./Providers";
 
@@ -36,7 +35,7 @@ export default function RootLayout({
         <AuthWrapper>
           <Providers>
              <UserProvider>
-            <ProfileProvider>
+            
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -46,7 +45,7 @@ export default function RootLayout({
                 <Toaster />
                 {children}
               </ThemeProvider>
-            </ProfileProvider>
+            
             </UserProvider>
           </Providers>
         </AuthWrapper>
