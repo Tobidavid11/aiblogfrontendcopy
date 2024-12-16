@@ -4,15 +4,16 @@ import { assertUserAuthenticated } from "@/lib/auth";
 import { getBlogs } from "../../../actions/getBlogs";
 import { getCategories } from "@/actions/categories";
 import { BlogPost } from "@/types/blog";
+import { User } from "@/types/auth";
 
 export default async function BlogPage() {
-  let user, initialBlog, category;
+  let user: { accessToken: any; userId?: string | undefined; user?: User; }, initialBlog, category;
 
   try {
     user = await assertUserAuthenticated();
   } catch (error) {
     console.error("User authentication failed:", error);
-    return <div>Error: Failed to authenticate user.</div>;
+    // return <div>Error: Failed to authenticate user.</div>;
   }
 
   try {
