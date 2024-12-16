@@ -36,6 +36,7 @@ export default async function BlogPage() {
           user.accessToken.value as string,
           blog.userId
         );
+        console.log(isFollowing, "hello world")
         return { ...blog, isFollowing };
       })
     );
@@ -51,7 +52,6 @@ export default async function BlogPage() {
 
   return (
     <BlogPlatformLayout
-    isFollowing={initialBlog.isFollowing}
       initialBlog={initialBlog}
       category={category}
     />

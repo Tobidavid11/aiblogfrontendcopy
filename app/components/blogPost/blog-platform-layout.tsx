@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { getBlogs } from "../../../actions/getBlogs";
 import Link from "next/link";
 
-export default function BlogPlatformLayout({isFollowing ,initialBlog , category }:{isFollowing:boolean , initialBlog:BlogPost[] , category:Category[]}) {
+export default function BlogPlatformLayout({initialBlog , category }:{ initialBlog:BlogPost[] , category:Category[]}) {
   const [blogs, setBlogs] = useState<BlogPost[]>(initialBlog);
   
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
@@ -218,7 +218,7 @@ export default function BlogPlatformLayout({isFollowing ,initialBlog , category 
             {blogs.map((blog: BlogPost) => (
               <Link href={`/explore/${blog.id}`} key={blog.id}>
               <BlogCard
-                 isFollowing={isFollowing}
+                 isFollowing={blog.isFollowing}
                 blog={{
                   ...blog,
                   image: blog.thumbnail,
