@@ -1,9 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { Copy, EyeIcon, EyeOff } from "lucide-react";
+import { Copy, EyeIcon, EyeOff, LogOut } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import { useWallet } from "@/context/walletContext";
 import { useAccount, useBalance } from "wagmi";
 
 export default function WalletDashboard() {
-  const { walletAddress } = useWallet();
+  const { walletAddress, disconnectWallet } = useWallet();
   const { address } = useAccount();
   const { data: balanceData } = useBalance({
     address: address,
@@ -25,8 +25,6 @@ export default function WalletDashboard() {
 
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([
-    // We'll keep some initial transactions for display
-    // In a real app, you'd fetch these from the blockchain
     {
       type: "connection",
       date: new Date().toLocaleDateString(),
@@ -38,9 +36,8 @@ export default function WalletDashboard() {
 
   useEffect(() => {
     if (balanceData) {
-      // Convert from Wei to ETH and then to USD (using a mock rate of $2,500 per ETH)
       const ethBalance = parseFloat(balanceData.formatted);
-      const usdBalance = ethBalance * 2500; // Mock conversion rate
+      const usdBalance = ethBalance * 2500;
       setBalance(usdBalance);
     }
   }, [balanceData]);
@@ -77,7 +74,12 @@ export default function WalletDashboard() {
     setShowBalance(!showBalance);
   };
 
-  // Format the wallet address for display
+  const handleDisconnect = () => {
+    disconnectWallet();
+    setTransactions([]);
+    setBalance(0);
+  };
+
   const displayAddress = walletAddress
     ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(
         walletAddress.length - 4
@@ -107,10 +109,20 @@ export default function WalletDashboard() {
               <span className="text-sm text-gray-500">{displayAddress}</span>
               <button
                 onClick={() => navigator.clipboard.writeText(walletAddress)}
+                className="hover:text-gray-600"
               >
                 <Copy className="w-4 h-4 text-gray-400" />
               </button>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDisconnect}
+              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Disconnect
+            </Button>
           </div>
           <div className="text-4xl font-bold mb-4 flex items-center gap-4">
             <Image
@@ -127,7 +139,6 @@ export default function WalletDashboard() {
           <div className="flex space-x-4 mb-8">
             <WalletModals
               walletAddress={walletAddress}
-              // balance={balance}
               onDeposit={handleDeposit}
               onWithdraw={handleWithdraw}
               openBalance={openBalance}
