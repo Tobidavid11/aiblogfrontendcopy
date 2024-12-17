@@ -21,7 +21,7 @@ export default function DashboardLayout({
       {/* Navigation */}
       <NavBar />
 
-      <main className="w-full maxHeight overflow-hidden bg-[#FAFAFA] md:px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-1 md:grid-cols-3">
+      <main className="w-full maxHeight overflow-hidden  md:px-5 sm:px-12 2xl:px-[20rem] gap-6 grid grid-cols-1 md:grid-cols-3">
         {/* Featured article */}
         {/* <section className="hidden md:block col-span-1">
           <SectionTitle title="Featured Articles" />
@@ -29,7 +29,7 @@ export default function DashboardLayout({
         </section> */}
 
         {/* Profile */}
-        <section className="w-full flex-1 h-full md:col-span-2 px-6 bg-[#FAFAFA] rounded-tl-xl rounded-tr-xl">
+        <section className="w-full flex-1 h-full md:col-span-2 px-6 rounded-tl-xl rounded-tr-xl">
           {children}
         </section>
 

@@ -1,7 +1,7 @@
 //aiblogfrontend\app\components\blogPost\blog-platform-layout.tsx
 "use client";
 
-import { getCategories } from "@/actions/categories";
+
 import { BlogCard } from "@/components/blog";
 import { SearchInput } from "@/components/shared";
 import { CategoryItem } from "@/components/shared/category";
@@ -9,30 +9,28 @@ import { Button } from "@/components/ui/button";
 import { cn, generateSlug } from "@/lib/utils";
 import type { BlogPost } from "@/types/blog";
 import { Category } from "@/types/categories";
-import { Briefcase, Home, Loader2Icon, MessageCircle, User } from "lucide-react";
+import { Briefcase, Home, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getBlogs } from "../../../actions/getBlogs";
+import Link from "next/link";
 
-export default function BlogPlatformLayout() {
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Array<Category>>([]);
-  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
-  const [categoryError, setCategoryError] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function BlogPlatformLayout({initialBlog , category }:{ initialBlog:BlogPost[] , category:Category[]}) {
+  const [blogs, setBlogs] = useState<BlogPost[]>(initialBlog);
+  
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  
 
   useEffect(() => {
-    fetchBlogs({ category: currentCategory?.name });
+   fetchBlogs({ category: currentCategory?.name });
   }, [currentCategory?.name]);
 
+  console.log(category ,"erth")
+
   const fetchBlogs = async (params?: { category?: string; page?: number }) => {
+  
     try {
-      setLoading(true);
+      
       const response = await getBlogs(params || {});
       const blogData = response.data.results;
       console.log(blogData)
@@ -43,41 +41,40 @@ export default function BlogPlatformLayout() {
         sessionStorage.setItem(`blog-${slug}`, blog.id);
       });
 
-      setError(null);
     } catch (error) {
-      setError("Failed to load blogs. Please try again later.");
+      
       throw error;
     } finally {
-      setLoading(false);
+    
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      setIsCategoriesLoading(true);
-      const response = await getCategories();
-      const categoriesData = response.data;
+  // const fetchCategories = async () => {
+  //   try {
+  //     setIsCategoriesLoading(true);
+  //     const response = await getCategories();
+  //     const categoriesData = response.data;
 
-      setCategories(categoriesData);
-      setCategoryError(null);
-    } catch (error) {
-      setError("Failed to load categories. Please try again later.");
-      throw error;
-    } finally {
-      setIsCategoriesLoading(false);
-    }
-  };
+  //     setCategories(categoriesData);
+  //     setCategoryError(null);
+  //   } catch (error) {
+  //     setError("Failed to load categories. Please try again later.");
+  //     throw error;
+  //   } finally {
+  //     setIsCategoriesLoading(false);
+  //   }
+  // };
 
   const handleSearch = async (searchTerm: string) => {
     try {
-      setLoading(true);
+    
       const response = await getBlogs({ search: searchTerm });
       setBlogs(response.data.results);
     } catch (error) {
-      setError("Search failed. Please try again.");
+      
       throw error;
     } finally {
-      setLoading(false);
+    
     }
   };
 
@@ -90,12 +87,12 @@ export default function BlogPlatformLayout() {
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-2">CATEGORY</h2>
         <div className="flex space-x-2 overflow-x-auto custom-scroll pb-2">
-          {isCategoriesLoading && (
+          {/* {isCategoriesLoading && (
             <div className="w-full p-1 grid place-items-center">
               <Loader2Icon className="animate-spin" />
             </div>
-          )}
-          {categoryError && <p className="text-destructive text-sm">{categoryError}</p>}
+          )} */}
+          {/* {categoryError && <p className="text-destructive text-sm">{categoryError}</p>} */}
 
           <Button
             className={cn(
@@ -108,7 +105,7 @@ export default function BlogPlatformLayout() {
           >
             All
           </Button>
-          {categories.map((category) => (
+          {category.map((category) => (
             <Button
               key={category.id}
               className={cn(
@@ -132,7 +129,7 @@ export default function BlogPlatformLayout() {
         <div className="w-full">
           <h2 className="text-2xl font-bold mb-4">Recent Blogs</h2>
 
-          {loading && (
+          {/* {loading && (
             <div className="text-center">
               <div className="flex items-center justify-center min-h-screen ">
                 <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
@@ -215,12 +212,13 @@ export default function BlogPlatformLayout() {
               </div>
             </div>
           )}
-          {error && <div className="text-red-500 mt-24 text-center">{error}</div>}
+          {error && <div className="text-red-500 mt-24 text-center">{error}</div>} */}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {blogs.map((blog: BlogPost) => (
+              <Link href={`/explore/${blog.id}`} key={blog.id}>
               <BlogCard
-                key={blog.id}
+                 isFollowing={blog.isFollowing}
                 blog={{
                   ...blog,
                   image: blog.thumbnail,
@@ -237,7 +235,8 @@ export default function BlogPlatformLayout() {
                     followersCount: 0,
                     followingCount: 0,
                     coverPhoto: "/default-cover.jpg",
-                    userId: "",
+                    userId:blog.userId ,
+                   
             
                   },
                   metrics: {
@@ -246,8 +245,9 @@ export default function BlogPlatformLayout() {
                     sharesCount: blog.views,
                   },
                 }}
-                hasBackground
+                
               />
+              </Link>
             ))}
           </div>
         </div>

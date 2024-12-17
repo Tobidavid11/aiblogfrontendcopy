@@ -3,9 +3,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme.provider";
-import ProfileProvider from "@/context/contextProvider";
+import { UserProvider } from "@/context/userProfilectx";
 import { AuthWrapper } from "../app/AuthWrapper";
 import { Providers } from "./Providers";
+
 
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
@@ -23,6 +24,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -30,7 +34,8 @@ export default function RootLayout({
       >
         <AuthWrapper>
           <Providers>
-            <ProfileProvider>
+             <UserProvider>
+            
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -40,10 +45,13 @@ export default function RootLayout({
                 <Toaster />
                 {children}
               </ThemeProvider>
-            </ProfileProvider>
+            
+            </UserProvider>
           </Providers>
         </AuthWrapper>
+  
       </body>
     </html>
   );
 }
+

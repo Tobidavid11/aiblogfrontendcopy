@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { RoundedImage } from "./rounded-image";
 import { UserProps } from "@/types/user";
 import FollowButton from "@/app/components/follow-button";
+import { useUser } from "@/context/userProfilectx";
 
 interface ProfileCardProps {
   user: UserProps;
@@ -22,7 +23,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const applyAction = async () => {
     console.log("Application for job successful!");
   };
-
+  const{user : loggedinUser} = useUser()
   return (
     <div className={cn("flex items-center justify-between gap-6", className)}>
       <div className="w-full flex gap-2 items-center">
@@ -68,8 +69,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </Button>
         ) : (
           // renderFollowButton()
-
-          <FollowButton userId={user.userId} isFollowing={isFollowing} />
+          <div>
+          {loggedinUser?.userId != user.userId &&
+          <FollowButton userId={user.userId} isFollowing={isFollowing} />}
+          </div>
         )}
       </div>
     </div>
