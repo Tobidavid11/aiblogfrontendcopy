@@ -36,7 +36,7 @@ const BlogCard = memo<MainBloyType>(
             .map((item) => (typeof item === "string" ? item : item.text))
             .join(" ")
         : blog.content
-      ).replace(/<[^>]+>/g, "")
+      )?.replace(/<[^>]+>/g, "")
     );
     const previewText =
       rawText.length > 100 ? `${rawText.slice(0, 200)}...` : rawText;
