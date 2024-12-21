@@ -23,11 +23,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   const applyAction = async () => {
     console.log("Application for job successful!");
   };
-  const{user : loggedinUser} = useUser()
+  const{user : loggedinUser , loading} = useUser()
+   console.log(loggedinUser?.userId, "loggedinUser?.userId")
+   console.log(user?.userId, "user?.userId")
   return (
     <div className={cn("flex items-center justify-between gap-6", className)}>
       <div className="w-full flex gap-2 items-center">
-        {user.profilePic ? (
+        {user?.profilePic ? (
           <RoundedImage
             size={40}
             src={user.profilePic}
@@ -40,7 +42,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         )}
         <div className="flex-1 gap-y-1">
           <h4 className="text-sm font-medium text-[#404040] dark:text-neutral-100 capitalize">
-            {`${user?.firstName || user.username}  ${user?.lastName || ""}`}
+            {user?.name|| `${user?.firstName || user.username}  ${user?.lastName ||  ""}`}
           </h4>
 
           <div className="w-fit flex items-center gap-x-2">
@@ -70,7 +72,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         ) : (
           // renderFollowButton()
           <div>
-          {loggedinUser?.userId != user.userId &&
+          {!loading && loggedinUser?.userId !== user.userId &&
           <FollowButton userId={user.userId} isFollowing={isFollowing} />}
           </div>
         )}

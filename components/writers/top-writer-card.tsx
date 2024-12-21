@@ -13,12 +13,14 @@ export interface TopWriterProps {
   title: string;
   comments_count: number;
   likes_count: number;
-  firstName:string
-  lastName: string
-   profile_pic:string
+  firstName:string;
+  lastName: string;
+  profile_pic:string;
+  username:string;
 }
 
 const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
+  // console.log("yiygug" , item)
   const metrics = {
     commentsCount: item.comments_count,
     likesCount: item.likes_count,
@@ -27,9 +29,11 @@ const TopWriterCard = memo<{ item: TopWriterProps }>(({ item }) => {
   const profile = {
     firstName: item.firstName,
     lastName: item.lastName,
-    profile_pic: item.profile_pic,
+    profilePic: item.profile_pic,
+    username:item.username,
+    userId: item.userId,
   };
-  console.log(item, "itemsss");
+  console.log(profile, "itemssjuugug");
   return (
     <Card className="w-full p-3 flex flex-col gap-y-[0.9rem] border rounded-xl bg-transparent shadow-none border-[#E5E5E5] dark:border-neutral-800">
       <CardHeader className="p-0">
