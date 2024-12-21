@@ -1,7 +1,13 @@
+"use client"
 import { getUserProfile } from '@/actions/profile';
 import { assertUserAuthenticated } from '@/lib/auth';
 import { UserProps } from '@/types/user';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+// import { fcm } from "@/lib/FirebaseConfig/firebaseConfig";
+// import { getToken, onMessage } from "firebase/messaging";
+// import { toast } from "sonner";
+// import {
+	// NEXT_PUBLIC_FIREBASE_VAPID_KEY } from "@/lib/constants"
 
 
 interface UserContextProps {
@@ -15,6 +21,7 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
+  
   const [user, setUserState] = useState<UserProps | null>(null);
    const [loading, setLoading] = useState<boolean>(false);
 
@@ -51,13 +58,40 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     fetchUserProfile();
   },[]); 
 
+//  useEffect(()=>{
+//   function requestPermission() {
+//     Notification.requestPermission().then((permission) => {
+//       if (permission === "granted") {
+//         console.debug("Notification permission granted.");
+//       } else {
+//         console.debug("Notification permission denied.");
+//       }
+//     });
+//   }
 
-  return (
-    <UserContext.Provider value={{ user, setUser, clearUser , loading , setLoading }}>
+//   getToken(fcm, { vapidKey: NEXT_PUBLIC_FIREBASE_VAPID_KEY })
+//     .then((currentToken) => {
+//       if (currentToken) {
+//         localStorage.setItem("fcmToken", currentToken);
+//       } else {
+//         requestPermission();
+//       }
+//     })
+//     .catch(() => {
+//       console.debug("An error occurred while retrieving token. ");
+//     });
+
+//   onMessage(fcm, (payload) => {
+//     toast(payload.notification?.title as string);
+
+// });
+//  },[])
+   return (
+     <UserContext.Provider value={{ user, setUser, clearUser , loading , setLoading }}>
       {children}
-    </UserContext.Provider>
-  );
-};
+     </UserContext.Provider>
+   );
+ };
 
 export const useUser = (): UserContextProps => {
   const context = useContext(UserContext);

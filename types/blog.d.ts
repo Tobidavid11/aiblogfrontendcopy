@@ -92,6 +92,7 @@ export type BlogPost = {
   dislikes: number;
   thumbnail: string;
   publishedAt: string;
+  isFollowing?: boolean;
 };
 
 export type BlogResponse = {

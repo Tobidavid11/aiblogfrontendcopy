@@ -1,4 +1,4 @@
-import type { TopWriterProps } from "@/components/writers/top-writer-card";
+
 import type { PostMetrics } from "@/types/post-metrics";
 import type { UserProps } from "@/types/user";
 
@@ -117,7 +117,7 @@ export const dummyMetrics: PostMetrics[] = [
 /**
  * Array of top writers with complete props.
  */
-const topWriters: TopWriterProps[] = [
+const topWriters:any[] = [
 	{
 		user: dummyUsers[0],
 		topic: "Tesla's AI-Powered Transformation in Electric Vehicles",
