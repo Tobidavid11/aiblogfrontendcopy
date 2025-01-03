@@ -198,8 +198,8 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white dark:bg-neutral-800 p-8 rounded-3xl shadow-lg w-full max-w-md">
+    <div className="flex justify-center items-center min-h-screen bg-primary">
+      <div className="dark:bg-secondary bg-white shadow-lg text-black dark:text-white p-8 rounded-3xl w-full max-w-md">
         <h2 className="text-sm text-gray-500 mb-2">WELCOME BACK</h2>
         <h1 className="text-2xl font-bold mb-6">Sign In to Your Account</h1>
 

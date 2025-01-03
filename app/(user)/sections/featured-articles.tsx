@@ -16,7 +16,7 @@ const FeaturedArticles = () => {
         const parsedArticles = data.data.results.map((item: any): ArticleProps => ({
           user: {
             username: `@${item.username}`,
-            profilePic: item.profilePic || "/default-profile.png",
+            profilePic: item.profilePic || "/profile.png",
             name: `${item.firstName} ${item.lastName}`,
             // timestamp: Date.now() - 1000 * 60 * 5, 
             coverPhoto: "/default-cover.jpg",
@@ -47,7 +47,7 @@ const FeaturedArticles = () => {
 
   return (
     <div className="">
-      <div className="containerHeight overflow-scroll  custom-scroll pt-2">
+      <div className="containerHeight overflow-scroll custom-scroll pt-2">
         {loading ? (
           <p>Loading...</p>
         ) : (

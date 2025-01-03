@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${DmSans.className} antialiased bg-[#FAFAFA] dark:bg-black/90`}
+        className={`${DmSans.className} antialiased`}
       >
         <AuthWrapper>
           <Providers>
@@ -38,8 +38,8 @@ export default function RootLayout({
             
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
-                enableSystem
+                defaultTheme="light"
+                enableSystem={false}
                 disableTransitionOnChange
               >
                 <Toaster />

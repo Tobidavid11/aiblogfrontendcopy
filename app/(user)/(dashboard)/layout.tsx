@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { SectionTitle } from "@/components/shared";
 import "../../globals.css";
 import {
@@ -8,8 +8,6 @@ import {
   TrendingTopics,
 } from "../sections";
 import { Suspense } from "react";
-
-
 
 // For the grid, to check if the user is
 // authenticated and change the layout accordingly
@@ -23,23 +21,26 @@ export default function DashboardLayout({
   return (
     <>
       {/* Navigation */}
-      
+
       <NavBar />
 
-      <main className="flex justify-center">
-        <div className="container mx-auto px-4 md:px-1 2xl:px-[8rem] w-full maxHeight overflow-hidden md:pt-6 bg-white md:bg-[#FAFAFA] dark:bg-black/90 gap-6 grid grid-cols-1 md:grid-cols-4 lg:place-content-center lg:place-items-center">
+      <main className="w-[1200px] mx-auto flex justify-center mt-4 overflow-hidden h-[85vh]">
+        <div className="grid grid-cols-4 gap-4">
           {/* Featured article */}
-          <section className="hidden relarive md:block w-full col-span-1">
-            <SectionTitle title="Featured Articles" />
+
+          <section className="hidden relative md:block w-full col-span-1">
+            <SectionTitle title="Featured Articless" />
             <FeaturedArticles />
           </section>
 
           {/* Blog | Jobs */}
-          <section className="w-full flex-1 h-full md:col-span-2 md:px-6 mt-10 md:pt-6 bg-white md:bg-[#F5F5F5] dark:bg-black/90 border border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
+
+          <section className="w-full flex-1 h-full md:col-span-2 md:px-6 md:pt-6  border-[#E5E5E5] dark:border-neutral-800 rounded-tl-xl rounded-tr-xl">
             {children}
           </section>
 
           {/* Trending topics | Top writers */}
+
           <section className="hidden md:block col-span-1">
             <div
               className={`h-[88vh] grid ${
@@ -48,8 +49,8 @@ export default function DashboardLayout({
             >
               <section className="row-span-1 overflow-hidden">
                 <SectionTitle title="Trending Topics" />
-                 <Suspense fallback={<div>loading........</div>}> 
-                <TrendingTopics />
+                <Suspense fallback={<div>loading........</div>}>
+                  <TrendingTopics />
                 </Suspense>
               </section>
 
@@ -59,15 +60,14 @@ export default function DashboardLayout({
                 }`}
               >
                 <SectionTitle title="Top Writers" />
-                <Suspense fallback={<div>loading........</div>}> 
-                <TopWriters />
+                <Suspense fallback={<div>loading........</div>}>
+                  <TopWriters />
                 </Suspense>
               </section>
             </div>
           </section>
         </div>
       </main>
-      
     </>
   );
 }
