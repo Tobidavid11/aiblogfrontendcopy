@@ -34,11 +34,11 @@ const Home = async () => {
       initialBlog.map(async (blog: BlogPost) => {
         const isFollowing = await CheckFollowing(
           user.accessToken.value as string,
-          blog.userId
+          blog.userId,
         );
         console.log(isFollowing, "hello world");
         return { ...blog, isFollowing };
-      })
+      }),
     );
     initialBlog = followStatus; // Update blogs with follow status
   } catch (error) {
@@ -55,7 +55,7 @@ const Home = async () => {
       {initialBlog.map((blog: BlogPost) => (
         <Link href={`/explore/${blog.id}`} key={blog.id}>
           <BlogCard
-            hasBackground={false}
+            hasBackground={true}
             isFollowing={blog.isFollowing}
             blog={{
               ...blog,

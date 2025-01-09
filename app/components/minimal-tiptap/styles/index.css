@@ -1,7 +1,7 @@
-@import './partials/code.css';
-@import './partials/placeholder.css';
-@import './partials/lists.css';
-@import './partials/typography.css';
+@import "./partials/code.css";
+@import "./partials/placeholder.css";
+@import "./partials/lists.css";
+@import "./partials/typography.css";
 
 :root {
   --mt-code-background: #082b781f;

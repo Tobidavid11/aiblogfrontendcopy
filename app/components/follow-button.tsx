@@ -50,7 +50,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, isFollowing }) => {
     >
       <Button
         className={cn(
-          "font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4 text-[0.8rem] text-white dark:text-black bg-black dark:bg-white"
+          "font-medium capitalize rounded-full transition duration-300 ease-in-out items-center gap-4 text-[0.8rem] text-white dark:text-black bg-black dark:bg-white",
         )}
         disabled={isPending}
       >

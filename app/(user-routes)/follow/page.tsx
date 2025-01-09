@@ -43,8 +43,6 @@ const FollowersPage = async () => {
     },
   ];
 
-  
-
   return (
     <main className="font-dm-sans grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr] max-w-[1440px] mx-auto w-full md:px-4 h-screen md:overflow-hidden">
       <ScrollArea className="bg-white py-8 px-4">
@@ -59,7 +57,7 @@ const FollowersPage = async () => {
                   "after:rounded-t-md after:rounded-b-none",
                   "after:transition-all after:duration-300 after:ease-in-out",
                   "after:opacity-0 after:scale-x-0",
-                  "data-[state=active]:after:opacity-100 data-[state=active]:after:scale-x-100"
+                  "data-[state=active]:after:opacity-100 data-[state=active]:after:scale-x-100",
                 )}
                 value={tab.title}
                 key={tab.title}
@@ -107,7 +105,7 @@ const FollowersPage = async () => {
 
 async function renderTabContent(
   data: SuccessResponse<UserProps[]> | ErrorResponse | undefined,
-  tabTitle: string
+  tabTitle: string,
 ) {
   if (!data) {
     return <p>Error: No data available</p>;
@@ -123,8 +121,8 @@ async function renderTabContent(
         {tabTitle === "followers"
           ? "You don't have any followers"
           : tabTitle === "following"
-          ? "You are not following any users"
-          : "You don't have any verified followers"}
+            ? "You are not following any users"
+            : "You don't have any verified followers"}
       </p>
     );
   }
@@ -132,10 +130,14 @@ async function renderTabContent(
   // Ensure all `isFollowing` calls are resolved for each user
   const usersWithFollowStatus = await Promise.all(
     data.data.map(async (user) => {
-      const isFollowingStatus = await isFollowing(user.userId); 
-      
-      return { ...user, isFollowing: isFollowingStatus, name:`${user.firstName} ${user.lastName}`};
-    })
+      const isFollowingStatus = await isFollowing(user.userId);
+
+      return {
+        ...user,
+        isFollowing: isFollowingStatus,
+        name: `${user.firstName} ${user.lastName}`,
+      };
+    }),
   );
 
   return usersWithFollowStatus.map((user) => (

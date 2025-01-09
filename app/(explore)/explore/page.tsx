@@ -36,11 +36,11 @@ export default async function BlogPage() {
       initialBlog.map(async (blog: BlogPost) => {
         const isFollowing = await CheckFollowing(
           user.accessToken.value as string,
-          blog.userId
+          blog.userId,
         );
         console.log(isFollowing, "hello world");
         return { ...blog, isFollowing };
-      })
+      }),
     );
     initialBlog = followStatus; // Update blogs with follow status
   } catch (error) {

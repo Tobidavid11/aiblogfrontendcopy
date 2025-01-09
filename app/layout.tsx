@@ -7,7 +7,6 @@ import { UserProvider } from "@/context/userProfilectx";
 import { AuthWrapper } from "../app/AuthWrapper";
 import { Providers } from "./Providers";
 
-
 const DmSans = DM_Sans({
   subsets: ["latin-ext"],
   variable: "--dm-sans",
@@ -24,18 +23,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
-  
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${DmSans.className} antialiased`}
-      >
+      <body className={`${DmSans.className} antialiased`}>
         <AuthWrapper>
           <Providers>
-             <UserProvider>
-            
+            <UserProvider>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="light"
@@ -45,13 +38,10 @@ export default function RootLayout({
                 <Toaster />
                 {children}
               </ThemeProvider>
-            
             </UserProvider>
           </Providers>
         </AuthWrapper>
-  
       </body>
     </html>
   );
 }
-

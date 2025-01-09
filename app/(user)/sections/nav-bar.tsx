@@ -95,7 +95,7 @@ const NavBar = () => {
   return (
     <>
       <header className="border-b border-[#E7E5E4] dark:border-neutral-800 sticky top-0 z-50 bg-secondary">
-        <nav className="w-[1200px] mx-auto flex items-center py-4">
+        <nav className="w-[1200px] mx-auto flex items-center py-4 max-[1150px]:w-[initial] max-[1150px]:px-4">
           <div className="flex flex-row items-center gap-x-16 mr-auto">
             {/* Logo */}
 
@@ -104,8 +104,8 @@ const NavBar = () => {
             </a>
 
             {/* Nav links */}
-            <nav>
-              <ul className="md:flex flex-row items-center gap-x-11 hidden">
+            <nav className="max-[768px]:hidden">
+              <ul className="flex flex-row items-center gap-4">
                 {navLinks.map((link) => (
                   <li
                     key={link.routeName}
@@ -114,7 +114,7 @@ const NavBar = () => {
                     <p
                       role="button"
                       onClick={handleRoute(link.route)}
-                      className={`nav-link text-base capitalize hover:cursor-pointer hover:text-[#fdc316] transition-all duration-300 ease-in-out transform hover:scale-105 hover:tracking-wide ${
+                      className={`nav-link text-sm capitalize hover:cursor-pointer hover:text-[#fdc316] transition-all duration-300 ease-in-out transform hover:scale-105 hover:tracking-wide ${
                         activeLink === link.route
                           ? "text-[#fdc316] font-bold"
                           : "text-[#171717] dark:text-neutral-50 font-normal"
@@ -137,13 +137,16 @@ const NavBar = () => {
             </nav>
           </div>
 
-          <div className="hidden md:flex flex-row items-center gap-x-6 ml-auto">
+          <div className="flex flex-row items-center gap-x-6 ml-auto">
             {/* Search */}
-            <div className="hidden md:block">
+
+            <div className="max-[1095px]:hidden">
               <SearchInput onSearch={handleSearch} placeholder="Find..." />
             </div>
+
             {/* Write to earn btn */}
-            <Link href={"/create"}>
+
+            <Link href={"/create"} className="max-[460px]:hidden">
               <Button className="bg-[#fdc316] hover:bg-[hsl(45,98%,49%)] rounded-full py-3 gap-x-2 flex justify-center items-center transition duration-300 ease-in-out">
                 <Edit3Icon className="h-4 w-4 text-[#262626]" />
                 <span className="font-medium text-[#262626] text-center">
@@ -151,11 +154,15 @@ const NavBar = () => {
                 </span>
               </Button>
             </Link>
+
             {/* Notification */}
-            <div className="flex-1 border border-[#262626] dark:border-neutral-800 rounded-full w-9 h-9 flex items-center justify-center group hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
+
+            <div className="flex-1 border border-[#262626] dark:border-white rounded-full w-9 h-9 flex items-center justify-center group hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
               <Bell className="h-[18px] w-[18px] text-[#262626] dark:text-neutral-400 group-hover:dark:text-black/60" />
             </div>
+
             {/* User profile */}
+
             <DropdownMenu>
               <DropdownMenuTrigger
                 asChild
@@ -170,9 +177,11 @@ const NavBar = () => {
                         alt={`${UserData.username} profile pic`}
                       />
                     ) : (
-                      <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold hover:cursor-pointer hover:border-none hover:bg-[#fdc316] transition duration-300 ease-in-out">
-                        {user?.username?.[0].toUpperCase()}
-                      </div>
+                      <RoundedImage
+                        size={40}
+                        src={"/default-profile-avatar.webp"}
+                        alt={`${UserData.username} profile pic`}
+                      />
                     )}
 
                     <ChevronDown className="w-5 h-5 text-black/70 -mt-2 text-[#262626] dark:text-neutral-400" />
